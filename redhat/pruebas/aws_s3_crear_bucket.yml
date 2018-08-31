@@ -1,0 +1,116 @@
+---
+- hosts: localhost
+  gather_facts: true
+  connection: local
+  tasks:
+
+    - name: AWS900-00 Validación de existencia de Bucket
+      aws_s3:
+        bucket: "{{ bucket_name }}"
+        mode: list
+      register: valida_bucket_reg
+      ignore_errors: true
+
+    - name: AWS900-02 Fallo al validar bucket
+      fail:
+        msg: "El bucket ingresado ya existe, intente con otro nombre"
+      when: valida_bucket_reg is succeeded
+
+    - name: AWS901-00 Crear bucket S3
+      aws_s3:
+        bucket: "{{ bucket_name }}"
+        mode: create
+        permission: "{{ bucket_permission }}"
+        region: ca-central-1
+      register: crear_bucket_reg
+      when: valida_bucket_reg is failed
+
+    - name: AWS902-00 Crear DRO para bucket S3
+      uri:
+        url: "{{ manageiq.api_url }}/api/generic_objects"
+        method: POST
+        validate_certs: no
+        headers:
+          X-Auth-Token: "{{ manageiq.api_token }}"
+          Content-Type:  application/json
+        body_format: json
+        body:
+          action: create
+          name: "{{ bucket_name }}"
+          generic_object_definition:
+            href: "{{ manageiq.api_url }}/api/generic_object_definitions/1000000000001"
+          property_attributes:
+            dro_bucket_name: "{{ bucket_name }}"
+            dro_bucket_permission: "{{ bucket_permission }}"
+            dro_bucket_url: "https://s3.ca-central-1.amazonaws.com/{{ bucket_name }}"
+          associations:
+            service:
+            - href: "{{ manageiq.api_url }}/api/{{ manageiq.service }}"
+      register: crear_dro_reg
+      ignore_errors: true
+      when: crear_bucket_reg is succeeded
+
+    - name: AWS903-00 Agregar DRO al servicio
+      uri:
+        url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}"
+        method: POST
+        validate_certs: no
+        headers:
+          X-Auth-Token: "{{ manageiq.api_token }}"
+          Content-Type:  application/json
+        body_format: json
+        body:
+          action: add_resource
+          resource:
+            resource:
+              href: "{{ crear_dro_reg.json.results[0].href }}"
+      register: agregar_dro_reg
+      ignore_errors: true
+      when: crear_dro_reg is succeeded
+
+    - name: AWS904-00 Agregar TAGs de S3
+      uri:
+        url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}/tags"
+        method: POST
+        validate_certs: no
+        headers:
+          X-Auth-Token: "{{ manageiq.api_token }}"
+          Content-Type:  application/json
+        body_format: json
+        body:
+          action: assign
+          resources:
+            - category: "senha_ambiente"
+              name: "senha_ambiente_desarrollo"
+            - category: "senha_nube"
+              name: "senha_publica_aws"
+            - category: "senha_almacenamiento"
+              name: "senha_almacenamiento_s3"
+      ignore_errors: true
+      register: agregar_tags_reg
+      when: crear_bucket_reg is succeeded
+
+    - name: AWS905-00 Agregar Custom Attributes a servicio
+      uri:
+        url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}/custom_attributes"
+        method: POST
+        validate_certs: no
+        headers:
+          X-Auth-Token: "{{ manageiq.api_token }}"
+          Content-Type:  application/json
+        body_format: json
+        body:
+          action: add
+          resources:
+            - name: "Work Order"
+              value: "{{ numero_de_ticket  }}"
+      ignore_errors: true
+      register: agregar_cu_reg
+      when: crear_bucket_reg is succeeded
+
+    - name: AWS906-00 Pasar datos de despliegue para envio de correo
+      import_role:
+        name: comunicar_informacion_ambiente
+      ignore_errors: true
+      when: crear_bucket_reg is succeeded
+...
