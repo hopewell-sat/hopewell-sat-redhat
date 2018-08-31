@@ -1,0 +1,986 @@
+{
+    "ansible_facts": {
+        "cloudformation": {
+            "SENHALandingZone": {
+                "stack_description": {
+                    "capabilities": [
+                        "CAPABILITY_NAMED_IAM"
+                    ],
+                    "creation_time": "2018-07-31T21:11:02.795000+00:00",
+                    "description": "(D0001) Despliegue en un click.",
+                    "disable_rollback": false,
+                    "notification_arns": [],
+                    "parameters": [
+                        {
+                            "parameter_key": "MyFlowlogsRoleName",
+                            "parameter_value": "FLAudit"
+                        },
+                        {
+                            "parameter_key": "CIDRCapa1IntA",
+                            "parameter_value": "10.98.8.0/21"
+                        },
+                        {
+                            "parameter_key": "MyEnvironmentType",
+                            "parameter_value": "DEV"
+                        },
+                        {
+                            "parameter_key": "CIDRCapa1IntB",
+                            "parameter_value": "10.98.16.0/21"
+                        },
+                        {
+                            "parameter_key": "MyProfileSetCreation",
+                            "parameter_value": "No"
+                        },
+                        {
+                            "parameter_key": "CIDRCapaSegExtA",
+                            "parameter_value": "10.98.48.0/24"
+                        },
+                        {
+                            "parameter_key": "CIDRCapaSegExtB",
+                            "parameter_value": "10.98.49.0/24"
+                        },
+                        {
+                            "parameter_key": "MyBucketSetCreation",
+                            "parameter_value": "No"
+                        },
+                        {
+                            "parameter_key": "MyExtSecNet",
+                            "parameter_value": "Si"
+                        },
+                        {
+                            "parameter_key": "MyInetAccess",
+                            "parameter_value": "Si"
+                        },
+                        {
+                            "parameter_key": "CIDRCapaFrontB",
+                            "parameter_value": "10.98.53.0/24"
+                        },
+                        {
+                            "parameter_key": "CIDRCapaGestionB",
+                            "parameter_value": "10.98.192.0/18"
+                        },
+                        {
+                            "parameter_key": "MyPolicySetCreation",
+                            "parameter_value": "No"
+                        },
+                        {
+                            "parameter_key": "MyAdmNet",
+                            "parameter_value": "Si"
+                        },
+                        {
+                            "parameter_key": "CIDRCapaGestionA",
+                            "parameter_value": "10.98.128.0/18"
+                        },
+                        {
+                            "parameter_key": "CIDRCapaFrontA",
+                            "parameter_value": "10.98.52.0/24"
+                        },
+                        {
+                            "parameter_key": "MyNWLayout",
+                            "parameter_value": "MAT"
+                        },
+                        {
+                            "parameter_key": "MyIntSecNet",
+                            "parameter_value": "Si"
+                        },
+                        {
+                            "parameter_key": "CIDRCapa2B",
+                            "parameter_value": "10.98.96.0/19"
+                        },
+                        {
+                            "parameter_key": "MySvcRollout",
+                            "parameter_value": "No"
+                        },
+                        {
+                            "parameter_key": "MyProjectName",
+                            "parameter_value": "SEN"
+                        },
+                        {
+                            "parameter_key": "CIDRCapa2A",
+                            "parameter_value": "10.98.64.0/19"
+                        },
+                        {
+                            "parameter_key": "CIDRCapaSegIntA",
+                            "parameter_value": "10.98.50.0/24"
+                        },
+                        {
+                            "parameter_key": "CIDRCapaSegIntB",
+                            "parameter_value": "10.98.51.0/24"
+                        },
+                        {
+                            "parameter_key": "MyVPCCIDR",
+                            "parameter_value": "10.98.0.0/16"
+                        },
+                        {
+                            "parameter_key": "MyLambdaRoleName",
+                            "parameter_value": "LambdaExec"
+                        },
+                        {
+                            "parameter_key": "CIDRCapaAccesoA",
+                            "parameter_value": "10.98.0.0/22"
+                        },
+                        {
+                            "parameter_key": "CIDRCapaAccesoB",
+                            "parameter_value": "10.98.4.0/22"
+                        },
+                        {
+                            "parameter_key": "MyTemplateBucket",
+                            "parameter_value": "senhaawsconfig"
+                        },
+                        {
+                            "parameter_key": "MySecRollout",
+                            "parameter_value": "No"
+                        },
+                        {
+                            "parameter_key": "MyAZ2",
+                            "parameter_value": "ca-central-1b"
+                        },
+                        {
+                            "parameter_key": "CIDRCapa1A",
+                            "parameter_value": "10.98.24.0/21"
+                        },
+                        {
+                            "parameter_key": "MyAZ1",
+                            "parameter_value": "ca-central-1a"
+                        },
+                        {
+                            "parameter_key": "CIDRCapa3B",
+                            "parameter_value": "10.98.44.0/22"
+                        },
+                        {
+                            "parameter_key": "CIDRCapa3A",
+                            "parameter_value": "10.98.40.0/22"
+                        },
+                        {
+                            "parameter_key": "MyEC2ProfileName",
+                            "parameter_value": "EC2CLI"
+                        },
+                        {
+                            "parameter_key": "MyNetRollout",
+                            "parameter_value": "Si"
+                        },
+                        {
+                            "parameter_key": "CIDRCapa1B",
+                            "parameter_value": "10.98.32.0/21"
+                        }
+                    ],
+                    "stack_id": "arn:aws:cloudformation:ca-central-1:726872842055:stack/SENHALandingZone/3afd47a0-9506-11e8-9417-504dcde8fc82",
+                    "stack_name": "SENHALandingZone",
+                    "stack_status": "CREATE_COMPLETE",
+                    "tags": []
+                },
+                "stack_events": [
+                    {
+                        "ClientRequestToken": "Console-CreateStack-5c7432c2-9558-4153-af12-3e948c5c88d1",
+                        "EventId": "de85c050-9506-11e8-802e-504dce3aaf36",
+                        "LogicalResourceId": "SENHALandingZone",
+                        "PhysicalResourceId": "arn:aws:cloudformation:ca-central-1:726872842055:stack/SENHALandingZone/3afd47a0-9506-11e8-9417-504dcde8fc82",
+                        "ResourceStatus": "CREATE_COMPLETE",
+                        "ResourceType": "AWS::CloudFormation::Stack",
+                        "StackId": "arn:aws:cloudformation:ca-central-1:726872842055:stack/SENHALandingZone/3afd47a0-9506-11e8-9417-504dcde8fc82",
+                        "StackName": "SENHALandingZone",
+                        "Timestamp": "2018-07-31T21:15:37.021000+00:00"
+                    },
+                    {
+                        "ClientRequestToken": "Console-CreateStack-5c7432c2-9558-4153-af12-3e948c5c88d1",
+                        "EventId": "ComBase-CREATE_COMPLETE-2018-07-31T21:15:34.948Z",
+                        "LogicalResourceId": "ComBase",
+                        "PhysicalResourceId": "arn:aws:cloudformation:ca-central-1:726872842055:stack/SENHALandingZone-ComBase-1D8P7I52UESQ4/6e923c60-9506-11e8-bc18-504dce355a1e",
+                        "ResourceProperties": "{\"TemplateURL\":\"https://s3.amazonaws.com/senhaawsconfig/templates/senha/Current/SENHA-ComBase.template\",\"Parameters\":{\"MyInetAccess\":\"Si\",\"MyAdmNet\":\"Si\",\"MyNWLayout\":\"MAT\",\"MyEnvironmentType\":\"DEV\",\"MyProjectName\":\"SEN\"}}",
+                        "ResourceStatus": "CREATE_COMPLETE",
+                        "ResourceType": "AWS::CloudFormation::Stack",
+                        "StackId": "arn:aws:cloudformation:ca-central-1:726872842055:stack/SENHALandingZone/3afd47a0-9506-11e8-9417-504dcde8fc82",
+                        "StackName": "SENHALandingZone",
+                        "Timestamp": "2018-07-31T21:15:34.948000+00:00"
+                    },
+                    {
+                        "ClientRequestToken": "Console-CreateStack-5c7432c2-9558-4153-af12-3e948c5c88d1",
+                        "EventId": "ComBase-CREATE_IN_PROGRESS-2018-07-31T21:12:29.396Z",
+                        "LogicalResourceId": "ComBase",
+                        "PhysicalResourceId": "arn:aws:cloudformation:ca-central-1:726872842055:stack/SENHALandingZone-ComBase-1D8P7I52UESQ4/6e923c60-9506-11e8-bc18-504dce355a1e",
+                        "ResourceProperties": "{\"TemplateURL\":\"https://s3.amazonaws.com/senhaawsconfig/templates/senha/Current/SENHA-ComBase.template\",\"Parameters\":{\"MyInetAccess\":\"Si\",\"MyAdmNet\":\"Si\",\"MyNWLayout\":\"MAT\",\"MyEnvironmentType\":\"DEV\",\"MyProjectName\":\"SEN\"}}",
+                        "ResourceStatus": "CREATE_IN_PROGRESS",
+                        "ResourceStatusReason": "Resource creation Initiated",
+                        "ResourceType": "AWS::CloudFormation::Stack",
+                        "StackId": "arn:aws:cloudformation:ca-central-1:726872842055:stack/SENHALandingZone/3afd47a0-9506-11e8-9417-504dcde8fc82",
+                        "StackName": "SENHALandingZone",
+                        "Timestamp": "2018-07-31T21:12:29.396000+00:00"
+                    },
+                    {
+                        "ClientRequestToken": "Console-CreateStack-5c7432c2-9558-4153-af12-3e948c5c88d1",
+                        "EventId": "ComBase-CREATE_IN_PROGRESS-2018-07-31T21:12:28.587Z",
+                        "LogicalResourceId": "ComBase",
+                        "PhysicalResourceId": "",
+                        "ResourceProperties": "{\"TemplateURL\":\"https://s3.amazonaws.com/senhaawsconfig/templates/senha/Current/SENHA-ComBase.template\",\"Parameters\":{\"MyInetAccess\":\"Si\",\"MyAdmNet\":\"Si\",\"MyNWLayout\":\"MAT\",\"MyEnvironmentType\":\"DEV\",\"MyProjectName\":\"SEN\"}}",
+                        "ResourceStatus": "CREATE_IN_PROGRESS",
+                        "ResourceType": "AWS::CloudFormation::Stack",
+                        "StackId": "arn:aws:cloudformation:ca-central-1:726872842055:stack/SENHALandingZone/3afd47a0-9506-11e8-9417-504dcde8fc82",
+                        "StackName": "SENHALandingZone",
+                        "Timestamp": "2018-07-31T21:12:28.587000+00:00"
+                    },
+                    {
+                        "ClientRequestToken": "Console-CreateStack-5c7432c2-9558-4153-af12-3e948c5c88d1",
+                        "EventId": "RedBase-CREATE_COMPLETE-2018-07-31T21:12:26.342Z",
+                        "LogicalResourceId": "RedBase",
+                        "PhysicalResourceId": "arn:aws:cloudformation:ca-central-1:726872842055:stack/SENHALandingZone-RedBase-1B49FJGOPSZX7/3e094f20-9506-11e8-9c05-504dce1555d2",
+                        "ResourceProperties": "{\"TemplateURL\":\"https://s3.amazonaws.com/senhaawsconfig/templates/senha/Current/SENHA-RedBase.template\",\"Parameters\":{\"CIDRCapa1IntA\":\"10.98.8.0/21\",\"MyEnvironmentType\":\"DEV\",\"CIDRCapa1IntB\":\"10.98.16.0/21\",\"CIDRCapaSegExtA\":\"10.98.48.0/24\",\"CIDRCapaSegExtB\":\"10.98.49.0/24\",\"MyExtSecNet\":\"Si\",\"MyInetAccess\":\"Si\",\"CIDRCapaFrontB\":\"10.98.53.0/24\",\"CIDRCapaGestionB\":\"10.98.192.0/18\",\"MyAdmNet\":\"Si\",\"CIDRCapaGestionA\":\"10.98.128.0/18\",\"CIDRCapaFrontA\":\"10.98.52.0/24\",\"MyNWLayout\":\"MAT\",\"MyIntSecNet\":\"Si\",\"CIDRCapa2B\":\"10.98.96.0/19\",\"MyProjectName\":\"SEN\",\"CIDRCapa2A\":\"10.98.64.0/19\",\"CIDRCapaSegIntA\":\"10.98.50.0/24\",\"CIDRCapaSegIntB\":\"10.98.51.0/24\",\"MyVPCCIDR\":\"10.98.0.0/16\",\"CIDRCapaAccesoA\":\"10.98.0.0/22\",\"CIDRCapaAccesoB\":\"10.98.4.0/22\",\"MyAZ2\":\"ca-central-1b\",\"CIDRCapa1A\":\"10.98.24.0/21\",\"MyAZ1\":\"ca-central-1a\",\"CIDRCapa3B\":\"10.98.44.0/22\",\"CIDRCapa3A\":\"10.98.40.0/22\",\"CIDRCapa1B\":\"10.98.32.0/21\"}}",
+                        "ResourceStatus": "CREATE_COMPLETE",
+                        "ResourceType": "AWS::CloudFormation::Stack",
+                        "StackId": "arn:aws:cloudformation:ca-central-1:726872842055:stack/SENHALandingZone/3afd47a0-9506-11e8-9417-504dcde8fc82",
+                        "StackName": "SENHALandingZone",
+                        "Timestamp": "2018-07-31T21:12:26.342000+00:00"
+                    },
+                    {
+                        "ClientRequestToken": "Console-CreateStack-5c7432c2-9558-4153-af12-3e948c5c88d1",
+                        "EventId": "RedBase-CREATE_IN_PROGRESS-2018-07-31T21:11:08.118Z",
+                        "LogicalResourceId": "RedBase",
+                        "PhysicalResourceId": "arn:aws:cloudformation:ca-central-1:726872842055:stack/SENHALandingZone-RedBase-1B49FJGOPSZX7/3e094f20-9506-11e8-9c05-504dce1555d2",
+                        "ResourceProperties": "{\"TemplateURL\":\"https://s3.amazonaws.com/senhaawsconfig/templates/senha/Current/SENHA-RedBase.template\",\"Parameters\":{\"CIDRCapa1IntA\":\"10.98.8.0/21\",\"MyEnvironmentType\":\"DEV\",\"CIDRCapa1IntB\":\"10.98.16.0/21\",\"CIDRCapaSegExtA\":\"10.98.48.0/24\",\"CIDRCapaSegExtB\":\"10.98.49.0/24\",\"MyExtSecNet\":\"Si\",\"MyInetAccess\":\"Si\",\"CIDRCapaFrontB\":\"10.98.53.0/24\",\"CIDRCapaGestionB\":\"10.98.192.0/18\",\"MyAdmNet\":\"Si\",\"CIDRCapaGestionA\":\"10.98.128.0/18\",\"CIDRCapaFrontA\":\"10.98.52.0/24\",\"MyNWLayout\":\"MAT\",\"MyIntSecNet\":\"Si\",\"CIDRCapa2B\":\"10.98.96.0/19\",\"MyProjectName\":\"SEN\",\"CIDRCapa2A\":\"10.98.64.0/19\",\"CIDRCapaSegIntA\":\"10.98.50.0/24\",\"CIDRCapaSegIntB\":\"10.98.51.0/24\",\"MyVPCCIDR\":\"10.98.0.0/16\",\"CIDRCapaAccesoA\":\"10.98.0.0/22\",\"CIDRCapaAccesoB\":\"10.98.4.0/22\",\"MyAZ2\":\"ca-central-1b\",\"CIDRCapa1A\":\"10.98.24.0/21\",\"MyAZ1\":\"ca-central-1a\",\"CIDRCapa3B\":\"10.98.44.0/22\",\"CIDRCapa3A\":\"10.98.40.0/22\",\"CIDRCapa1B\":\"10.98.32.0/21\"}}",
+                        "ResourceStatus": "CREATE_IN_PROGRESS",
+                        "ResourceStatusReason": "Resource creation Initiated",
+                        "ResourceType": "AWS::CloudFormation::Stack",
+                        "StackId": "arn:aws:cloudformation:ca-central-1:726872842055:stack/SENHALandingZone/3afd47a0-9506-11e8-9417-504dcde8fc82",
+                        "StackName": "SENHALandingZone",
+                        "Timestamp": "2018-07-31T21:11:08.118000+00:00"
+                    },
+                    {
+                        "ClientRequestToken": "Console-CreateStack-5c7432c2-9558-4153-af12-3e948c5c88d1",
+                        "EventId": "RedBase-CREATE_IN_PROGRESS-2018-07-31T21:11:07.203Z",
+                        "LogicalResourceId": "RedBase",
+                        "PhysicalResourceId": "",
+                        "ResourceProperties": "{\"TemplateURL\":\"https://s3.amazonaws.com/senhaawsconfig/templates/senha/Current/SENHA-RedBase.template\",\"Parameters\":{\"CIDRCapa1IntA\":\"10.98.8.0/21\",\"MyEnvironmentType\":\"DEV\",\"CIDRCapa1IntB\":\"10.98.16.0/21\",\"CIDRCapaSegExtA\":\"10.98.48.0/24\",\"CIDRCapaSegExtB\":\"10.98.49.0/24\",\"MyExtSecNet\":\"Si\",\"MyInetAccess\":\"Si\",\"CIDRCapaFrontB\":\"10.98.53.0/24\",\"CIDRCapaGestionB\":\"10.98.192.0/18\",\"MyAdmNet\":\"Si\",\"CIDRCapaGestionA\":\"10.98.128.0/18\",\"CIDRCapaFrontA\":\"10.98.52.0/24\",\"MyNWLayout\":\"MAT\",\"MyIntSecNet\":\"Si\",\"CIDRCapa2B\":\"10.98.96.0/19\",\"MyProjectName\":\"SEN\",\"CIDRCapa2A\":\"10.98.64.0/19\",\"CIDRCapaSegIntA\":\"10.98.50.0/24\",\"CIDRCapaSegIntB\":\"10.98.51.0/24\",\"MyVPCCIDR\":\"10.98.0.0/16\",\"CIDRCapaAccesoA\":\"10.98.0.0/22\",\"CIDRCapaAccesoB\":\"10.98.4.0/22\",\"MyAZ2\":\"ca-central-1b\",\"CIDRCapa1A\":\"10.98.24.0/21\",\"MyAZ1\":\"ca-central-1a\",\"CIDRCapa3B\":\"10.98.44.0/22\",\"CIDRCapa3A\":\"10.98.40.0/22\",\"CIDRCapa1B\":\"10.98.32.0/21\"}}",
+                        "ResourceStatus": "CREATE_IN_PROGRESS",
+                        "ResourceType": "AWS::CloudFormation::Stack",
+                        "StackId": "arn:aws:cloudformation:ca-central-1:726872842055:stack/SENHALandingZone/3afd47a0-9506-11e8-9417-504dcde8fc82",
+                        "StackName": "SENHALandingZone",
+                        "Timestamp": "2018-07-31T21:11:07.203000+00:00"
+                    },
+                    {
+                        "ClientRequestToken": "Console-CreateStack-5c7432c2-9558-4153-af12-3e948c5c88d1",
+                        "EventId": "3afe0af0-9506-11e8-9417-504dcde8fc82",
+                        "LogicalResourceId": "SENHALandingZone",
+                        "PhysicalResourceId": "arn:aws:cloudformation:ca-central-1:726872842055:stack/SENHALandingZone/3afd47a0-9506-11e8-9417-504dcde8fc82",
+                        "ResourceStatus": "CREATE_IN_PROGRESS",
+                        "ResourceStatusReason": "User Initiated",
+                        "ResourceType": "AWS::CloudFormation::Stack",
+                        "StackId": "arn:aws:cloudformation:ca-central-1:726872842055:stack/SENHALandingZone/3afd47a0-9506-11e8-9417-504dcde8fc82",
+                        "StackName": "SENHALandingZone",
+                        "Timestamp": "2018-07-31T21:11:02.795000+00:00"
+                    }
+                ],
+                "stack_outputs": {},
+                "stack_parameters": {
+                    "CIDRCapa1A": "10.98.24.0/21",
+                    "CIDRCapa1B": "10.98.32.0/21",
+                    "CIDRCapa1IntA": "10.98.8.0/21",
+                    "CIDRCapa1IntB": "10.98.16.0/21",
+                    "CIDRCapa2A": "10.98.64.0/19",
+                    "CIDRCapa2B": "10.98.96.0/19",
+                    "CIDRCapa3A": "10.98.40.0/22",
+                    "CIDRCapa3B": "10.98.44.0/22",
+                    "CIDRCapaAccesoA": "10.98.0.0/22",
+                    "CIDRCapaAccesoB": "10.98.4.0/22",
+                    "CIDRCapaFrontA": "10.98.52.0/24",
+                    "CIDRCapaFrontB": "10.98.53.0/24",
+                    "CIDRCapaGestionA": "10.98.128.0/18",
+                    "CIDRCapaGestionB": "10.98.192.0/18",
+                    "CIDRCapaSegExtA": "10.98.48.0/24",
+                    "CIDRCapaSegExtB": "10.98.49.0/24",
+                    "CIDRCapaSegIntA": "10.98.50.0/24",
+                    "CIDRCapaSegIntB": "10.98.51.0/24",
+                    "MyAZ1": "ca-central-1a",
+                    "MyAZ2": "ca-central-1b",
+                    "MyAdmNet": "Si",
+                    "MyBucketSetCreation": "No",
+                    "MyEC2ProfileName": "EC2CLI",
+                    "MyEnvironmentType": "DEV",
+                    "MyExtSecNet": "Si",
+                    "MyFlowlogsRoleName": "FLAudit",
+                    "MyInetAccess": "Si",
+                    "MyIntSecNet": "Si",
+                    "MyLambdaRoleName": "LambdaExec",
+                    "MyNWLayout": "MAT",
+                    "MyNetRollout": "Si",
+                    "MyPolicySetCreation": "No",
+                    "MyProfileSetCreation": "No",
+                    "MyProjectName": "SEN",
+                    "MySecRollout": "No",
+                    "MySvcRollout": "No",
+                    "MyTemplateBucket": "senhaawsconfig",
+                    "MyVPCCIDR": "10.98.0.0/16"
+                },
+                "stack_policy": {},
+                "stack_resource_list": [
+                    {
+                        "LastUpdatedTimestamp": "2018-07-31T21:15:34.948000+00:00",
+                        "LogicalResourceId": "ComBase",
+                        "PhysicalResourceId": "arn:aws:cloudformation:ca-central-1:726872842055:stack/SENHALandingZone-ComBase-1D8P7I52UESQ4/6e923c60-9506-11e8-bc18-504dce355a1e",
+                        "ResourceStatus": "CREATE_COMPLETE",
+                        "ResourceType": "AWS::CloudFormation::Stack"
+                    },
+                    {
+                        "LastUpdatedTimestamp": "2018-07-31T21:12:26.342000+00:00",
+                        "LogicalResourceId": "RedBase",
+                        "PhysicalResourceId": "arn:aws:cloudformation:ca-central-1:726872842055:stack/SENHALandingZone-RedBase-1B49FJGOPSZX7/3e094f20-9506-11e8-9c05-504dce1555d2",
+                        "ResourceStatus": "CREATE_COMPLETE",
+                        "ResourceType": "AWS::CloudFormation::Stack"
+                    }
+                ],
+                "stack_resources": {
+                    "ComBase": "arn:aws:cloudformation:ca-central-1:726872842055:stack/SENHALandingZone-ComBase-1D8P7I52UESQ4/6e923c60-9506-11e8-bc18-504dce355a1e",
+                    "RedBase": "arn:aws:cloudformation:ca-central-1:726872842055:stack/SENHALandingZone-RedBase-1B49FJGOPSZX7/3e094f20-9506-11e8-9c05-504dce1555d2"
+                },
+                "stack_tags": {},
+                "stack_template": {
+                    "AWSTemplateFormatVersion": "2010-09-09",
+                    "Conditions": {
+                        "DesplegarRed": {
+                            "Fn::Equals": [
+                                {
+                                    "Ref": "MyNetRollout"
+                                },
+                                "Si"
+                            ]
+                        },
+                        "DesplegarSeg": {
+                            "Fn::Equals": [
+                                {
+                                    "Ref": "MySecRollout"
+                                },
+                                "Si"
+                            ]
+                        },
+                        "DesplegarSvc": {
+                            "Fn::Equals": [
+                                {
+                                    "Ref": "MySvcRollout"
+                                },
+                                "Si"
+                            ]
+                        }
+                    },
+                    "Description": "(D0001) Despliegue en un click.",
+                    "Metadata": {
+                        "AWS::CloudFormation::Interface": {
+                            "ParameterGroups": [
+                                {
+                                    "Description": {
+                                        "default": ""
+                                    },
+                                    "Label": {
+                                        "default": "Ambiente."
+                                    },
+                                    "Parameters": [
+                                        "MyProjectName",
+                                        "MyEnvironmentType",
+                                        "MyNWLayout",
+                                        "MyNWAccess",
+                                        "MyMgtAccess",
+                                        "MyAZ1",
+                                        "MyAZ2"
+                                    ]
+                                },
+                                {
+                                    "Description": {
+                                        "default": ""
+                                    },
+                                    "Label": {
+                                        "default": "Redes."
+                                    },
+                                    "Parameters": [
+                                        "MyVPCCIDR",
+                                        "CIDRCapaExtra2A",
+                                        "CIDRCapaExtra2B",
+                                        "CIDRCapa1A",
+                                        "CIDRCapa1B",
+                                        "CIDRCapa3A",
+                                        "CIDRCapa3B",
+                                        "CIDRCapa2A",
+                                        "CIDRCapa2B",
+                                        "CIDRCapaExtra1A",
+                                        "CIDRCapaExtra1B",
+                                        "CIDRGestionA",
+                                        "CIDRGestionB"
+                                    ]
+                                }
+                            ],
+                            "ParameterLabels": {
+                                "CIDRCapa1A": {
+                                    "default": "Bloque CIDR para subred primaria de presentacion (contribuyente)."
+                                },
+                                "CIDRCapa1B": {
+                                    "default": "Bloque CIDR para subred secundaria de presentacion (contribuyente)."
+                                },
+                                "CIDRCapa2A": {
+                                    "default": "Bloque CIDR para subred primaria de Procesamiento."
+                                },
+                                "CIDRCapa2B": {
+                                    "default": "Bloque CIDR para subred secundaria de Procesamiento."
+                                },
+                                "CIDRCapa3A": {
+                                    "default": "Bloque CIDR para subred primaria de datos."
+                                },
+                                "CIDRCapa3B": {
+                                    "default": "Bloque CIDR para subred secundaria de datos."
+                                },
+                                "CIDRCapaExtra1A": {
+                                    "default": "Bloque CIDR para subred primaria de acceso."
+                                },
+                                "CIDRCapaExtra1B": {
+                                    "default": "Bloque CIDR para subred secundaria de acceso."
+                                },
+                                "CIDRCapaExtra2A": {
+                                    "default": "Bloque CIDR para subred primaria de presentacion (empleado)."
+                                },
+                                "CIDRCapaExtra2B": {
+                                    "default": "Bloque CIDR para subred secundaria de presentacion (empleado)."
+                                },
+                                "CIDRGestionA": {
+                                    "default": "Bloque CIDR para subred primaria de gestion."
+                                },
+                                "CIDRGestionB": {
+                                    "default": "Bloque CIDR para subred primaria de gestion."
+                                },
+                                "MyAZ1": {
+                                    "default": "Seleccione la zona de disponibilidad primaria para el despliegue."
+                                },
+                                "MyAZ2": {
+                                    "default": "Seleccione la zona de disponibilidad secundaria para el despliegue."
+                                },
+                                "MyEnvironmentType": {
+                                    "default": "Seleccione el tipo de ambiente para despliegue."
+                                },
+                                "MyMgtAccess": {
+                                    "default": "Elija si desea una capa de red adicional para administracion de recursos."
+                                },
+                                "MyNWAccess": {
+                                    "default": "Elija si desea una capa de red publica."
+                                },
+                                "MyNWLayout": {
+                                    "default": "Seleccione el numero de capas a desplegar."
+                                },
+                                "MyProjectName": {
+                                    "default": "Escriba el nombre del proyecto o cliente (Para nomenclatura)."
+                                },
+                                "MyVPCCIDR": {
+                                    "default": "Bloque CIDR para su VPC."
+                                }
+                            }
+                        }
+                    },
+                    "Parameters": {
+                        "CIDRCapa1A": {
+                            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+                            "ConstraintDescription": "Debe ser un rango valido con formato x.x.x.x/x.",
+                            "Default": "10.98.24.0/21",
+                            "Description": "Bloque CIDR para la subred de presentacion Contribuyentes A.",
+                            "Type": "String"
+                        },
+                        "CIDRCapa1B": {
+                            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+                            "ConstraintDescription": "Debe ser un rango valido con formato x.x.x.x/x.",
+                            "Default": "10.98.32.0/21",
+                            "Description": "Bloque CIDR para la subred de presentacion Contribuyentes B.",
+                            "Type": "String"
+                        },
+                        "CIDRCapa1IntA": {
+                            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+                            "ConstraintDescription": "Debe ser un rango valido con formato x.x.x.x/x.",
+                            "Default": "10.98.8.0/21",
+                            "Description": "Bloque CIDR para la subred de presentacion Empleados A.",
+                            "Type": "String"
+                        },
+                        "CIDRCapa1IntB": {
+                            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+                            "ConstraintDescription": "Debe ser un rango valido con formato x.x.x.x/x.",
+                            "Default": "10.98.16.0/21",
+                            "Description": "Bloque CIDR para la subred de presentacion Empleados B.",
+                            "Type": "String"
+                        },
+                        "CIDRCapa2A": {
+                            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+                            "ConstraintDescription": "Debe ser un rango valido con formato x.x.x.x/x.",
+                            "Default": "10.98.64.0/19",
+                            "Description": "Bloque CIDR para la subred de procesamiento A.",
+                            "Type": "String"
+                        },
+                        "CIDRCapa2B": {
+                            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+                            "ConstraintDescription": "Debe ser un rango valido con formato x.x.x.x/x.",
+                            "Default": "10.98.96.0/19",
+                            "Description": "Bloque CIDR para la subred de proesamiento B.",
+                            "Type": "String"
+                        },
+                        "CIDRCapa3A": {
+                            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+                            "ConstraintDescription": "Debe ser un rango valido con formato x.x.x.x/x.",
+                            "Default": "10.98.40.0/22",
+                            "Description": "Bloque CIDR para la subred de datos A.",
+                            "Type": "String"
+                        },
+                        "CIDRCapa3B": {
+                            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+                            "ConstraintDescription": "Debe ser un rango valido con formato x.x.x.x/x.",
+                            "Default": "10.98.44.0/22",
+                            "Description": "Bloque CIDR para la subred de datos B.",
+                            "Type": "String"
+                        },
+                        "CIDRCapaAccesoA": {
+                            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+                            "ConstraintDescription": "Debe ser un rango valido con formato x.x.x.x/x.",
+                            "Default": "10.98.0.0/22",
+                            "Description": "Bloque CIDR para la subred de acceso A.",
+                            "Type": "String"
+                        },
+                        "CIDRCapaAccesoB": {
+                            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+                            "ConstraintDescription": "Debe ser un rango valido con formato x.x.x.x/x.",
+                            "Default": "10.98.4.0/22",
+                            "Description": "Bloque CIDR para la subred de acceso B.",
+                            "Type": "String"
+                        },
+                        "CIDRCapaFrontA": {
+                            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+                            "ConstraintDescription": "Debe ser un rango valido con formato x.x.x.x/x.",
+                            "Default": "10.98.52.0/24",
+                            "Description": "Bloque CIDR para la subred de Front Office A.",
+                            "Type": "String"
+                        },
+                        "CIDRCapaFrontB": {
+                            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+                            "ConstraintDescription": "Debe ser un rango valido con formato x.x.x.x/x.",
+                            "Default": "10.98.53.0/24",
+                            "Description": "Bloque CIDR para la subred de Front Office B.",
+                            "Type": "String"
+                        },
+                        "CIDRCapaGestionA": {
+                            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+                            "ConstraintDescription": "Debe ser un rango valido con formato x.x.x.x/x.",
+                            "Default": "10.98.128.0/18",
+                            "Description": "Bloque CIDR para la subred de gestion A.",
+                            "Type": "String"
+                        },
+                        "CIDRCapaGestionB": {
+                            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+                            "ConstraintDescription": "Debe ser un rango valido con formato x.x.x.x/x.",
+                            "Default": "10.98.192.0/18",
+                            "Description": "Bloque CIDR para la subred de gestion B.",
+                            "Type": "String"
+                        },
+                        "CIDRCapaSegExtA": {
+                            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+                            "ConstraintDescription": "Debe ser un rango valido con formato x.x.x.x/x.",
+                            "Default": "10.98.48.0/24",
+                            "Description": "Bloque CIDR para la subred de Seguridad Externa A.",
+                            "Type": "String"
+                        },
+                        "CIDRCapaSegExtB": {
+                            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+                            "ConstraintDescription": "Debe ser un rango valido con formato x.x.x.x/x.",
+                            "Default": "10.98.49.0/24",
+                            "Description": "Bloque CIDR para la subred de Seguridad Externa B.",
+                            "Type": "String"
+                        },
+                        "CIDRCapaSegIntA": {
+                            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+                            "ConstraintDescription": "Debe ser un rango valido con formato x.x.x.x/x.",
+                            "Default": "10.98.50.0/24",
+                            "Description": "Bloque CIDR para la subred de Seguridad Interna A.",
+                            "Type": "String"
+                        },
+                        "CIDRCapaSegIntB": {
+                            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+                            "ConstraintDescription": "Debe ser un rango valido con formato x.x.x.x/x.",
+                            "Default": "10.98.51.0/24",
+                            "Description": "Bloque CIDR para la subred de Seguridad Interna B.",
+                            "Type": "String"
+                        },
+                        "MyAZ1": {
+                            "Default": "us-east-1a",
+                            "Description": "Choose the Primary AvailabilityZone where your Subnets will be created.",
+                            "Type": "AWS::EC2::AvailabilityZone::Name"
+                        },
+                        "MyAZ2": {
+                            "Default": "us-east-1b",
+                            "Description": "Choose the Primary AvailabilityZone where your Subnets will be created.",
+                            "Type": "AWS::EC2::AvailabilityZone::Name"
+                        },
+                        "MyAdmNet": {
+                            "AllowedValues": [
+                                "Si",
+                                "No"
+                            ],
+                            "ConstraintDescription": "Debe ser Si o No.",
+                            "Default": "Si",
+                            "Description": "Crear capa de administracion.",
+                            "Type": "String"
+                        },
+                        "MyBucketSetCreation": {
+                            "AllowedValues": [
+                                "Si",
+                                "No"
+                            ],
+                            "Default": "Si",
+                            "Description": "Elija si desea crear la baase estandar de buckets.",
+                            "Type": "String"
+                        },
+                        "MyEC2ProfileName": {
+                            "AllowedPattern": "[-A-Za-z0-9]{3,18}",
+                            "Default": "EC2CLI",
+                            "Description": "Nombre para el perfil de automatizacion.",
+                            "Type": "String"
+                        },
+                        "MyEnvironmentType": {
+                            "AllowedValues": [
+                                "PRD",
+                                "INT",
+                                "DEV",
+                                "STR",
+                                "UAT",
+                                "INN"
+                            ],
+                            "Default": "DEV",
+                            "Description": "Tipo de ambiente a desplegar.",
+                            "Type": "String"
+                        },
+                        "MyExtSecNet": {
+                            "AllowedValues": [
+                                "Si",
+                                "No"
+                            ],
+                            "ConstraintDescription": "Debe ser Si o No.",
+                            "Default": "Si",
+                            "Description": "Crear capa de seguridad externa.",
+                            "Type": "String"
+                        },
+                        "MyFlowlogsRoleName": {
+                            "AllowedPattern": "[-A-Za-z0-9]{3,18}",
+                            "Default": "FLAudit",
+                            "Description": "Nombre para el rol de registro de flowlogs.",
+                            "Type": "String"
+                        },
+                        "MyInetAccess": {
+                            "AllowedValues": [
+                                "Si",
+                                "No"
+                            ],
+                            "ConstraintDescription": "Debe ser Si o No.",
+                            "Default": "No",
+                            "Description": "Permitir acceso desde internet.",
+                            "Type": "String"
+                        },
+                        "MyIntSecNet": {
+                            "AllowedValues": [
+                                "Si",
+                                "No"
+                            ],
+                            "ConstraintDescription": "Debe ser Si o No.",
+                            "Default": "Si",
+                            "Description": "Crear capa de seguridad externa.",
+                            "Type": "String"
+                        },
+                        "MyLambdaRoleName": {
+                            "AllowedPattern": "[-A-Za-z0-9]{3,18}",
+                            "Default": "LambdaExec",
+                            "Description": "Nombre para el rol de ejecucion de lambdas.",
+                            "Type": "String"
+                        },
+                        "MyNWLayout": {
+                            "AllowedValues": [
+                                "1-Capa",
+                                "2-Capas",
+                                "3-Capas",
+                                "MAT"
+                            ],
+                            "Default": "3-Capas",
+                            "Description": "Elija la arquitectura de red deseada.",
+                            "Type": "String"
+                        },
+                        "MyNetRollout": {
+                            "AllowedValues": [
+                                "Si",
+                                "No"
+                            ],
+                            "ConstraintDescription": "Debe ser Si o No.",
+                            "Default": "No",
+                            "Description": "Desplegar servicios de red.",
+                            "Type": "String"
+                        },
+                        "MyPolicySetCreation": {
+                            "AllowedValues": [
+                                "Si",
+                                "No"
+                            ],
+                            "ConstraintDescription": "Debe ser Si o No.",
+                            "Default": "Si",
+                            "Description": "Elija si desea crear los grupos de politicas estandar.",
+                            "Type": "String"
+                        },
+                        "MyProfileSetCreation": {
+                            "AllowedValues": [
+                                "Si",
+                                "No"
+                            ],
+                            "Default": "Si",
+                            "Description": "Elija si desea crear el conjunto estandar de roles y perfiles.",
+                            "Type": "String"
+                        },
+                        "MyProjectName": {
+                            "AllowedPattern": "[a-zA-Z0-9]+",
+                            "Default": "SEN",
+                            "Description": "Nombre del cliente o del proyecto (Para etiquetado).",
+                            "Type": "String"
+                        },
+                        "MySecRollout": {
+                            "AllowedValues": [
+                                "Si",
+                                "No"
+                            ],
+                            "ConstraintDescription": "Debe ser Si o No.",
+                            "Default": "No",
+                            "Description": "Desplegar subredes para infraestructura de SI.",
+                            "Type": "String"
+                        },
+                        "MySvcRollout": {
+                            "AllowedValues": [
+                                "Si",
+                                "No"
+                            ],
+                            "ConstraintDescription": "Debe ser Si o No.",
+                            "Default": "No",
+                            "Description": "Desplegar roles y servicios comunes.",
+                            "Type": "String"
+                        },
+                        "MyTemplateBucket": {
+                            "AllowedPattern": "[-a-zA-Z0-9]+",
+                            "Default": "support-561032890377",
+                            "Description": "Nombre del bucket que contiene las plaantillas a desplegar.",
+                            "Type": "String"
+                        },
+                        "MyVPCCIDR": {
+                            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+                            "ConstraintDescription": "Debe ser un rango valido con formato x.x.x.x/x.",
+                            "Default": "10.98.0.0/16",
+                            "Description": "Bloque CIDR Para su VPC.",
+                            "Type": "String"
+                        }
+                    },
+                    "Resources": {
+                        "ComBase": {
+                            "Condition": "DesplegarRed",
+                            "DependsOn": "RedBase",
+                            "Properties": {
+                                "Parameters": {
+                                    "MyAdmNet": {
+                                        "Ref": "MyAdmNet"
+                                    },
+                                    "MyEnvironmentType": {
+                                        "Ref": "MyEnvironmentType"
+                                    },
+                                    "MyInetAccess": {
+                                        "Ref": "MyInetAccess"
+                                    },
+                                    "MyNWLayout": {
+                                        "Ref": "MyNWLayout"
+                                    },
+                                    "MyProjectName": {
+                                        "Ref": "MyProjectName"
+                                    }
+                                },
+                                "TemplateURL": {
+                                    "Fn::Sub": "https://s3.amazonaws.com/${MyTemplateBucket}/templates/senha/Current/SENHA-ComBase.template"
+                                }
+                            },
+                            "Type": "AWS::CloudFormation::Stack"
+                        },
+                        "RedBase": {
+                            "Condition": "DesplegarRed",
+                            "Properties": {
+                                "Parameters": {
+                                    "CIDRCapa1A": {
+                                        "Ref": "CIDRCapa1A"
+                                    },
+                                    "CIDRCapa1B": {
+                                        "Ref": "CIDRCapa1B"
+                                    },
+                                    "CIDRCapa1IntA": {
+                                        "Ref": "CIDRCapa1IntA"
+                                    },
+                                    "CIDRCapa1IntB": {
+                                        "Ref": "CIDRCapa1IntB"
+                                    },
+                                    "CIDRCapa2A": {
+                                        "Ref": "CIDRCapa2A"
+                                    },
+                                    "CIDRCapa2B": {
+                                        "Ref": "CIDRCapa2B"
+                                    },
+                                    "CIDRCapa3A": {
+                                        "Ref": "CIDRCapa3A"
+                                    },
+                                    "CIDRCapa3B": {
+                                        "Ref": "CIDRCapa3B"
+                                    },
+                                    "CIDRCapaAccesoA": {
+                                        "Ref": "CIDRCapaAccesoA"
+                                    },
+                                    "CIDRCapaAccesoB": {
+                                        "Ref": "CIDRCapaAccesoB"
+                                    },
+                                    "CIDRCapaFrontA": {
+                                        "Ref": "CIDRCapaFrontA"
+                                    },
+                                    "CIDRCapaFrontB": {
+                                        "Ref": "CIDRCapaFrontB"
+                                    },
+                                    "CIDRCapaGestionA": {
+                                        "Ref": "CIDRCapaGestionA"
+                                    },
+                                    "CIDRCapaGestionB": {
+                                        "Ref": "CIDRCapaGestionB"
+                                    },
+                                    "CIDRCapaSegExtA": {
+                                        "Ref": "CIDRCapaSegExtA"
+                                    },
+                                    "CIDRCapaSegExtB": {
+                                        "Ref": "CIDRCapaSegExtB"
+                                    },
+                                    "CIDRCapaSegIntA": {
+                                        "Ref": "CIDRCapaSegIntA"
+                                    },
+                                    "CIDRCapaSegIntB": {
+                                        "Ref": "CIDRCapaSegIntB"
+                                    },
+                                    "MyAZ1": {
+                                        "Ref": "MyAZ1"
+                                    },
+                                    "MyAZ2": {
+                                        "Ref": "MyAZ2"
+                                    },
+                                    "MyAdmNet": {
+                                        "Ref": "MyAdmNet"
+                                    },
+                                    "MyEnvironmentType": {
+                                        "Ref": "MyEnvironmentType"
+                                    },
+                                    "MyExtSecNet": {
+                                        "Ref": "MyExtSecNet"
+                                    },
+                                    "MyInetAccess": {
+                                        "Ref": "MyInetAccess"
+                                    },
+                                    "MyIntSecNet": {
+                                        "Ref": "MyIntSecNet"
+                                    },
+                                    "MyNWLayout": {
+                                        "Ref": "MyNWLayout"
+                                    },
+                                    "MyProjectName": {
+                                        "Ref": "MyProjectName"
+                                    },
+                                    "MyVPCCIDR": {
+                                        "Ref": "MyVPCCIDR"
+                                    }
+                                },
+                                "TemplateURL": {
+                                    "Fn::Sub": "https://s3.amazonaws.com/${MyTemplateBucket}/templates/senha/Current/SENHA-RedBase.template"
+                                }
+                            },
+                            "Type": "AWS::CloudFormation::Stack"
+                        },
+                        "SegBase": {
+                            "Condition": "DesplegarSeg",
+                            "DependsOn": "RedBase",
+                            "Properties": {
+                                "Parameters": {
+                                    "MyAdmNet": {
+                                        "Ref": "MyAdmNet"
+                                    },
+                                    "MyEnvironmentType": {
+                                        "Ref": "MyEnvironmentType"
+                                    },
+                                    "MyExtSecNet": {
+                                        "Ref": "MyExtSecNet"
+                                    },
+                                    "MyInetAccess": {
+                                        "Ref": "MyInetAccess"
+                                    },
+                                    "MyIntSecNet": {
+                                        "Ref": "MyIntSecNet"
+                                    },
+                                    "MyNWLayout": {
+                                        "Ref": "MyNWLayout"
+                                    },
+                                    "MyProjectName": {
+                                        "Ref": "MyProjectName"
+                                    },
+                                    "MyTemplateBucket": {
+                                        "Ref": "MyTemplateBucket"
+                                    }
+                                },
+                                "TemplateURL": {
+                                    "Fn::Sub": "https://s3.amazonaws.com/${MyTemplateBucket}/templates/senha/Current/SENHA-SegBase.template"
+                                }
+                            },
+                            "Type": "AWS::CloudFormation::Stack"
+                        },
+                        "SvcBase": {
+                            "Condition": "DesplegarSvc",
+                            "DependsOn": "RedBase",
+                            "Properties": {
+                                "Parameters": {
+                                    "MyBucketSetCreation": {
+                                        "Ref": "MyBucketSetCreation"
+                                    },
+                                    "MyEC2ProfileName": {
+                                        "Ref": "MyEC2ProfileName"
+                                    },
+                                    "MyEnvironmentType": {
+                                        "Ref": "MyEnvironmentType"
+                                    },
+                                    "MyFlowlogsRoleName": {
+                                        "Ref": "MyFlowlogsRoleName"
+                                    },
+                                    "MyLambdaRoleName": {
+                                        "Ref": "MyLambdaRoleName"
+                                    },
+                                    "MyPolicySetCreation": {
+                                        "Ref": "MyPolicySetCreation"
+                                    },
+                                    "MyProfileSetCreation": {
+                                        "Ref": "MyProfileSetCreation"
+                                    },
+                                    "MyProjectName": {
+                                        "Ref": "MyProjectName"
+                                    }
+                                },
+                                "TemplateURL": {
+                                    "Fn::Sub": "https://s3.amazonaws.com/${MyTemplateBucket}/templates/senha/Current/SENHA-SvcBase.template"
+                                }
+                            },
+                            "Type": "AWS::CloudFormation::Stack"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "changed": false,
+    "invocation": {
+        "module_args": {
+            "all_facts": true,
+            "aws_access_key": "AKIAIEPVUQMA3Z6UEVDA",
+            "aws_secret_key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER",
+            "ec2_url": null,
+            "profile": null,
+            "region": "ca-central-1",
+            "security_token": null,
+            "stack_events": true,
+            "stack_name": "SENHALandingZone",
+            "stack_policy": false,
+            "stack_resources": true,
+            "stack_template": true,
+            "validate_certs": true
+        }
+    }
+}
