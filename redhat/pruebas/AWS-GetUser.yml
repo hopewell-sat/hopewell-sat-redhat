@@ -4,7 +4,7 @@
   connection: local
   tasks:
     - uri:
-        url: https://iam.amazonaws.com/?Action=GetUser&UserName={{ UserName }}&Version=2012-10-17
+        url: https://iam.amazonaws.com/?Action=GetUser&UserName=kevin-rh&Version=2012-10-17
         return_content: yes
       register: token_response
 
