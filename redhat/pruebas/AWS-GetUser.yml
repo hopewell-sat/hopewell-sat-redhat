@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  gather_facts: true
+  connection: local
+  tasks:
+    - uri:
+        url: https://iam.amazonaws.com/?Action=GetUser&UserName={{ UserName }}&Version=2012-10-17
+        return_content: yes
+      register: token_response
+
+    - debug: var=token_response.content
+...
