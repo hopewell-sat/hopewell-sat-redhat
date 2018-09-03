@@ -1,8 +1,7 @@
 - name: consultar api AWS GetUser
-- uri:
+  uri:
     url: https://iam.amazonaws.com/?Action=GetUser&UserName={{ UserName }}&Version=2012-10-17
     return_content: yes
   register: response
-
-- debug:
+  debug:
     msg: {{ response }}
