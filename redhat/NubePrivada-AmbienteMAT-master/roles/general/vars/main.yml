@@ -1,0 +1,41 @@
+---
+# vars file for general
+general_correo_de: "senha.notificacion@gmail.com"
+general_correo_para: ""      #correo@gmail.com
+general_correo_concopia: ""      #listas@grupo.com, 
+general_correo_asunto: "" #Asunto del correo
+general_correo_cuerpo: ""    #Contenido del correo
+general_correo_adjuntos: ""  #Datos adjunto
+general_correo_archivo_fecha: ""
+general_correo_archivo_temporal: ""
+general_storage: ""
+general_lista_datastores: ""
+tipo_evento_notificacion: ""
+
+oracle_database_sql_oracle_home: /u01/app/oracle/product/11.2.0/xe
+oracle_database_sql_sid: XE
+oracle_database_sql_admin_username: param
+oracle_database_sql_admin_password: senhauser
+oracle_database_sql_is_dba: no #
+oracle_database_sql_create_schemas: no #yes
+oracle_database_sql_schemas: param
+sql_path: /var/sql_senha/
+oracle_database_sqlplus: /u01/app/oracle/product/11.2.0/xe/bin/sqlplus
+# defaults to host
+oracle_ssh_hostname: 10.20.0.50
+oracle_ssh_user: root
+oracle_ssh_passsword: smartvm
+oracle_ssh_connect: "sshpass -p {{oracle_ssh_passsword}} ssh -o StrictHostKeyChecking=no {{oracle_ssh_user}}@{{oracle_ssh_hostname}}"
+
+
+espacio_total_disponible_html: 0
+espacio_total_html: 0
+umbral_riesgo: 0
+umbral_critico: 0
+espacio_ocupado: 0
+espacio_disponible_umbral: 0
+barra_ocupado: 0
+barra_total: 0
+porcentaje_espacio_ocupado: 0
+porcentaje_espacio_disponible: 0
+porcentaje_espacio_umbral: 0

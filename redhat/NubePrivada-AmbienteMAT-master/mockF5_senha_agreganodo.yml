@@ -1,0 +1,69 @@
+ 
+- hosts: localhost
+  vars:
+    diccionario_valor_descripcion:
+      lp: "Laboratorio Puebla"
+      labPueba: "Laboratorio Puebla"
+      dev: "Desarrollo"
+      uat: "Calidad (UAT)"
+      pro: "Producción"
+      str: "Estrés"
+      t: "Se desplego en umbral de riesgo"
+      f: "No se ha superado ningún umbral"
+      CHPRE: "Chica"
+      MEPRE: "Mediana"
+      GRPRE: "Grande"
+      EGPRE: "Extragrande"
+      CHPRO: "Chica"
+      MEPRO: "Mediana"
+      GRPRO: "Grande"
+      EGPRO: "Extragrande"
+      CHDAT: "Chica"
+      MEDAT: "Mediana"
+      GRDAT: "Grande"
+      EGDAT: "Extragrande"  
+
+  tasks:
+  
+  - name: Tiempo inicio
+    command: date +%Y-%m-%d %H:%M:%S
+    register: inidate
+    ignore_errors: True
+  
+  - set_fact:
+      inivariabletiempo: "{{ inidate.end[:19] }}"
+    when: inidate.end != ""
+  
+  - set_fact:
+      estructura_ambiente:
+        senha_generales:
+          numero_de_ticket: "{{  numero_de_ticket }}"
+          nombre_solicitante: "{{ nombre_solicitante }}"
+          correo_solicitante: "{{ correo_solicitante }}"
+          lista_correo_electronico: "{{ lista_correo_electronico }}"
+          centro_datos_sat: "{{  diccionario_valor_descripcion[centro_datos_sat]  }}"
+          fecha_inicio_proceso: "{{ inivariabletiempo}}"
+
+        
+  - set_fact:
+        f5_entrada_nombrepool: "{{ f5_dialogo_nombrep }}"
+        f5_entrada_ipnodo: "{{ f5_dialogo_ipnode }}"
+        f5_entrada_puerto: "{{ f5_dialogo_puerto }}"
+        
+  - debug:
+      msg: estructura_ambiente
+  
+  - name: Ejecutando una sola tarea desde F5/tasks/f5_senha_agreganodo.yml
+    import_role:
+      name: F5
+      tasks_from: f5_senha_agreganodo
+      
+  - name: Ejecutando una sola tarea desde F5/tasks/f5_handlers2.yml
+    import_role:
+      name: F5
+      tasks_from: f5_handlers2     
+
+  - name: Ejecutando una sola tarea desde F5/tasks/f5_senha_envio_correo_agrega_nodo.yml
+    import_role:
+      name: F5
+      tasks_from: f5_senha_envio_correo_agrega_nodo

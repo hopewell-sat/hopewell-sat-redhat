@@ -1,0 +1,48 @@
+---
+
+- set_fact:
+    execute_command: "{{oracle_ssh_connect}} export ORACLE_HOME={{oracle_database_sql_oracle_home}} && export ORACLE_SID={{oracle_database_sql_sid}} && {{oracle_database_sqlplus}} -S {{oracle_database_sql_admin_username}}/{{oracle_database_sql_admin_password}} @{{sql_path}}consulta_lista_distribucion.sql \\\"{{ tipo_evento_notificacion }}\\\"" 
+  ignore_errors: True    
+
+- debug:
+    msg: "command: '{{ execute_command }}' Sera ejecutado en sentencia Oracle en el sig esquema ({{ oracle_database_sql_sid }}) (ORACLE_HOME: {{oracle_database_sql_oracle_home }})"
+
+
+- name: Ejecución de comando de consulta
+  command: "{{execute_command}}"
+  register: lista_distribucion
+  environment:
+    ORACLE_HOME: "{{oracle_database_sql_oracle_home}}"
+    ORACLE_SID: "{{oracle_database_sql_sid}}"
+    SQL_PATH: "{{sql_path}}"
+  ignore_errors: True    
+
+
+- name: Tarea de envio de correo del proceso
+  mail:
+    host: "{{ gen_correo_servidor }}"
+    port: "{{ gen_correo_puerto }}"
+    from: "{{ general_correo_de }}"
+    to: "{{ general_correo_para }}"
+    cc: "{{ general_correo_concopia }},{{ lista_distribucion.stdout | regex_replace('\n', ',') | regex_replace('correo_solicitante', correo_solicitante ) }}"
+    subject: "{{ general_correo_asunto }}"
+    subtype: html
+    body: "{{ general_correo_cuerpo }}"
+    attach: "{{ general_correo_adjuntos }}"
+  retries: 3
+  delay: 5
+  register: general_correo_info
+  ignore_errors: True
+
+
+- name: "Notificacion de correo enviada satisfactoriamente"
+  command: echo ""
+  when: 
+    - general_correo_info is succeeded
+  
+- name: "Error de comunicacion con el servicio de correo"
+  command: echo ""
+  when: 
+    - general_correo_info is failed  
+  
+... 

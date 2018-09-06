@@ -1,0 +1,25 @@
+---
+- name: PowerOff a VM before absent
+  vmware_guest:
+    hostname: "{{ vmware_vcenterhost }}"
+    username: "{{ vmware_usuario }}"
+    password: "{{ vmware_contrasenia }}"
+    uuid: "{{uuid_vm}}"
+    name:
+    validate_certs: no
+    state: poweredoff
+    force: yes
+
+- name: Remove a VM by uuid
+  vmware_guest:
+    hostname: "{{ vmware_vcenterhost }}"
+    username: "{{ vmware_usuario }}"
+    password: "{{ vmware_contrasenia }}"
+    uuid: "{{uuid_vm}}"
+    name:
+    validate_certs: no
+    state: absent
+    force: yes
+  register: vmware_resultado
+  ignore_errors: True
+... 

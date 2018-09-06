@@ -1,0 +1,68 @@
+- name: "Fecha de inicio proceso eliminacion VS F5"
+  set_fact:
+    f5_fecha_inicio: ansible_date_time.iso8601
+
+- debug:
+  msg: "{{ f5_servidor }}"
+
+- debug:
+  msg: "{{ f5_particion }}"
+
+- debug:
+  msg: "{{ f5_constrasenia }}"
+#
+# AFM comentado por que en RHCF no existe el modulo bugsuds
+# Prueba realizada 21 Julio 2018
+#
+#- name: "Decomiso virtual server en F5"
+#  bigip_virtual_server:
+#    server: "{{ f5_servidor }}"
+#    user: "{{ f5_usuario }}"
+#    password: "{{ f5_constrasenia }}"
+#    state: "absent"
+#    partition: "{{ f5_particion }}"
+#    name: "{{ f5_entrada_nombrepool }}vs"
+#    validate_certs: no
+#  register: f5_resultado_eliminarvs
+#  ignore_errors: True
+
+- name: "Eliminar pool de recursos {{ f5_token }}"
+  uri:
+    url: "https://{{ f5_servidor }}/mgmt/tm/ltm/virtual/~{{ f5_particion }}~{{ f5_entrada_nombrepool }}vs"
+    method: DELETE
+    headers:
+      Content-Type: "application/json"
+      X-F5-Auth-Token: "{{ f5_token }}"
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200
+  register: f5_resultado_eliminarvs
+  ignore_errors: True
+
+- name: "Fecha de inicio proceso F5"
+  set_fact:
+    f5_fecha_fin: ansible_date_time.iso8601
+
+- name: "Decomiso virtual server F5"
+  set_fact:
+    f5_proceso:
+      codigo: "99"
+      descripcion: "Proceso OK"
+      instancia: "{{ f5_resultado_eliminarvs }}"
+      fecha_inicio: "{{ f5_fecha_inicio }}"
+      fecha_fin: "{{ f5_fecha_fin }}"
+  when:
+    - f5_resultado_eliminarvs is succeeded
+    - f5_resultado_eliminarvs.changed == true
+
+- name: "Decomiso de load balancer fallido F5"
+  set_fact:
+    f5_proceso:
+      codigo: "02"
+      descripcion: "Proceso fallo no existe el virtual server a eliminar"
+      instancia: ""
+      fecha_inicio: "{{ f5_fecha_inicio }}"
+      fecha_fin: "{{ f5_fecha_fin }}"
+  when:
+    - f5_resultado_eliminarvs is failed or f5_resultado_eliminarvs.changed == false

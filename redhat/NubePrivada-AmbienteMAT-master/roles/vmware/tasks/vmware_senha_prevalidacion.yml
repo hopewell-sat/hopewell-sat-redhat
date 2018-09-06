@@ -1,0 +1,24 @@
+
+#- include_tasks: roles/vmware/tasks/validar_existenciamv.yml vmware_maquina_virtual_validacion="{{ item }}"
+#  with_items: "{{ capa_presentacion_hostnames }}"
+
+#- include_tasks: roles/vmware/tasks/validar_existenciamv.yml vmware_maquina_virtual_validacion="{{ item }}"
+#  with_items: "{{ capa_procesamiento_hostnames }}"
+
+#- include_tasks: roles/vmware/tasks/validar_existenciamv.yml vmware_maquina_virtual_validacion="{{ item }}"
+#  with_items: "{{ capa_datos_hostnames }}"
+
+- include_tasks: validar_existenciamv.yml
+  vars:
+    vmware_maquina_virtual_validacion: "{{ item }}"
+  with_items: "{{ capa_presentacion_hostnames }}"
+
+- include_tasks: validar_existenciamv.yml
+  vars:
+    vmware_maquina_virtual_validacion: "{{ item }}"
+  with_items: "{{ capa_procesamiento_hostnames }}"
+
+- include_tasks: validar_existenciamv.yml
+  vars:
+    vmware_maquina_virtual_validacion: "{{ item }}"
+  with_items: "{{ capa_datos_hostnames }}"

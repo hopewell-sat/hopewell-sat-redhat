@@ -1,0 +1,14 @@
+---
+# tasks file for configurar_conectividad
+#- name: Llamado a rol apic_buscar_app_profile
+#  include_role:
+#    name: apic_buscar_app_profile
+
+- name: Llamado a rol apic_crear_app_profile
+  include_role:
+    name: apic_crear_app_profile
+
+- name: Llamado a rol apic_crear_epgs_mat
+  include_role:
+    name: apic_crear_epgs_mat
+...

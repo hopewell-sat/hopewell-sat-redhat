@@ -1,0 +1,25 @@
+---
+# tasks file for apic_crear_app_profile
+- name: Agregar un nuevo AP
+  aci_ap:
+    host: "{{host_name}}"
+    username: "{{usuario}}"
+    password: "{{password}}"
+    tenant: "{{apic_tenant}}"
+    ap: "{{ acronimo_aplicacion }}"
+    description: Perfil de aplicación para comunicación de ambiente MAT
+    state: present
+    validate_certs: no
+  register: salida_crear_app_profile
+- name: Imprimir resultado
+  debug:
+    var: salida_crear_app_profile
+
+- set_fact:
+    aci_app:
+      senha_generales:
+        aci_app:
+          descr: "{{ salida_crear_app_profile.config.fvAp.attributes.descr }}"
+          name: "{{ salida_crear_app_profile.config.fvAp.attributes.name }}"
+  ignore_errors: True
+...

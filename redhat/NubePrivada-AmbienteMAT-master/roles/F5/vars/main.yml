@@ -1,0 +1,33 @@
+---
+# vars file for F5
+f5_proceso: ""
+f5_fecha_inicio: ""
+f5_fecha_fin: ""
+f5_token: ""
+f5_existencia_pool: false
+f5_creacion_pool: false
+f5_resultado_validacion_balanceo: ""
+f5_continua: false
+f5_body_html: ""
+f5_string_temporal: ""
+f5_temporal_ip: ""
+f5_entrada_nombrepool: ""
+f5_entrada_ipvirtual: ""
+f5_entrada_ipsnodos: ""
+f5_entrada_puerto: ""
+f5_entrada_tipobalanceo: ""
+f5_entrada_tipopersistencia: ""
+f5_temporal_vmware: ""
+f5_temporal_vmware_presentacion: ""
+f5_temporal_vmware_procesamiento: ""
+f5_temporal_vmware_datos: ""
+#Separacion de redes AFM
+f5_presentacion_ips_gestion: ""
+f5_presentacion_ips_produccion: ""
+f5_procesamiento_ips_gestion: ""
+f5_procesamiento_ips_produccion: ""
+f5_datos_ips_gestion: ""
+f5_datos_ips_produccion: ""
+
+f5_nombre_cookie_pres: ""
+f5_nombre_cookie_proc: ""

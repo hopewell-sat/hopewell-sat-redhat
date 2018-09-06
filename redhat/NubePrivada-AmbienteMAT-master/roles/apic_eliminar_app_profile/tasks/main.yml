@@ -1,0 +1,13 @@
+---
+# tasks file for apic_eliminar_app_profile
+- name: eliminar AP
+  aci_ap:
+    hostname: "{{host_name}}"
+    username: "{{usuario}}"
+    password: "{{password}}"
+    tenant: "{{apic_tenant}}"
+    ap: "{{acronimo_aplicacion}}"
+    state: absent
+    validate_certs: no
+  ignore_errors: True
+...

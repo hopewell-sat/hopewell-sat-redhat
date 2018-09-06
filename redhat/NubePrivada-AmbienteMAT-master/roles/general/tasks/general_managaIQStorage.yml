@@ -1,0 +1,20 @@
+---
+
+- name: "SENHA :::  Reporte de almacenamiento -- Reportes de almacenamiento."
+  set_fact:
+    provider_url: "{{ manageiq.api_url }}/api/data_stores"
+
+- name: "SENHA :::  reporte de almacenamiento -- Obteniendo resultados de los datastores."
+  uri:
+    url: "{{ provider_url }}"
+    method: GET
+    body_format: json
+    validate_certs: False
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type: "application/json"
+    status_code: 200
+  register: general_storage
+
+- include_tasks: general_reporteDataStore.yml
+  with_items: "{{general_storage.json.resources}}"

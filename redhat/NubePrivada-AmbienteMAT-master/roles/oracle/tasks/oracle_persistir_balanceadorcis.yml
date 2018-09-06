@@ -1,0 +1,49 @@
+---
+# tasks file for oracle
+- set_fact:
+    execute_command: "{{oracle_ssh_connect}} export ORACLE_HOME={{oracle_database_sql_oracle_home}} && export ORACLE_SID={{oracle_database_sql_sid}} && {{oracle_database_sqlplus}} -S {{oracle_database_sql_admin_username}}/{{oracle_database_sql_admin_password}} @{{sql_path}}{{guarda_balanceadorcis_senha}} \\\"{{tipo_de_registro}}\\\" \\\"{{clase_de_ci}}\\\" \\\"{{id_de_elemento}}\\\" \\\"{{fecha_de_registro}}\\\" \\\"{{centro_de_datos}}\\\" \\\"{{ambiente}}\\\" \\\"{{capa}}\\\" \\\"{{work_order}}\\\" \\\"{{area_general}}\\\" \\\"{{area_central}}\\\" \\\"{{id_de_servicio}}\\\" \\\"{{id_de_aplicacion}}\\\" \\\"{{version_de_aplicacion}}\\\" \\\"{{tenant}}\\\" \\\"{{vip}}\\\" \\\"{{algoritmo_de_balanceo}}\\\" \\\"{{tipo_de_persistencia}}\\\" \\\"{{puerto_de_listener}}\\\" \\\"{{lista_de_nodos}}\\\""
+
+- debug:
+    msg: "command: '{{ execute_command }}' Sera ejecutado en sentencia Oracle en el sig esquema ({{ oracle_database_sql_sid }}) (ORACLE_HOME: {{oracle_database_sql_oracle_home }})"
+
+- name: oracle_persistir_mvirtualcis
+  command: "{{execute_command}}"
+
+  register: salida_oracle_persistir_balanceadorcis
+  environment:
+    ORACLE_HOME: "{{oracle_database_sql_oracle_home}}"
+    ORACLE_SID: "{{oracle_database_sql_sid}}"
+    SQL_PATH: "{{sql_path}}"
+    
+- set_fact:
+    salida_balanceador: |
+      {{salida_oracle_persistir_balanceadorcis.stdout}}
+
+- set_fact:
+    salida_balanceador_error: |
+      {{salida_oracle_persistir_balanceadorcis.stderr}}
+
+- debug:
+    msg: "{{ salida_balanceador }}"
+    
+- debug:
+    msg: "Se prodjo el siguiente error: {{ salida_balanceador_error }}"
+...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

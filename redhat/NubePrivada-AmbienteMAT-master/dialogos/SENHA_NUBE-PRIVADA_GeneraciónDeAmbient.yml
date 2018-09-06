@@ -1,0 +1,674 @@
+---
+- description: Generación de un ambiente para la nube privada
+  buttons: submit,cancel
+  label: SENHA_NUBE-PRIVADA_GeneraciónDeAmbiente
+  dialog_tabs:
+  - description: Información del requerimiento, relacionados con los solicitantes.
+    display: 
+    label: Datos del solicitante
+    display_method: 
+    display_method_options: 
+    position: 0
+    dialog_groups:
+    - description: Se coloca la información del area requisitora o solicitante.
+      display: 
+      label: Información de los solicitantes
+      display_method: 
+      display_method_options: 
+      position: 0
+      dialog_fields:
+      - name: numero_de_ticket
+        description: |-
+          Colocar el Numero de ticket
+          - Cambio (CH000...123)
+          - Orded de trabajo (WO000....123)
+          - Incidente (INC000...123)
+          - Oficio (ZZZ000...123)
+        data_type: string
+        notes: 
+        notes_display: 
+        display: edit
+        display_method: 
+        display_method_options: {}
+        required: false
+        required_method: 
+        required_method_options: {}
+        default_value: WO0000000012
+        values: 
+        values_method: 
+        values_method_options: {}
+        options:
+          :protected: false
+        label: Numero de ticket
+        position: 0
+        validator_type: 
+        validator_rule: 
+        reconfigurable: false
+        dynamic: false
+        show_refresh_button: false
+        load_values_on_init: false
+        read_only: false
+        auto_refresh: false
+        trigger_auto_refresh: false
+        visible: true
+        type: DialogFieldTextBox
+        resource_action:
+          action: 
+          resource_type: DialogField
+          ae_namespace: 
+          ae_class: 
+          ae_instance: 
+          ae_message: 
+          ae_attributes: {}
+        dialog_field_responders: []
+      - name: centro_de_costos
+        description: Se coloca el centro de costos del solicitante.
+        data_type: string
+        notes: 
+        notes_display: 
+        display: edit
+        display_method: 
+        display_method_options: {}
+        required: false
+        required_method: 
+        required_method_options: {}
+        default_value: COST000001
+        values: 
+        values_method: 
+        values_method_options: {}
+        options:
+          :protected: false
+        label: Centro de costos
+        position: 1
+        validator_type: 
+        validator_rule: 
+        reconfigurable: false
+        dynamic: false
+        show_refresh_button: false
+        load_values_on_init: false
+        read_only: false
+        auto_refresh: false
+        trigger_auto_refresh: false
+        visible: true
+        type: DialogFieldTextBox
+        resource_action:
+          action: 
+          resource_type: DialogField
+          ae_namespace: 
+          ae_class: 
+          ae_instance: 
+          ae_message: 
+          ae_attributes: {}
+        dialog_field_responders: []
+      - name: nombre_solicitante
+        description: Colocar el nombre del solicitante del ticket
+        data_type: string
+        notes: 
+        notes_display: 
+        display: edit
+        display_method: 
+        display_method_options: {}
+        required: false
+        required_method: 
+        required_method_options: {}
+        default_value: Usuario Lopez
+        values: 
+        values_method: 
+        values_method_options: {}
+        options:
+          :protected: false
+        label: Nombre del solicitante
+        position: 2
+        validator_type: 
+        validator_rule: 
+        reconfigurable: false
+        dynamic: false
+        show_refresh_button: false
+        load_values_on_init: false
+        read_only: false
+        auto_refresh: false
+        trigger_auto_refresh: false
+        visible: true
+        type: DialogFieldTextBox
+        resource_action:
+          action: 
+          resource_type: DialogField
+          ae_namespace: 
+          ae_class: 
+          ae_instance: 
+          ae_message: 
+          ae_attributes: {}
+        dialog_field_responders: []
+      - name: lista_correo_electronico
+        description: Lista de los correos electronicos, separados por coma, a los
+          cuales se les enviaran notificaciones del aprovisionamiento
+        data_type: 
+        notes: 
+        notes_display: 
+        display: edit
+        display_method: 
+        display_method_options: {}
+        required: false
+        required_method: 
+        required_method_options: {}
+        default_value: usuario@example.com,userlist@example.com
+        values: 
+        values_method: 
+        values_method_options: {}
+        options:
+          :protected: false
+        label: Lista de correos electronicos de notificación
+        position: 3
+        validator_type: 
+        validator_rule: 
+        reconfigurable: false
+        dynamic: false
+        show_refresh_button: false
+        load_values_on_init: false
+        read_only: false
+        auto_refresh: false
+        trigger_auto_refresh: false
+        visible: true
+        type: DialogFieldTextAreaBox
+        resource_action:
+          action: 
+          resource_type: DialogField
+          ae_namespace: 
+          ae_class: 
+          ae_instance: 
+          ae_message: 
+          ae_attributes: {}
+        dialog_field_responders: []
+  - description: Selección de tipo de ambiente para este aprovisionamiento.
+    display: edit
+    label: Ambiente
+    display_method: 
+    display_method_options: 
+    position: 1
+    dialog_groups:
+    - description: Se solicita el ambiente para despliegue, solo se permite uno por
+        aprovisionamiento
+      display: edit
+      label: Selección de ambiente
+      display_method: 
+      display_method_options: 
+      position: 0
+      dialog_fields:
+      - name: selector_de_ambiente
+        description: Permite seleccionar un ambiente con respecto a  los ofrecidos
+          por SAT
+        data_type: string
+        notes: 
+        notes_display: 
+        display: edit
+        display_method: 
+        display_method_options: {}
+        required: true
+        required_method: 
+        required_method_options: {}
+        default_value: '1'
+        values:
+        - - '1'
+          - Desarrollo
+        - - '2'
+          - Calidad (UAT)
+        - - '3'
+          - Producción
+        - - '4'
+          - Estres
+        values_method: 
+        values_method_options: {}
+        options:
+          :sort_by: description
+          :sort_order: ascending
+        label: Ambiente
+        position: 0
+        validator_type: 
+        validator_rule: 
+        reconfigurable: false
+        dynamic: false
+        show_refresh_button: false
+        load_values_on_init: false
+        read_only: false
+        auto_refresh: false
+        trigger_auto_refresh: false
+        visible: true
+        type: DialogFieldRadioButton
+        resource_action:
+          action: 
+          resource_type: DialogField
+          ae_namespace: 
+          ae_class: 
+          ae_instance: 
+          ae_message: 
+          ae_attributes: {}
+        dialog_field_responders: []
+  - description: Relación y descripción de cada capa con sus correspondientes parámetros.
+    display: edit
+    label: Capas
+    display_method: 
+    display_method_options: 
+    position: 2
+    dialog_groups:
+    - description: Capa que tiene exponentes http, donde se encuentran los elementos
+        de interfaz web de los aplicativos.
+      display: edit
+      label: Presentacón
+      display_method: 
+      display_method_options: 
+      position: 0
+      dialog_fields:
+      - name: no_vm_presentación
+        description: Se indica la cantidad de maquinas virtuales que seran requeridas
+          en este ambiente para la capa de presentación
+        data_type: integer
+        notes: 
+        notes_display: 
+        display: edit
+        display_method: 
+        display_method_options: {}
+        required: false
+        required_method: 
+        required_method_options: {}
+        default_value: '3'
+        values: 
+        values_method: 
+        values_method_options: {}
+        options:
+          :protected: false
+        label: Cantidad de maquinas virtuales para presentacion
+        position: 0
+        validator_type: 
+        validator_rule: 
+        reconfigurable: false
+        dynamic: false
+        show_refresh_button: false
+        load_values_on_init: false
+        read_only: false
+        auto_refresh: false
+        trigger_auto_refresh: false
+        visible: true
+        type: DialogFieldTextBox
+        resource_action:
+          action: 
+          resource_type: DialogField
+          ae_namespace: 
+          ae_class: 
+          ae_instance: 
+          ae_message: 
+          ae_attributes: {}
+        dialog_field_responders: []
+      - name: vmware_template_presentacion
+        description: ''
+        data_type: string
+        notes: 
+        notes_display: 
+        display: edit
+        display_method: 
+        display_method_options: {}
+        required: false
+        required_method: 
+        required_method_options: {}
+        default_value: ''
+        values: 
+        values_method: 
+        values_method_options: {}
+        options:
+          :sort_by: description
+          :sort_order: ascending
+          :force_multi_value: false
+        label: Template de VMWare
+        position: 1
+        validator_type: 
+        validator_rule: 
+        reconfigurable: false
+        dynamic: true
+        show_refresh_button: false
+        load_values_on_init: false
+        read_only: false
+        auto_refresh: false
+        trigger_auto_refresh: false
+        visible: true
+        type: DialogFieldDropDownList
+        resource_action:
+          action: 
+          resource_type: DialogField
+          ae_namespace: 
+          ae_class: 
+          ae_instance: 
+          ae_message: 
+          ae_attributes: {}
+        dialog_field_responders: []
+      - name: sabores_presentacion
+        description: Se definen tamaño de equipos (estandares) con respecto a CPu
+          y Memoria
+        data_type: integer
+        notes: 
+        notes_display: 
+        display: edit
+        display_method: 
+        display_method_options: {}
+        required: false
+        required_method: 
+        required_method_options: {}
+        default_value: '1'
+        values:
+        - - 
+          - "<None>"
+        - - '1'
+          - Chica
+        - - '2'
+          - Mediana
+        - - '3'
+          - Grande
+        - - '4'
+          - Extragrande
+        values_method: 
+        values_method_options: {}
+        options:
+          :sort_by: description
+          :sort_order: ascending
+          :force_multi_value: false
+        label: Sabores para capa de presentación
+        position: 2
+        validator_type: 
+        validator_rule: 
+        reconfigurable: false
+        dynamic: false
+        show_refresh_button: false
+        load_values_on_init: false
+        read_only: false
+        auto_refresh: false
+        trigger_auto_refresh: false
+        visible: true
+        type: DialogFieldDropDownList
+        resource_action:
+          action: 
+          resource_type: DialogField
+          ae_namespace: 
+          ae_class: 
+          ae_instance: 
+          ae_message: 
+          ae_attributes: {}
+        dialog_field_responders: []
+    - description: Capa de procesamiento, contenedores Java, y elmentos de servicios.
+      display: edit
+      label: Procesamiento
+      display_method: 
+      display_method_options: 
+      position: 1
+      dialog_fields:
+      - name: no_vm_procesamiento
+        description: Se indica la cantidad de maquinas virtuales que seran requeridas
+          en este ambiente para la capa de procesamiento
+        data_type: integer
+        notes: 
+        notes_display: 
+        display: edit
+        display_method: 
+        display_method_options: {}
+        required: false
+        required_method: 
+        required_method_options: {}
+        default_value: '3'
+        values: 
+        values_method: 
+        values_method_options: {}
+        options:
+          :protected: false
+        label: Cantidad de maquinas virtuales para procesamiento
+        position: 0
+        validator_type: 
+        validator_rule: 
+        reconfigurable: false
+        dynamic: false
+        show_refresh_button: false
+        load_values_on_init: false
+        read_only: false
+        auto_refresh: false
+        trigger_auto_refresh: false
+        visible: true
+        type: DialogFieldTextBox
+        resource_action:
+          action: 
+          resource_type: DialogField
+          ae_namespace: 
+          ae_class: 
+          ae_instance: 
+          ae_message: 
+          ae_attributes: {}
+        dialog_field_responders: []
+      - name: vmware_template_procesamiento
+        description: ''
+        data_type: string
+        notes: 
+        notes_display: 
+        display: edit
+        display_method: 
+        display_method_options: {}
+        required: false
+        required_method: 
+        required_method_options: {}
+        default_value: ''
+        values: 
+        values_method: 
+        values_method_options: {}
+        options:
+          :sort_by: description
+          :sort_order: ascending
+          :force_multi_value: false
+        label: Template de VMWare
+        position: 1
+        validator_type: 
+        validator_rule: 
+        reconfigurable: false
+        dynamic: true
+        show_refresh_button: false
+        load_values_on_init: false
+        read_only: false
+        auto_refresh: false
+        trigger_auto_refresh: false
+        visible: true
+        type: DialogFieldDropDownList
+        resource_action:
+          action: 
+          resource_type: DialogField
+          ae_namespace: 
+          ae_class: 
+          ae_instance: 
+          ae_message: 
+          ae_attributes: {}
+        dialog_field_responders: []
+      - name: sabores_procesamiento
+        description: Se definen tamaño de equipos (estandares) con respecto a CPu
+          y Memoria
+        data_type: integer
+        notes: 
+        notes_display: 
+        display: edit
+        display_method: 
+        display_method_options: {}
+        required: false
+        required_method: 
+        required_method_options: {}
+        default_value: '1'
+        values:
+        - - 
+          - "<None>"
+        - - '1'
+          - Chica
+        - - '2'
+          - Mediana
+        - - '3'
+          - Grande
+        - - '4'
+          - Extragrande
+        values_method: 
+        values_method_options: {}
+        options:
+          :sort_by: description
+          :sort_order: ascending
+          :force_multi_value: false
+        label: Sabores para capa de presentación
+        position: 2
+        validator_type: 
+        validator_rule: 
+        reconfigurable: false
+        dynamic: false
+        show_refresh_button: false
+        load_values_on_init: false
+        read_only: false
+        auto_refresh: false
+        trigger_auto_refresh: false
+        visible: true
+        type: DialogFieldDropDownList
+        resource_action:
+          action: 
+          resource_type: DialogField
+          ae_namespace: 
+          ae_class: 
+          ae_instance: 
+          ae_message: 
+          ae_attributes: {}
+        dialog_field_responders: []
+    - description: Capa donde se encuentran Bases de datos, que se explotaras por
+        las otras dos capas superiores.
+      display: edit
+      label: Capa de datos
+      display_method: 
+      display_method_options: 
+      position: 2
+      dialog_fields:
+      - name: no_vm_datos
+        description: Se indica la cantidad de maquinas virtuales que seran requeridas
+          en este ambiente para la capa de datos
+        data_type: integer
+        notes: 
+        notes_display: 
+        display: edit
+        display_method: 
+        display_method_options: {}
+        required: false
+        required_method: 
+        required_method_options: {}
+        default_value: '3'
+        values: 
+        values_method: 
+        values_method_options: {}
+        options:
+          :protected: false
+        label: Cantidad de maquinas virtuales para datos
+        position: 0
+        validator_type: 
+        validator_rule: 
+        reconfigurable: false
+        dynamic: false
+        show_refresh_button: false
+        load_values_on_init: false
+        read_only: false
+        auto_refresh: false
+        trigger_auto_refresh: false
+        visible: true
+        type: DialogFieldTextBox
+        resource_action:
+          action: 
+          resource_type: DialogField
+          ae_namespace: 
+          ae_class: 
+          ae_instance: 
+          ae_message: 
+          ae_attributes: {}
+        dialog_field_responders: []
+      - name: vmware_template_datos
+        description: ''
+        data_type: string
+        notes: 
+        notes_display: 
+        display: edit
+        display_method: 
+        display_method_options: {}
+        required: false
+        required_method: 
+        required_method_options: {}
+        default_value: ''
+        values: 
+        values_method: 
+        values_method_options: {}
+        options:
+          :sort_by: description
+          :sort_order: ascending
+          :force_multi_value: false
+        label: Template de VMWare
+        position: 1
+        validator_type: 
+        validator_rule: 
+        reconfigurable: false
+        dynamic: true
+        show_refresh_button: false
+        load_values_on_init: false
+        read_only: false
+        auto_refresh: false
+        trigger_auto_refresh: false
+        visible: true
+        type: DialogFieldDropDownList
+        resource_action:
+          action: 
+          resource_type: DialogField
+          ae_namespace: 
+          ae_class: 
+          ae_instance: 
+          ae_message: 
+          ae_attributes: {}
+        dialog_field_responders: []
+      - name: sabores_datos
+        description: Se definen tamaño de equipos (estandares) con respecto a CPu
+          y Memoria
+        data_type: integer
+        notes: 
+        notes_display: 
+        display: edit
+        display_method: 
+        display_method_options: {}
+        required: false
+        required_method: 
+        required_method_options: {}
+        default_value: '1'
+        values:
+        - - 
+          - "<None>"
+        - - '1'
+          - Chica
+        - - '2'
+          - Mediana
+        - - '3'
+          - Grande
+        - - '4'
+          - Extragrande
+        values_method: 
+        values_method_options: {}
+        options:
+          :sort_by: description
+          :sort_order: ascending
+          :force_multi_value: false
+        label: Sabores para capa de datos
+        position: 2
+        validator_type: 
+        validator_rule: 
+        reconfigurable: false
+        dynamic: false
+        show_refresh_button: false
+        load_values_on_init: false
+        read_only: false
+        auto_refresh: false
+        trigger_auto_refresh: false
+        visible: true
+        type: DialogFieldDropDownList
+        resource_action:
+          action: 
+          resource_type: DialogField
+          ae_namespace: 
+          ae_class: 
+          ae_instance: 
+          ae_message: 
+          ae_attributes: {}
+        dialog_field_responders: []

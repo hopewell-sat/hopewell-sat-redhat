@@ -1,0 +1,26 @@
+---
+# vars file for generar_registro_cmdb
+
+diccionario_valor_descripcion:
+  lp: "Laboratorio Puebla"
+  labPueba: "Laboratorio Puebla"
+  dev: "Desarrollo"
+  uat: "Calidad (UAT)"
+  pro: "Producción"
+  str: "Estrés"
+  t: "Se desplegó en umbral de riesgo"
+  f: "No se ha superado ningún umbral"
+  CHPRE: "Chica"
+  MEPRE: "Mediana"
+  GRPRE: "Grande"
+  EGPRE: "Extragrande"
+  CHPRO: "Chica"
+  MEPRO: "Mediana"
+  GRPRO: "Grande"
+  EGPRO: "Extragrande"
+  CHDAT: "Chica"
+  MEDAT: "Mediana"
+  GRDAT: "Grande"
+  EGDAT: "Extragrande"
+
+

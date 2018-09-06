@@ -1,0 +1,57 @@
+
+- name: Prevalidacion de exisitencia de maquina
+  vmware_guest_find:
+    datacenter: "{{vmware_datacenter}}"
+    hostname: "{{ vmware_vcenterhost }}"
+    username: "{{ vmware_usuario }}"
+    password: "{{ vmware_contrasenia }}"
+    validate_certs: no
+    name: "{{ vmware_maquina_virtual_validacion }}"
+  register: vmware_validacion
+  ignore_errors: True
+
+
+- name: Importando la aplicacion de transformaciones en caso de error para envio de correo
+  import_role:
+    name: aplicar_diccionario
+    tasks_from: main
+  when:
+    - vmware_validacion is succeeded
+
+#De aqui se envia el correo
+- name: Enviar de correo informacion duplicada
+  include_role:
+    name: general
+    tasks_from: general_enviocorreo
+  vars:
+    general_correo_de: "senha.notificacion@gmail.com"
+    general_correo_para: "{{ correo_solicitante }}"
+    general_correo_concopia: "{{ lista_correo_electronico }}"
+    general_correo_asunto: "Folio {{ estructura_ambiente.senha_generales.numero_de_ticket }} - Despliegue Fallido - {{ nombre_catalogo }}"
+    general_correo_cuerpo: |
+                            <br/>Datos generales del despliegue con el folio <b>{{ estructura_ambiente.senha_generales.numero_de_ticket }}</b>.-
+                            <br/>
+                            <ul>
+                            <li>Item desplegado: <b>{{ nombre_catalogo }}</b></li>
+                            <li>Solicitante / Correo:  <b>{{ estructura_ambiente.senha_generales.nombre_solicitante }}</b> / <b>{{ estructura_ambiente.senha_generales.correo_solicitante }}</b></li>
+                            <li>Aplicación / Versión:  <b>{{ estructura_ambiente.senha_generales.nombre_aplicacion }}</b> / <b>{{ estructura_ambiente.senha_generales.version_proyecto }}</b></li>
+                            <li>Ambiente: <b>{{ estructura_ambiente.senha_generales.selector_de_ambiente }}</b></li>
+                            <li>Prevalidación con error: <b> Prevalidación de existencia de máquina </b></li>
+                            </ul>
+                            <br/>
+                            <br/>Mensaje de error.-
+                            <ul>
+                            <li>SENHA ha detectado un componente existente por el cual no se puede generar todo el stack de arquitectura MAT. M&aacute;quina virtual <b> {{ vmware_maquina_virtual_validacion }} existente</b> </li>
+                            </ul>
+    general_correo_adjuntos: ""
+    tipo_evento_notificacion: "error_de_prevalidacion"
+  when:
+    - vmware_validacion is succeeded
+
+#Hasta aca se envia el correo
+
+- name: Alertar de existencia de maquina virtual.
+  fail:
+    msg: "La maquina virtual {{vmware_maquina_virtual_validacion}} ya existe dentro del Vcenter."
+  when:
+    - vmware_validacion is succeeded

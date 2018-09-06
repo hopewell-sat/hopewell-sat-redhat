@@ -1,0 +1,12 @@
+ 
+- hosts: localhost
+  vars:
+    f5_entrada_nombrepool: "capa_pres_odi_tcp"
+    f5_entrada_ipsnodos: " \"192.168.10.8:80\", \"192.168.10.9:80\" "
+    f5_entrada_puerto: "80"
+
+  tasks:
+    - name: Ejecutando una sola tarea desde F5/tasks/f5_eliminarvs.yml
+      import_role:
+        name: F5
+        tasks_from: f5_eliminarvs

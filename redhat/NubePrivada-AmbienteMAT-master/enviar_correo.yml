@@ -1,0 +1,9 @@
+---
+- name: Valores  Generados y Obtenidos
+  hosts: localhost
+  gather_facts: no
+  roles:
+    - calcular_variables_ambiente_mat
+    - aplicar_diccionario
+    - comunicar_informacion_ambiente
+...

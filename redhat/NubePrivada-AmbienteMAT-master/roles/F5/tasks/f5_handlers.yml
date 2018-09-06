@@ -1,0 +1,47 @@
+---
+# handlers file for f5
+- debug:
+    msg: "Ejecutando archivo handlers para el rol f5"
+
+- name: Add TAGs to F5
+  uri:
+    url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}/tags"
+    method: POST
+    validate_certs: no
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type:  application/json
+    body_format: json
+    body:
+      action: assign
+      resources:
+        - category: "senha_ambiente"
+          name: "senha_ambiente_desarrollo"
+        - category: "senha_balanceadores"
+          name: "senha_bc_f5"
+  ignore_errors: True
+     
+- name: Add Custom Attributes to F5
+  uri:
+    url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}/custom_attributes"
+    method: POST
+    validate_certs: no
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type:  application/json
+    body_format: json
+    body:
+      action: add
+      resources:
+        - name: "Work Order"
+          value: "{{ numero_de_ticket  }}"
+        - name: "General"
+          value: "{{ nombre_general  }}"
+        - name: "Central"
+          value: "{{ nombre_central  }}"
+        - name: "Aplicación"
+          value: "{{ nombre_aplicacion }}"
+        - name: "Versión"
+          value: "{{ version_proyecto }}"
+  ignore_errors: True
+...

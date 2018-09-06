@@ -1,0 +1,34 @@
+---
+centro_de_datos: "{{centro_datos_sat}}"
+
+tmp_identificar_balanceador_procesamiento: "f"
+tmp_identificar_umbral_storage: "f"
+
+entrada_tipobalanceo_lb_pres: ""
+entrada_tipopersistencia_lb_pres: ""
+
+entrada_tipobalanceo_lb_proc: ""
+entrada_tipopersistencia_lb_proc: ""
+
+calcular_tmp_version: ""
+calcular_tmp_subversion: ""
+calcular_tmp_arreglo: ""
+
+id_plantilla_presetacion: ""
+plantilla_presentacion: ""
+descripcion_plantilla_presentacion: ""
+
+id_plantilla_procesamiento: ""
+plantilla_procesamiento: ""
+descripcion_plantilla_procesamiento: ""
+
+id_plantilla_datos: ""
+plantilla_datos: ""
+descripcion_plantilla_datos: ""
+
+acronimo_aplicacion: ""
+tmp_nombre_aplicacion: ""
+
+omitir_capa_presentacion: "f"
+omitir_capa_procesamiento: "f"
+omitir_capa_datos: "f"

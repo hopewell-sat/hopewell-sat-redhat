@@ -1,0 +1,23 @@
+---
+# vars file for generar_registro_cmdb
+
+#diccionario_valor_descripcion:
+#  lp: "LabPuebla"
+#  dev: "Desarrollo"
+#  uat: "Calidad (UAT)"
+#  pro: "Producción"
+#  str: "Estrés"
+#  t: "Si"
+#  f: "No"
+#  CHPRE: "Chica"
+#  MEPRE: "Mediana"
+#  GRPRE: "Grande"
+#  EGPRE: "Extragrande"
+#  CHPRO: "Chica"
+#  MEPRO: "Mediana"
+#  GRPRO: "Grande"
+#  EGPRO: "Extragrande"
+#  CHDAT: "Chica"
+#  MEDAT: "Mediana"
+#  GRDAT: "Grande"
+#  EGDAT: "Extragrande"

@@ -1,0 +1,5 @@
+---
+- debug:
+    msg: "Ejecutando archivo \"tasks\" para el rol generar_registro_db"
+
+...

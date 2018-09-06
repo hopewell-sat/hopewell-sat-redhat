@@ -1,0 +1,32 @@
+# @  Author Alan Flores Mendoza
+# @  Parametros de entrada
+#    inflobox_listadoip: "10.0.0.0,10.0.0.1,10.0.0.2,10.0.0.3,10.0.0.4"
+# @  Descripcion
+# @@ Esta secuencia de metodos el rollback de los elementos generados basado en parametros de entrada mencionados en los renglones primarios
+
+- debug:
+    msg: "Procesamiento LB {{ entrada_ipvirtual_lb_proc }}"
+  when:
+    - entrada_ipvirtual_lb_proc is defined
+    - entrada_ipvirtual_lb_proc != ""
+
+- debug:
+    msg: "Presentacion LB {{ entrada_ipvirtual_lb_pres }}"
+  when: entrada_ipvirtual_lb_pres != ""
+
+- include_tasks: decomisar_ip.yml
+  vars:
+    infoblox_ipeliminar: "{{ item }}"
+  with_items: "{{ rollback_ips_capas.split(',') }}"
+
+- include_tasks: decomisar_ip.yml
+  vars:
+    infoblox_ipeliminar: "{{ entrada_ipvirtual_lb_pres }}"
+  when: entrada_ipvirtual_lb_pres != ""
+
+- include_tasks: decomisar_ip.yml
+  vars:
+    infoblox_ipeliminar: "{{ entrada_ipvirtual_lb_proc }}"
+  when:
+    - entrada_ipvirtual_lb_proc is defined
+    - entrada_ipvirtual_lb_proc != ""

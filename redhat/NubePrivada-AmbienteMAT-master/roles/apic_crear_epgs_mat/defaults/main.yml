@@ -1,0 +1,7 @@
+---
+# defaults file for apic_crear_egps_mat
+ap: "default"
+epg: "epg_default"
+bd: "default"
+apic_tenant: "common"
+...

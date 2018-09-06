@@ -1,0 +1,23 @@
+ 
+- hosts: localhost
+  vars:
+    f5_entrada_nombrepool: "capa_pres_odi_tcp"
+    f5_entrada_ipsnodos: "192.168.10.10:80"
+
+  tasks:
+
+    - name: Ejecutando una sola tarea desde F5/tasks/f5_login.yml
+      import_role:
+        name: F5
+        tasks_from: f5_login
+
+    - name: Ejecutando una sola tarea desde F5/tasks/f5_validar_pool.yml
+      import_role:
+        name: F5
+        tasks_from: f5_validar_pool        
+        
+    - name: Ejecutando una sola tarea desde F5/tasks/f5_agrega_nodo.yml
+      import_role:
+        name: F5
+        tasks_from: f5_elimina_nodo
+

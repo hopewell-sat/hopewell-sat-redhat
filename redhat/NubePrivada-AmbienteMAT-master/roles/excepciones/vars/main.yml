@@ -1,0 +1,5 @@
+---
+# vars file for excepciones
+global_excepcion: ""                #SC,MF, 
+global_componente_integracion: ""   #Balanceadores de carga, Maquinas virtuales, Asignacion de IPs, Asignacion de almacenamiento, etc
+global_nombre_servicio: ""          #          F5,                   VMware,          InfoBlox,           CISCO ACI

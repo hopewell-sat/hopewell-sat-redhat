@@ -1,0 +1,155 @@
+---
+- name: "SENHA ::: VMware  ::: Creacion de m. v. -- Creacion de mv."
+  vmware_guest:
+    hostname: "{{ vmware_vcenterhost }}"
+    username: "{{ vmware_usuario }}"
+    password: "{{ vmware_contrasenia }}"
+    validate_certs: no
+    folder: "{{ vmware_carpeta }}"
+    cluster: "{{ vmware_cluster }}"
+    name: "{{ vmware_nombre_vm }}"
+    state: poweredon
+    template: "{{ vmware_template }}"
+    datacenter: "{{ vmware_datacenter }}"
+    wait_for_ip_address: no
+    hardware:
+      memory_mb: "{{ vmware_memory_mb }}"
+      num_cpus: "{{ vmware_num_cpus }}"
+  register: vmware_resultado
+  ignore_errors: True
+
+#Integracion de toma de 2 IP para las nics de la maquina virtual
+- import_role:
+    name: infoblox
+    tasks_from: asignacion_ip
+  vars:
+    infoblox_tipo_red: "P"
+    infoblox_macaddress: "{{vmware_resultado.instance.hw_eth0.macaddress}}"
+  when:
+    - vmware_resultado is succeeded
+    - vmware_resultado.instance is defined
+    - vmware_resultado.instance != ""
+
+- set_fact:
+    infoblox_proceso_produccion: "{{infoblox_proceso}}"
+
+- import_role:
+    name: infoblox
+    tasks_from: asignacion_ip
+  vars:
+    infoblox_tipo_red: "G"
+    infoblox_macaddress: "{{vmware_resultado.instance.hw_eth1.macaddress}}"
+  when:
+    - vmware_resultado is succeeded
+    - vmware_resultado.instance is defined
+    - vmware_resultado.instance != ""
+
+- set_fact:
+    infoblox_proceso_gestion: "{{infoblox_proceso}}"
+#Integracion de toma de 2 IP para las nics de la maquina virtual
+
+
+- name: "SENHA ::: VMware  ::: Creacion de m. v. -- Proceso satisfactorio."
+  set_fact:
+    maquina_virtual:
+      -
+        nombre_vm: "{{ vmware_nombre_vm }}"
+        vmware_proceso:
+          nombre_vm: "{{ vmware_nombre_vm }}"
+          codigo: "99"
+          mensaje: "Proceso OK"
+          entrada_nombrevm: "{{ vmware_nombre_vm }}"
+          salida_uuid: "{{ vmware_resultado.instance.hw_product_uuid }}"
+          nics: "{{vmware_resultado.instance.hw_eth0.macaddress}}"
+          plantilla: "{{ vmware_template }}"
+        infoblox_proceso: "{{ infoblox_proceso }}"
+        infoblox_proceso_gestion: "{{ infoblox_proceso_gestion }}"
+        infoblox_proceso_produccion: "{{ infoblox_proceso_produccion }}"
+  when:
+    - vmware_resultado is succeeded
+    - vmware_resultado.instance is defined
+    - vmware_resultado.instance != ""
+
+- name: "SENHA ::: VMware  ::: Creacion de m. v. -- Proceso NO satisfactorio."
+  set_fact:
+    maquina_virtual:
+      -
+        nombre_vm: "{{ vmware_nombre_vm }}"
+        vmware_proceso:
+          nombre_vm: "{{ vmware_nombre_vm }}"
+          codigo: "02"
+          mensaje: "Fallo proceso de ejecucion"
+          entrada_nombrevm: "{{ vmware_nombre_vm }}"
+          salida_uuid: ""
+          nics: []
+          plantilla: "{{ vmware_template }}"
+        infoblox_proceso: "{{ infoblox_proceso }}"
+  when: vmware_resultado is failed or vmware_resultado.instance is undefined
+
+- name: "SENHA ::: VMware  ::: Creacion de m. v. -- Inyeccion de datos de la maquina generada capa presentacion."
+  set_fact:
+    estructura_ambiente:
+      senha_generales: "{{ estructura_ambiente.senha_generales }}"
+      senha_presentacion:
+        presentacion_sabor: "{{ estructura_ambiente.senha_presentacion.presentacion_sabor }}"
+        no_vm_presentacion: "{{ estructura_ambiente.senha_presentacion.no_vm_presentacion }}"
+        vmware_template_presentacion: "{{ estructura_ambiente.senha_presentacion.vmware_template_presentacion }}"
+        balanceador_carga_presentacion: "{{ estructura_ambiente.senha_presentacion.balanceador_carga_presentacion }}"
+        puerto_escucha_presentacion: "{{ estructura_ambiente.senha_presentacion.puerto_escucha_presentacion }}"
+        maquinas_virtuales: "{{ estructura_ambiente.senha_presentacion.maquinas_virtuales }} + {{ maquina_virtual }}"
+        balanceador: "{{ estructura_ambiente.senha_presentacion.balanceador }}"
+        aci_epg: "{{ estructura_ambiente.senha_presentacion.aci_epg }}"
+      senha_procesamiento: "{{ estructura_ambiente.senha_procesamiento }}"
+      senha_datos: "{{ estructura_ambiente.senha_datos }}"
+  when: tipo_capa == "presentacion"
+
+- name: "SENHA ::: VMware  ::: Creacion de m. v. -- Inyeccion de datos de la maquina generada capa procesamiento."
+  set_fact:
+    estructura_ambiente:
+      senha_generales: "{{ estructura_ambiente.senha_generales }}"
+      senha_presentacion: "{{ estructura_ambiente.senha_presentacion }}"
+      senha_procesamiento:
+        procesamiento_sabor: "{{ estructura_ambiente.senha_procesamiento.procesamiento_sabor }}"
+        no_vm_procesamiento: "{{ estructura_ambiente.senha_procesamiento.no_vm_procesamiento }}"
+        vmware_template_procesamiento: "{{ estructura_ambiente.senha_procesamiento.vmware_template_procesamiento }}"
+        puerto_escucha_procesamiento: "{{ estructura_ambiente.senha_procesamiento.puerto_escucha_procesamiento }}"
+        maquinas_virtuales: "{{ estructura_ambiente.senha_procesamiento.maquinas_virtuales }} + {{ maquina_virtual }}"
+        balanceador: "{{ estructura_ambiente.senha_presentacion.balanceador }}"
+        aci_epg: "{{ estructura_ambiente.senha_procesamiento.aci_epg }}"
+      senha_datos: "{{ estructura_ambiente.senha_datos }}"
+  when: tipo_capa == "procesamiento"
+
+- name: "SENHA ::: VMware  ::: Creacion de m. v. -- Inyeccion de datos de la maquina generada capa datos."
+  set_fact:
+    estructura_ambiente:
+      senha_generales: "{{ estructura_ambiente.senha_generales }}"
+      senha_presentacion: "{{ estructura_ambiente.senha_presentacion }}"
+      senha_procesamiento: "{{ estructura_ambiente.senha_procesamiento }}"
+      senha_datos:
+        datos_sabor: "{{ estructura_ambiente.senha_datos.datos_sabor }}"
+        no_vm_datos: "{{ estructura_ambiente.senha_datos.no_vm_datos }}"
+        vmware_template_datos: "{{ estructura_ambiente.senha_datos.vmware_template_datos }}"
+        maquinas_virtuales: "{{ estructura_ambiente.senha_datos.maquinas_virtuales }} + {{ maquina_virtual }}"
+        balanceador: "{{ estructura_ambiente.senha_presentacion.balanceador }}"
+        aci_epg: "{{ estructura_ambiente.senha_datos.aci_epg }}"
+  when: tipo_capa == "datos"
+
+- name: "SENHA ::: VMware  ::: Creacion de m. v. -- vinculacion de la maquina en servicio CF."
+  import_tasks: vinculacion_vmencf.yml
+  when:
+    - vmware_resultado is succeeded
+    - vmware_resultado.instance is defined
+    - vmware_resultado.instance != ""
+
+- name: "SENHA ::: VMware  ::: Creacion de m. v. -- Etiquetado y metadata."
+  import_tasks: handlers.yml
+
+- set_fact: error_flujo_general="Error al generar la VM {{ vmware_nombre_vm }} mediante VMware {{ vmware_vcenterhost }}"
+  when: vmware_resultado is failed or vmware_resultado.instance is undefined
+
+- name: "SENHA ::: VMware  ::: Creacion de m. v. -- Rollback desde el proceso de vmware."
+  include_role:
+    name: ejecutar_rollback
+    tasks_from: main
+  when: vmware_resultado is failed or vmware_resultado.instance is undefined
+...

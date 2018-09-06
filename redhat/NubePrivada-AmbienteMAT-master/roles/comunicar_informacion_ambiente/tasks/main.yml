@@ -1,0 +1,463 @@
+---
+- name: "Imprimir variable ansible_hostname"
+  debug:
+    msg: "El hostname es {{ estructura_ambiente }}"
+      
+- name: Inicio de archivo HTML
+  copy:
+    dest: /tmp/senha_general.html
+    content: |
+            <html>
+               <head>
+                  <title>Resumen de despliegue</title>
+                  <meta charset="UTF-8">
+                  <meta name="viewport" content="width=device-width, initial-scale=1">
+                  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+                  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+                  <div class="jumbotron jumbotron-fluid" style="background-color:white;padding-top: 0px;padding-bottom: 0px">
+                    <div class="container">
+                       <img src="https://drive.google.com/uc?id=1QqaTGiBl0y9HeAlZ_iqyLP21y_YdBbay&export=download" class="img-responsive">
+                    </div>
+                  </div>
+               </head>
+               <body>
+                 <div class="container">
+  ignore_errors: True
+
+- name: Creación de tabla Generales
+  blockinfile:
+    path: /tmp/senha_general.html
+    marker: ""
+    block: |
+            <!-- Tabla de contenido -->
+                         <table class="table table-striped">
+                              <tr>
+                                <th style="color:white; background-color:#3C79C2; text-align:center; font-weight: bold" colspan="2">DATOS GENERALES</th>
+                              </tr>
+                            <tr>
+                               <td>Número de ticket:  </td>
+                               <td> {{ estructura_ambiente.senha_generales.numero_de_ticket }} </td>
+                            </tr>
+                            <tr>
+                               <td>Nombre del solicitante:  </td>
+                               <td> {{ estructura_ambiente.senha_generales.nombre_solicitante }} </td>
+                            </tr>
+                            <tr>
+                               <td>Correo del solicitante:  </td>
+                               <td> {{ estructura_ambiente.senha_generales.correo_solicitante }} </td>
+                            </tr>
+                            <tr>
+                               <td>Centro de datos:  </td>
+                               <td> {{ estructura_ambiente.senha_generales.centro_datos_sat }} </td>
+                            </tr>
+                            <tr>
+                               <td>Tipo de ambiente:  </td>
+                               <td> {{ estructura_ambiente.senha_generales.selector_de_ambiente }} </td>
+                            </tr>
+                            <tr>
+                               <td>Nombre de la aplicación:  </td>
+                               <td> {{ estructura_ambiente.senha_generales.nombre_aplicacion  }} </td>
+                            </tr>
+                            <tr>
+                               <td>Acrónimo de la aplicación:  </td>
+                               <td> {{ estructura_ambiente.senha_generales.acronimo_aplicacion }} </td>
+                            </tr>
+                            <tr>
+                               <td>Versión de la aplicación:  </td>
+                               <td> {{ estructura_ambiente.senha_generales.version_proyecto }} </td>
+                            </tr>
+                            <tr>
+                               <td>Perfil de aplicación: </td>
+                               <td>Mi perfil de aplicación ejemplo</td>
+                            </tr>
+                            <tr>
+                               <td>Continuar al alcanzar el umbral de riesgo de almacenamiento:  </td>
+                               <td> {{ estructura_ambiente.senha_generales.continuar_riesgo_umbral_storage }} </td>
+                            </tr>
+                             <tr>
+                               <td>Usuario root:  </td>
+                               <td> root </td>
+                            </tr>
+                            <tr>
+                               <td>Contraseña de usuario root:  </td>
+                               <td> {{ estructura_ambiente.senha_generales.contrasena_root_vms }} </td>
+                            </tr>
+                            <tr>
+                               <td>Usuario administrador:  </td>
+                               <td> adminsenha </td>
+                            </tr>
+                            <tr>
+                               <td>Contraseña de usuario administrador:  </td>
+                               <td> {{ estructura_ambiente.senha_generales.contrasena_admin_vms }} </td>
+                            </tr>
+                            <tr>
+                               <td>Fecha de creación de servicio:  </td>
+                               <td> {{ estructura_ambiente.senha_generales.fecha_inicio_proceso }} </td>
+                            </tr>
+                            <tr>
+                               <td>Fecha de término de despliegue:  </td>
+                               <td> {{ detarea.end[:19] }} </td>
+                            </tr>
+                         </table>
+  ignore_errors: True
+
+- name: Creación de tabla Presentación
+  blockinfile:
+    path: /tmp/senha_general.html
+    marker: ""
+    block: |
+            <!-- Tabla de presentacion -->
+                         </br>
+                         <table class="table table-striped">
+                            <tr>
+                               <th style="color:white; background-color:#3C79C2; text-align:center; font-weight: bold" colspan="3">CAPA DE PRESENTACIÓN</th>
+                            </tr>
+  when:   omitir_capa_presentacion  != "t"
+  ignore_errors: True
+
+- name: Llenado de tabla Presentación
+  blockinfile:
+    path: /tmp/senha_general.html
+    marker: ""
+    block: |
+           <!-- Balanceador de presentacion y EPG -->
+                            <tr>
+                               <td style="vertical-align:middle; text-align:center" rowspan="2">EPG</td>
+                               <td style="color:white; background-color:#A4A4A4; text-align:center; font-weight: bold" colspan="2">EPG presentación</td>
+                            </tr>
+                            <tr>
+                               <td>Descripción:</td>
+                               <td> Mi EPG ejemplo</td>
+                            </tr>
+                            <tr>
+                               <td style="vertical-align:middle; text-align:center" rowspan="7">Balanceador</td>
+                               <td style="color:white; background-color:#A4A4A4; text-align:center; font-weight: bold" colspan="2">{{ estructura_ambiente.senha_presentacion.balanceador.f5_proceso.entrada_nombre_pool }}</td>
+                            </tr>
+                            <tr>
+                               <td> VIP:  </td>
+                               <td> {{ estructura_ambiente.senha_presentacion.balanceador.f5_proceso.entrada_ip_virtual }} </td>
+                            </tr>
+                            <tr>
+                               <td> Puerto:  </td>
+                               <td> {{ estructura_ambiente.senha_presentacion.balanceador.f5_proceso.entrada_puerto }} </td>
+                            </tr>
+                            <tr>
+                               <td> IPs de nodos:  </td>
+                               <td> {{ estructura_ambiente.senha_presentacion.balanceador.f5_proceso.entrada_ips }} </td>
+                            </tr>
+                            <tr>
+                               <td> Protocolo:  </td>
+                               <td> {{ estructura_ambiente.senha_presentacion.balanceador.f5_proceso.entrada_protocolo }} </td>
+                            </tr>
+                            <tr>
+                               <td> Tipo de balanceo:  </td>
+                               <td> {{ estructura_ambiente.senha_presentacion.balanceador.f5_proceso.entrada_t_balanceo }} </td>
+                            </tr>
+                            <tr>
+                               <td> Tipo de persistencia:  </td>
+                               <td> {{ estructura_ambiente.senha_presentacion.balanceador.f5_proceso.entrada_t_persistencia }} </td>
+                            </tr>
+  when:   omitir_capa_presentacion  != "t"
+  ignore_errors: True
+
+- name: Llenado de tabla Presentación
+  blockinfile:
+    path: /tmp/senha_general.html
+    marker: ""
+    block: |
+           <!-- Máquinas de presentacion -->
+                            <tr>
+                               <td style="vertical-align:middle; text-align:center" rowspan="6">Máquina virtual  </td>
+                               <td style="color:white; background-color:#A4A4A4; text-align:center; font-weight: bold" colspan="2"> {{ item.nombre_vm }} </td>
+                            </tr>
+                            <tr>
+                               <td> Tamaño:  </td>
+                               <td> {{ estructura_ambiente.senha_presentacion.presentacion_sabor }} </td>
+                            </tr>
+                            <tr>
+                               <td> Plantilla:  </td>
+                               <td> {{ estructura_ambiente.senha_presentacion.vmware_template_presentacion }} </td>
+                            </tr>
+                            <tr>
+                               <td> Red de gestión - IP / MAC :  </td>
+                               <td> {{ item.infoblox_proceso_gestion.salida_ipasignada }} / {{ item.infoblox_proceso_gestion.entrada_macaddress }} </td>
+                            </tr>
+                            <tr>
+                               <td> Red de producción - IP / MAC :  </td>
+                               <td> {{ item.infoblox_proceso_produccion.salida_ipasignada }} / {{ item.infoblox_proceso_produccion.entrada_macaddress }} </td>
+                            </tr>
+                            <tr>
+                               <td> VMware UUID:  </td>
+                               <td> {{ item.vmware_proceso.salida_uuid }} </td>
+                            </tr>
+  with_items: "{{ estructura_ambiente.senha_presentacion.maquinas_virtuales }}"
+  when:   omitir_capa_presentacion  != "t"
+  ignore_errors: True
+
+- name: Final de tabla Presentación
+  blockinfile:
+    path: /tmp/senha_general.html
+    marker: ""
+    block: |
+           <!-- Final tabla presentacion -->
+                        </table>
+  when:   omitir_capa_presentacion  != "t"
+  ignore_errors: True
+
+
+- name: Creación de tabla Procesamiento
+  blockinfile:
+    path: /tmp/senha_general.html
+    marker: ""
+    block: |
+            <!-- Tabla de procesamiento -->
+                         </br>
+                         <table class="table table-striped">
+                            <tr>
+                               <th style="color:white; background-color:#3C79C2; text-align:center; font-weight: bold" colspan="3">CAPA DE PROCESAMIENTO</th>
+                            </tr>
+  when:   omitir_capa_procesamiento  != "t"
+  ignore_errors: True
+
+- name: Llenado de tabla Procesamiento
+  blockinfile:
+    path: /tmp/senha_general.html
+    marker: ""
+    block: |
+           <!-- Balanceador de procesamiento y EPG -->
+                            <tr>
+                               <td style="vertical-align:middle; text-align:center" rowspan="2">EPG</td>
+                               <td style="color:white; background-color:#A4A4A4; text-align:center; font-weight: bold" colspan="2">EPG procesamiento</td>
+                            </tr>
+                            <tr>
+                               <td>Descripción:</td>
+                               <td>Mi EPG ejemplo</td>
+                            </tr>
+                            <tr>
+                               <td style="vertical-align:middle; text-align:center" rowspan="7">Balanceador</td>
+                               <td style="color:white; background-color:#A4A4A4; text-align:center; font-weight: bold" colspan="2">{{ estructura_ambiente.senha_procesamiento.balanceador.f5_proceso.entrada_nombre_pool }}</td>
+                            </tr>
+                            <tr>
+                               <td> VIP:  </td>
+                               <td> {{ estructura_ambiente.senha_procesamiento.balanceador.f5_proceso.entrada_ip_virtual }} </td>
+                            </tr>
+                            <tr>
+                               <td> Puerto:  </td>
+                               <td> {{ estructura_ambiente.senha_procesamiento.balanceador.f5_proceso.entrada_puerto }} </td>
+                            </tr>
+                            <tr>
+                               <td> IPs de nodos:  </td>
+                               <td> {{ estructura_ambiente.senha_procesamiento.balanceador.f5_proceso.entrada_ips }} </td>
+                            </tr>
+                            <tr>
+                               <td> Protocolo:  </td>
+                               <td> {{ estructura_ambiente.senha_procesamiento.balanceador.f5_proceso.entrada_protocolo }} </td>
+                            </tr>
+                            <tr>
+                               <td> Tipo de balanceo:  </td>
+                               <td> {{ estructura_ambiente.senha_procesamiento.balanceador.f5_proceso.entrada_t_balanceo }} </td>
+                            </tr>
+                            <tr>
+                               <td> Tipo de persistencia:  </td>
+                               <td> {{ estructura_ambiente.senha_procesamiento.balanceador.f5_proceso.entrada_t_persistencia }} </td>
+                            </tr>
+  when:
+    - omitir_capa_procesamiento  != "t"
+    - balanceador_de_carga_procesamiento != "t"
+  ignore_errors: True
+
+- name: Llenado de tabla Procesamiento
+  blockinfile:
+    path: /tmp/senha_general.html
+    marker: ""
+    block: |
+           <!-- Máquinas de procesamiento -->
+                            <tr>
+                               <td style="vertical-align:middle; text-align:center" rowspan="6">Máquina virtual  </td>
+                               <td style="color:white; background-color:#A4A4A4; text-align:center; font-weight: bold" colspan="2"> {{ item.nombre_vm }} </td>
+                            </tr>
+                            <tr>
+                               <td> Tamaño:  </td>
+                               <td> {{ estructura_ambiente.senha_procesamiento.procesamiento_sabor }} </td>
+                            </tr>
+                            <tr>
+                               <td> Plantilla:  </td>
+                               <td> {{ estructura_ambiente.senha_procesamiento.vmware_template_procesamiento }} </td>
+                            </tr>
+                            <tr>
+                               <td> Red de gestión - IP / MAC :  </td>
+                               <td> {{ item.infoblox_proceso_gestion.salida_ipasignada }} / {{ item.infoblox_proceso_gestion.entrada_macaddress }} </td>
+                            </tr>
+                            <tr>
+                               <td> Red de producción - IP / MAC :  </td>
+                               <td> {{ item.infoblox_proceso_produccion.salida_ipasignada }} / {{ item.infoblox_proceso_produccion.entrada_macaddress }} </td>
+                            </tr>
+                            <tr>
+                               <td> VMware UUID:  </td>
+                               <td> {{ item.vmware_proceso.salida_uuid }} </td>
+                            </tr>
+  with_items: "{{ estructura_ambiente.senha_procesamiento.maquinas_virtuales }}"
+  when:   omitir_capa_procesamiento  != "t"
+  ignore_errors: True
+
+- name: Final de tabla Procesamiento
+  blockinfile:
+    path: /tmp/senha_general.html
+    marker: ""
+    block: |
+           <!-- Final tabla procesamiento -->
+                        </table>
+  when:   omitir_capa_procesamiento  != "t"
+  ignore_errors: True
+
+
+- name: Creación de tabla datos
+  blockinfile:
+    path: /tmp/senha_general.html
+    marker: ""
+    block: |
+            <!-- Tabla de datos y EPG -->
+                         </br>
+                         <table class="table table-striped">
+                            <tr>
+                               <th style="color:white; background-color:#3C79C2; text-align:center; font-weight: bold" colspan="3">CAPA DE DATOS</th>
+                            </tr>
+                            <tr>
+                               <td style="vertical-align:middle; text-align:center" rowspan="2">EPG</td>
+                               <td style="color:white; background-color:#A4A4A4; text-align:center; font-weight: bold" colspan="2">EPG datos</td>
+                            </tr>
+                            <tr>
+                               <td>Descripción:</td>
+                               <td>Mi EPG ejemplo</td>
+                            </tr>
+  when:   omitir_capa_datos  != "t"
+  ignore_errors: True
+
+- name: LLenado de tabla Datos
+  blockinfile:
+    path: /tmp/senha_general.html
+    marker: ""
+    block: |
+           <!-- Máquinas de datos -->
+                            <tr>
+                               <td style="vertical-align:middle; text-align:center" rowspan="6">Máquina virtual  </td>
+                               <td style="color:white; background-color:#A4A4A4; text-align:center; font-weight: bold" colspan="2"> {{ item.nombre_vm }} </td>
+                            </tr>
+                            <tr>
+                               <td> Tamaño:  </td>
+                               <td> {{ estructura_ambiente.senha_datos.datos_sabor }} </td>
+                            </tr>
+                            <tr>
+                               <td> Plantilla:  </td>
+                               <td> {{ estructura_ambiente.senha_datos.vmware_template_datos }} </td>
+                            </tr>
+                            <tr>
+                               <td> Red de gestión - IP / MAC :  </td>
+                               <td> {{ item.infoblox_proceso_gestion.salida_ipasignada }} / {{ item.infoblox_proceso_gestion.entrada_macaddress }} </td>
+                            </tr>
+                            <tr>
+                               <td> Red de producción - IP / MAC :  </td>
+                               <td> {{ item.infoblox_proceso_produccion.salida_ipasignada }} / {{ item.infoblox_proceso_produccion.entrada_macaddress }} </td>
+                            </tr>
+                            <tr>
+                               <td> VMware UUID:  </td>
+                               <td> {{ item.vmware_proceso.salida_uuid }} </td>
+                            </tr>
+  with_items: "{{ estructura_ambiente.senha_datos.maquinas_virtuales }}"
+  when:   omitir_capa_datos  != "t"
+  ignore_errors: True
+
+- name: Final de tabla Datos
+  blockinfile:
+    path: /tmp/senha_general.html
+    marker: ""
+    block: |
+           <!-- Final tabla datos -->
+                        </table>
+  when:   omitir_capa_datos  != "t"
+  ignore_errors: True
+
+- name: Final de archivo HTML
+  blockinfile:
+    path: /tmp/senha_general.html
+    marker: ""
+    block: |
+        <!-- final de archivo-->
+                </div>
+              </body>
+          </html>
+  ignore_errors: True
+
+- set_fact:
+    nombre_archivo: "/tmp/{{ estructura_ambiente.senha_generales.numero_de_ticket }}-{{ estructura_ambiente.senha_generales.acronimo_aplicacion }}-{{ nombre_catalogo | regex_replace('\\.') | regex_replace(' ') }}_{{ estructura_ambiente.senha_generales.fecha_inicio_proceso | regex_replace('-') | regex_replace(':') | regex_replace(' ')}}"
+  ignore_errors: True
+
+- name: Renombrado de archivo HTML
+  copy:
+    src: /tmp/senha_general.html
+    dest: "{{ nombre_archivo }}.html"
+  ignore_errors: True
+
+- name: Generando archivo json
+  copy:
+    dest: "{{ nombre_archivo }}.json"
+    content: "{{ estructura_ambiente | to_nice_json }}"
+  ignore_errors: True
+
+- name: Generando archivo zip
+  archive:
+    path:
+    - "{{ nombre_archivo }}.html"
+    - "{{ nombre_archivo }}.json"
+    dest: "{{ nombre_archivo }}.zip"
+    format: zip
+  ignore_errors: True
+
+
+
+- name: Envio de correo electrónico con los datos del despliegue
+  import_role:
+    name: general
+    tasks_from: general_enviocorreo
+  vars:
+    general_correo_de: "senha.notificacion@gmail.com"
+    general_correo_para: "{{ correo_solicitante }}"
+    general_correo_concopia: "{{ lista_correo_electronico }}"
+    general_correo_asunto: "Folio {{ estructura_ambiente.senha_generales.numero_de_ticket }} - Despliegue completado - {{ nombre_catalogo }}"
+    general_correo_cuerpo: |
+                            <br/>Datos generales del despliegue con el folio <b>{{ estructura_ambiente.senha_generales.numero_de_ticket }}</b>.-
+                            <br/>
+                            <ul>
+                            <li>Item desplegado: <b>{{ nombre_catalogo }}</b></li>
+                            <li>Solicitante / Correo:  <b>{{ estructura_ambiente.senha_generales.nombre_solicitante }}</b> / <b>{{ estructura_ambiente.senha_generales.correo_solicitante }}</b></li>
+                            <li>Aplicación / Versión:  <b>{{ estructura_ambiente.senha_generales.nombre_aplicacion }}</b> / <b>{{ estructura_ambiente.senha_generales.version_proyecto }}</b></li>
+                            <li>Ambiente: <b>{{ estructura_ambiente.senha_generales.selector_de_ambiente }}</b></li>
+                            <li>Centro de Datos: <b>{{ estructura_ambiente.senha_generales.centro_datos_sat }}</b></li>
+                            <li>Estado de despliegue: <b>Exitoso</b></li>
+                            </ul>
+                            <br/>
+                            <br/>Documentos anexos.-
+                            <ul>
+                            <li>Documento detalle de elementos desplegados en formato HTML: <b>{{ nombre_archivo | regex_replace('/tmp/') }}.html</b></li>
+                            <li>Documento detalle de elementos desplegados en formato JSON: <b>{{ nombre_archivo | regex_replace('/tmp/') }}.json</b></li>
+                            </ul>
+                            <br/>
+                            <br/>Nota importante de usuarios.-
+                            <ul>
+                            <li>Las contraseñas de usuario root y adminsenha <b>se notifican en base64.</b></li>
+                            </ul>
+    general_correo_adjuntos: "{{ nombre_archivo }}.zip"
+    tipo_evento_notificacion: "resultado_Ok"
+  ignore_errors: True
+
+
+- name: Envio de correo electrónico con los datos del despliegue
+  import_role:
+    name: general
+    tasks_from: general_reportestorage
+  ignore_errors: True
+  when: continuar_correo_umbral ==  "t"
+
+
+...

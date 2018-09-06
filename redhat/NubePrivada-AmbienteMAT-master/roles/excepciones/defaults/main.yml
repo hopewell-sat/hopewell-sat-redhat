@@ -1,0 +1,6 @@
+---
+# defaults file for excepciones
+excepcion:
+  SC: "El componente de integracion {{ global_componente_integracion }} no logra establecer conexion con el servicio {{ global_nombre_servicio }}"
+  MF: "La peticion con el servicio {{ global_nombre_servicio }} esta mal formado. Verificar el play."
+  

@@ -1,0 +1,117 @@
+---
+- debug:
+    msg: "Ejecutando archivo \"tasks\" para el rol aplicar_diccionario"
+
+- name: Genera contraseña/semilla adminsenha
+  shell: date | sha256sum | base64 | head -c 32
+  register: contraadminsenha_sem
+  no_log: true
+
+- name: Esperar 1s para cambio de fecha
+  shell: "sleep 1"
+
+- name: Genera contraseña/semilla root
+  shell: date | sha256sum | base64 | head -c 32
+  register: contraroot_sem
+  no_log: true
+
+- name: "Fecha con formato"
+  shell: date +%Y-%m-%d\\ %H:%M:%S
+  register: detarea
+  ignore_errors: True
+
+- set_fact:
+    continuar_correo_umbral: "{{ estructura_ambiente.senha_generales.continuar_riesgo_umbral_storage }}"
+
+- set_fact:
+    estructura_ambiente:
+      senha_generales:
+        numero_de_ticket: "{{ estructura_ambiente.senha_generales.numero_de_ticket }}"
+        nombre_solicitante: "{{ estructura_ambiente.senha_generales.nombre_solicitante }}"
+        correo_solicitante: "{{ estructura_ambiente.senha_generales.correo_solicitante }}"
+        lista_correo_electronico: "{{ estructura_ambiente.senha_generales.lista_correo_electronico }}"
+        centro_datos_sat: "{{ diccionario_valor_descripcion[estructura_ambiente.senha_generales.centro_datos_sat] }}"
+        selector_de_ambiente: "{{ diccionario_valor_descripcion[estructura_ambiente.senha_generales.selector_de_ambiente] }}"
+        version_proyecto: "{{ estructura_ambiente.senha_generales.version_proyecto }}"
+        continuar_riesgo_umbral_storage: "{{ diccionario_valor_descripcion[estructura_ambiente.senha_generales.continuar_riesgo_umbral_storage] }}"
+        contrasena_root_vms: "{{ contraroot_sem.stdout }}"
+        contrasena_admin_vms: "{{ contraadminsenha_sem.stdout }}"
+        generales_compuestos: "{{ estructura_ambiente.senha_generales.generales_compuestos }}"
+        fecha_inicio_proceso: "{{ estructura_ambiente.senha_generales.fecha_inicio_proceso }}"
+        fecha_termino_proceso: "{{ detarea.end[:19] }}"
+        acronimo_aplicacion: "{{ acronimo_aplicacion }}"
+        nombre_aplicacion: "{{ tmp_nombre_aplicacion }}"
+#AFM        aci_epg: "{{ aci_epg.senha_generales.aci_epg }}"
+#AFM        aci_app: "{{ aci_app.senha_generales.aci_app }}"
+      senha_presentacion:
+        presentacion_sabor: "{{ diccionario_valor_descripcion[tamanio_presentacion] }}"
+        no_vm_presentacion: "{{ estructura_ambiente.senha_presentacion.no_vm_presentacion }}"
+        vmware_template_presentacion: "{{ estructura_ambiente.senha_presentacion.vmware_template_presentacion }}"
+        balanceador_carga_presentacion: "{{ estructura_ambiente.senha_presentacion.balanceador_carga_presentacion }}"
+        puerto_escucha_presentacion: "{{ estructura_ambiente.senha_presentacion.puerto_escucha_presentacion }}"
+        maquinas_virtuales: "{{ estructura_ambiente.senha_presentacion.maquinas_virtuales }}"
+        balanceador: "{{ estructura_ambiente.senha_presentacion.balanceador }}"
+#AFM        aci_epg: "{{ aci_epg.senha_presentacion.aci_epg }}"
+      senha_procesamiento:
+        procesamiento_sabor: "{{ diccionario_valor_descripcion[tamanio_procesamiento] }}"
+        no_vm_procesamiento: "{{ estructura_ambiente.senha_procesamiento.no_vm_procesamiento }}"
+        vmware_template_procesamiento: "{{ estructura_ambiente.senha_procesamiento.vmware_template_procesamiento }}"
+        puerto_escucha_procesamiento: "{{ estructura_ambiente.senha_procesamiento.puerto_escucha_procesamiento }}"
+        maquinas_virtuales: "{{ estructura_ambiente.senha_procesamiento.maquinas_virtuales }}"
+        balanceador: "{{ estructura_ambiente.senha_procesamiento.balanceador }}"
+#AFM        aci_epg: "{{ aci_epg.senha_procesamiento.aci_epg }}"
+      senha_datos:
+        datos_sabor: "{{ diccionario_valor_descripcion[tamanio_datos] }}"
+        no_vm_datos: "{{ estructura_ambiente.senha_datos.no_vm_datos }}"
+        vmware_template_datos: "{{ estructura_ambiente.senha_datos.vmware_template_datos }}"
+        maquinas_virtuales: "{{ estructura_ambiente.senha_datos.maquinas_virtuales }}"
+#AFM        aci_epg: "{{ aci_epg.senha_datos.aci_epg }}"
+  ignore_errors: True
+
+- name: Estructura de ambiente MAT generada
+  debug:
+    var: estructura_ambiente
+
+- name: Add TAGs to service
+  uri:
+    url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}/tags"
+    method: POST
+    validate_certs: no
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type:  application/json
+    body_format: json
+    body:
+      action: assign
+      resources:
+        - category: "senha_ambiente"
+          name: "senha_ambiente_desarrollo"
+        - category: "senha_nube"
+          name: "senha_privada_vmware"
+  ignore_errors: True
+
+- name: Add Custom Attributes to service
+  uri:
+    url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}/custom_attributes"
+    method: POST
+    validate_certs: no
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type:  application/json
+    body_format: json
+    body:
+      action: add
+      resources:
+        - name: "Work Order"
+          value: "{{ numero_de_ticket  }}"
+        - name: "General"
+          value: "{{ nombre_general  }}"
+        - name: "Central"
+          value: "{{ nombre_central  }}"
+        - name: "Aplicación"
+          value: "{{ nombre_aplicacion }}"
+        - name: "Versión"
+          value: "{{ version_proyecto }}"
+  ignore_errors: True
+
+...

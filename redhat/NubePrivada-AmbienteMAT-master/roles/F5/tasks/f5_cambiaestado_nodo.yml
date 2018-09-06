@@ -1,0 +1,70 @@
+- name: "Fecha de inicio proceso eliminacion F5"
+  set_fact:
+    f5_fecha_inicio: ansible_date_time.iso8601
+
+- set_fact:
+    f5_body_html: "{\"state\": \"user-down\", \"session\": \"user-disabled\"}"
+  when: f5_entrada_estadonodo == "D"
+
+- set_fact:
+    f5_body_html: "{\"state\": \"user-up\", \"session\": \"user-enabled\"}"
+  when: f5_entrada_estadonodo == "H"
+
+- name: Cambia estado a nodo
+  uri:
+    url: "https://{{ f5_servidor }}/mgmt/tm/ltm/pool/{{ f5_entrada_nombrepool }}po/members/~{{ f5_particion }}~{{ f5_entrada_ipnodo }}:{{f5_entrada_puerto}}/"
+    method: PUT
+    headers:
+      Content-Type: "application/json"
+      X-F5-Auth-Token: "{{ f5_token }}"
+    body: "{{ f5_body_html }}"
+    body_format: json
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200, 201, 202
+  register: f5_resultado_estatusnodo
+  ignore_errors: True
+  when:
+    - f5_existencia_pool == true
+
+#- name: "Cambio de estado de nodo"
+#  command: echo "{{ f5_resultado_estatusnodo }}"
+
+- name: "Fecha de inicio proceso F5"
+  set_fact:
+    f5_fecha_fin: ansible_date_time.iso8601
+
+- name: "No existe el pool de recusos solicitado"
+  set_fact:
+    f5_proceso:
+      codigo: "02"
+      descripcion: "No existe el pool de recusos solicitado"
+      instancia: ""
+      fecha_inicio: "{{ f5_fecha_inicio }}"
+      fecha_fin: "{{ f5_fecha_fin }}"
+  when:
+    - f5_existencia_pool == false
+
+- name: "Cambio de estado a nodo OK de F5"
+  set_fact:
+    f5_proceso:
+      codigo: "99"
+      descripcion: "Proceso OK"
+      instancia: "{{ f5_resultado_estatusnodo }}"
+      fecha_inicio: "{{ f5_fecha_inicio }}"
+      fecha_fin: "{{ f5_fecha_fin }}"
+  when:
+    - f5_resultado_estatusnodo is succeeded
+    - f5_existencia_pool == true
+
+- name: "Cambio de estado a nodo fallido F5"
+  set_fact:
+    f5_proceso:
+      codigo: "02"
+      descripcion: "Proceso fallo"
+      instancia: "{{ f5_resultado_estatusnodo }}"
+      fecha_inicio: "{{ f5_fecha_inicio }}"
+      fecha_fin: "{{ f5_fecha_fin }}"
+  when:
+    - f5_resultado_estatusnodo is failed

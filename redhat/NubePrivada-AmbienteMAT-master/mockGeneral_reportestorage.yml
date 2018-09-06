@@ -1,0 +1,9 @@
+ 
+- hosts: localhost
+
+  tasks:
+    - name: Generacion y envio de reporte de storage F5/tasks/f5_eliminarvs.yml
+      import_role:
+        name: general
+        tasks_from: general_reportestorage
+  

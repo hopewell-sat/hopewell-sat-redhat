@@ -1,0 +1,115 @@
+
+- hosts: localhost
+  vars:
+    calcular_tmp_version: ""
+    calcular_tmp_subversion: ""
+    calcular_tmp_arreglo: ""
+    entrada_nombrepool: ""
+    lista_correo_electronico2: ""
+    diccionario_valor_descripcion:
+      lp: "Laboratorio Puebla"
+      labPueba: "Laboratorio Puebla"
+      dev: "Desarrollo"
+      uat: "Calidad (UAT)"
+      pro: "Producción"
+      str: "Estrés"
+      t: "Se desplego en umbral de riesgo"
+      f: "No se ha superado ningún umbral"
+      CHPRE: "Chica"
+      MEPRE: "Mediana"
+      GRPRE: "Grande"
+      EGPRE: "Extragrande"
+      CHPRO: "Chica"
+      MEPRO: "Mediana"
+      GRPRO: "Grande"
+      EGPRO: "Extragrande"
+      CHDAT: "Chica"
+      MEDAT: "Mediana"
+      GRDAT: "Grande"
+      EGDAT: "Extragrande"
+
+  tasks:
+
+  - name: Tiempo Inicio
+    command: date +%Y-%m-%d %H:%M:%S
+    register: inidate
+    ignore_errors: True
+
+  - set_fact:
+      inivariabletiempo: "{{ inidate.end[:19] }}"
+    when: inidate.end != ""
+
+  - set_fact:
+      calcular_tmp_arreglo: "{{ version_proyecto.split('.')}}"
+
+  - set_fact:
+      calcular_tmp_version: "0{{calcular_tmp_arreglo[0]}}"
+    when: (calcular_tmp_arreglo[0] | length) == 1
+
+  - set_fact:
+      calcular_tmp_subversion: "0{{calcular_tmp_arreglo[1]}}"
+    when: (calcular_tmp_arreglo[1] | length)  == 1
+
+  - set_fact:
+      calcular_tmp_version: "{{calcular_tmp_arreglo[0]}}"
+    when: (calcular_tmp_arreglo[0] | length) == 2
+
+  - set_fact:
+      calcular_tmp_subversion: "{{calcular_tmp_arreglo[1]}}"
+    when: (calcular_tmp_arreglo[1] | length) == 2
+
+
+
+  - name: Obtener variable para creacion de LB de capa de procesamiento
+    set_fact: entrada_nombrepool="sna{{ centro_datos_sat }}{{ nombre_aplicacion[:3] }}v{{ calcular_tmp_version }}p{{ calcular_tmp_subversion }}{{selector_de_ambiente}}{{ capa }}"
+
+  - debug:
+      msg: "{{ lista_correo_electronico }}"
+
+  - set_fact:
+      estructura_ambiente:
+        senha_generales:
+          numero_de_ticket: "{{  numero_de_ticket }}"
+          nombre_solicitante: "{{ nombre_solicitante }}"
+          correo_solicitante: "{{ correo_solicitante }}"
+          lista_correo_electronico: "{{ lista_correo_electronico }}"
+          centro_datos_sat: "{{  diccionario_valor_descripcion[centro_datos_sat]  }}"
+          selector_de_ambiente: "{{ diccionario_valor_descripcion[selector_de_ambiente] }}"
+          nombre_aplicacion: "{{ nombre_aplicacion }}"
+          version_proyecto: "{{ version_proyecto }}"
+          nombre_general: "{{ nombre_general }}"
+          nombre_central: "{{ nombre_central }}"
+          fecha_inicio_proceso: "{{ inivariabletiempo}}"
+
+
+  - set_fact:
+        f5_entrada_nombrepool: "{{ entrada_nombrepool }}"
+        f5_entrada_ipvirtual: "{{ f5_dialogo_ipvirtual }}"
+        f5_entrada_ipsnodos: "{{ f5_dialogo_ipsnodos }}"
+        f5_entrada_protocolo: "{{ f5_dialogo_protocolo }}"
+        f5_entrada_puerto: "{{ f5_dialogo_puerto }}"
+        f5_entrada_tipobalanceo: "{{ f5_dialogo_tipobalanceo }}"
+        f5_entrada_tipopersistencia: "{{ f5_dialogo_tipopersistencia }}"
+
+  - debug:
+      msg: "{{estructura_ambiente}}"
+
+  - name: Ejecutando una sola tarea desde F5/tasks/f5_senha_creacionLB.yml
+    import_role:
+      name: F5
+      tasks_from: f5_senha_creacionLB
+
+  - name: Ejecutando una sola tarea desde F5/tasks/f5_handlers.yml
+    import_role:
+      name: F5
+      tasks_from: f5_handlers
+
+  - name: Ejecutando una sola tarea desde F5/tasks/f5_registro_ci.yml
+    import_role:
+      name: F5
+      tasks_from: f5_registro_ci
+
+  - name: Ejecutando envio de correo /tasks/f5_senha_envio_correo.yml
+    import_role:
+      name: F5
+      tasks_from: f5_senha_envio_correo

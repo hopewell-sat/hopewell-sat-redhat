@@ -1,0 +1,9 @@
+---
+# defaults file for F5
+f5_usuario: "admin"
+f5_constrasenia: "smartvm"
+f5_servidor: "10.20.0.53"
+f5_particion: "Common"
+f5_descripcion: "Red Hat Consulting @2018 generacion de pool en F5"
+f5_entrada_protocolo: ""
+...

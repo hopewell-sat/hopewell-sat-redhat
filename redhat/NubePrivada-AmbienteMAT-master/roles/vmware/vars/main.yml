@@ -1,0 +1,7 @@
+---
+# vars file for vmware
+vmware_proceso: ""
+#usuario: "cfme_tsmx"
+#contrasenia: "cfM3_Pu3_L4B"
+#vcenterhost: "10.20.0.96"
+#name_cluster: "CloudCluster01"

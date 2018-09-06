@@ -1,0 +1,23 @@
+---
+# vars file for oracle
+oracle_database_sql_oracle_home: /u01/app/oracle/product/11.2.0/xe
+oracle_database_sql_sid: XE
+oracle_database_sql_admin_username: senhauser
+oracle_database_sql_admin_password: senhauser
+oracle_database_sql_is_dba: no #
+oracle_database_sql_create_schemas: no #yes
+oracle_database_sql_schemas: param
+sql_path: /var/sql_senha/
+oracle_database_sqlplus: /u01/app/oracle/product/11.2.0/xe/bin/sqlplus
+# defaults to host
+oracle_ssh_hostname: 10.20.0.50
+oracle_ssh_user: root
+oracle_ssh_passsword: smartvm
+oracle_ssh_connect: "sshpass -p {{oracle_ssh_passsword}} ssh -o StrictHostKeyChecking=no {{oracle_ssh_user}}@{{oracle_ssh_hostname}}"
+# Datos de los scripts de BD
+guarda_serviciocis_senha: guarda_serviciocis_senha.sql
+guarda_maquinavirtualcis_senha: guarda_maquinavirtualcis_senha.sql
+guarda_balanceadorcis_senha: guarda_balanceadorcis_senha.sql
+guarda_applicationcis_senha: guarda_applicationcis_senha.sql
+guarda_epgcis_senha: guarda_epgcis_senha.sql
+...

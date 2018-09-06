@@ -1,0 +1,8 @@
+---
+# handlers file for excepciones
+- name: SENHA Excepcion
+  shell: echo "Haz algo"
+
+- name: "SENHA ::: Excepciones ::: General -- Finalizacion de proceso general."
+  fail:
+    msg: "Excepcion general en el proceso."

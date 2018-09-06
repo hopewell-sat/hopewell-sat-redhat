@@ -1,0 +1,115 @@
+---
+#De aqui para asignacion de ip para balanceo de carga dinamico
+- name: "Llamado a Infoblox para obtener una IP sin mac de presentacion"
+  include_role:
+    name: infoblox
+    tasks_from: asignacion_ip
+  vars:
+    infoblox_macaddress: ""
+  when:
+    - tipo_capa == "presentacion"
+
+#De aqui para asignacion de ip para balanceo de carga dinamico
+- set_fact:
+    procesamiento_iplb_pres: "{{ infoblox_proceso.salida_ipasignada }}"
+    f5_entrada_nombrepool: "{{ entrada_nombrepool_pres }}"
+    f5_entrada_ipvirtual: "{{infoblox_proceso.salida_ipasignada}}"
+    f5_entrada_ipsnodos: "{{ f5_presentacion_ips_produccion }}"
+    f5_entrada_protocolo: "{{ entrada_protocolo_pres }}"
+    f5_entrada_puerto: "{{ entrada_puerto_pres }}"
+    f5_entrada_tipobalanceo: "{{ entrada_tipobalanceo_lb_pres }}"
+    f5_entrada_tipopersistencia: "{{ entrada_tipopersistencia_lb_pres }}"
+  when:
+    - tipo_capa == "presentacion"
+    - infoblox_proceso is defined
+    - infoblox_proceso.codigo == "99"
+
+- name: EJecutando creacion de LB presentacion
+  include_role:
+    name: F5
+    tasks_from: f5_senha_creacionLB
+  when:
+    - tipo_capa == "presentacion"
+    - infoblox_proceso is defined
+    - infoblox_proceso != ""
+    - infoblox_proceso.codigo == "99"
+
+- set_fact:
+    infoblox_proceso: ""
+  when:
+    - tipo_capa == "presentacion"
+
+#####################################################################################
+
+#De aqui para asignacion de ip para balanceo de carga dinamico
+- name: "Llamado a Infoblox para obtener una IP sin mac de procesamiento"
+  include_role:
+    name: infoblox
+    tasks_from: asignacion_ip
+  vars:
+    infoblox_macaddress: ""
+    infoblox_senha_gestion: "{{infoblox_senha_balanceo}}"
+  when:
+    - tipo_capa == "procesamiento"
+
+- set_fact:
+    procesamiento_iplb_proc: "{{ infoblox_proceso.salida_ipasignada }}"
+    f5_entrada_nombrepool: "{{ entrada_nombrepool_proc }}"
+    f5_entrada_ipvirtual: "{{ infoblox_proceso.salida_ipasignada }}"
+    f5_entrada_ipsnodos: "{{ f5_procesamiento_ips_produccion }}"
+    f5_entrada_protocolo: "{{ entrada_protocolo_proc }}"
+    f5_entrada_puerto: "{{ entrada_puerto_proc }}"
+    f5_entrada_tipobalanceo: "{{ entrada_tipobalanceo_lb_proc }}"
+    f5_entrada_tipopersistencia: "{{ entrada_tipopersistencia_lb_proc }}"
+  when:
+    - tipo_capa == "procesamiento"
+    - infoblox_proceso is defined
+    - infoblox_proceso != ""
+    - infoblox_proceso.codigo == "99"
+
+- name: EJecutando creacion de LB procesamiento
+  include_role:
+    name: F5
+    tasks_from: f5_senha_creacionLB
+  when:
+    - tipo_capa == "procesamiento"
+    - infoblox_proceso is defined
+    - infoblox_proceso != ""
+    - infoblox_proceso.codigo == "99"
+
+- name: Registrando variable de respuesta "f5_proceso"
+  set_fact:
+    estructura_ambiente:
+      senha_generales: "{{ estructura_ambiente.senha_generales }}"
+      senha_presentacion:
+        presentacion_sabor: "{{ estructura_ambiente.senha_presentacion.presentacion_sabor }}"
+        no_vm_presentacion: "{{ estructura_ambiente.senha_presentacion.no_vm_presentacion }}"
+        vmware_template_presentacion: "{{ estructura_ambiente.senha_presentacion.vmware_template_presentacion }}"
+        balanceador_carga_presentacion: "{{ estructura_ambiente.senha_presentacion.balanceador_carga_presentacion }}"
+        puerto_escucha_presentacion: "{{ estructura_ambiente.senha_presentacion.puerto_escucha_presentacion }}"
+        maquinas_virtuales: "{{ estructura_ambiente.senha_presentacion.maquinas_virtuales }}"
+        balanceador:
+          f5_proceso: "{{ f5_proceso }}"
+        aci_epg: "{{ estructura_ambiente.senha_presentacion.aci_epg }}"
+      senha_procesamiento: "{{ estructura_ambiente.senha_procesamiento }}"
+      senha_datos: "{{ estructura_ambiente.senha_datos }}"
+    entrada_ipvirtual_lb_pres: "{{f5_entrada_ipvirtual}}"
+  when: tipo_capa == "presentacion"
+
+- name: Registrando variable de respuesta "f5_proceso"
+  set_fact:
+    estructura_ambiente:
+      senha_generales: "{{ estructura_ambiente.senha_generales }}"
+      senha_presentacion: "{{ estructura_ambiente.senha_presentacion }}"
+      senha_procesamiento:
+        procesamiento_sabor: "{{ estructura_ambiente.senha_procesamiento.procesamiento_sabor }}"
+        no_vm_procesamiento: "{{ estructura_ambiente.senha_procesamiento.no_vm_procesamiento }}"
+        vmware_template_procesamiento: "{{ estructura_ambiente.senha_procesamiento.vmware_template_procesamiento }}"
+        puerto_escucha_procesamiento: "{{ estructura_ambiente.senha_procesamiento.puerto_escucha_procesamiento }}"
+        maquinas_virtuales: "{{ estructura_ambiente.senha_procesamiento.maquinas_virtuales }}"
+        balanceador:
+          f5_proceso: "{{ f5_proceso }}"
+        aci_epg: "{{ estructura_ambiente.senha_procesamiento.aci_epg }}"
+      senha_datos: "{{ estructura_ambiente.senha_datos }}"
+    entrada_ipvirtual_lb_proc: "{{f5_entrada_ipvirtual}}"
+  when: tipo_capa == "procesamiento"

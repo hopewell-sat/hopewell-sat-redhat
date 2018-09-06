@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  tasks:
+  - set_fact:
+      estructura_ambiente:
+        senha_generales:
+          nombre_solicitante: "{{ nombre_solicitante }}"
+          correo_solicitante: "{{ correo_solicitante }}"
+          centro_datos_sat: "{{ centro_datos_sat }}"
+
+  - debug:
+      msg: estructura_ambiente
+
+  - name: "Realizando el reporte de storage que sera enviado por correo"
+    import_role:
+      name: general
+      tasks_from: general_reportestorage
+...

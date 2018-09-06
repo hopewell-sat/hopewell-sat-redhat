@@ -1,0 +1,115 @@
+#
+# Comentarios de toma de red para SENHA 19 Junio 2019
+# Esta linea fue comentada para asignar directamente una IP de una red en infoblox, el servicio
+# no cambia en la manera de asignar las variables.
+#
+#Para obtener una ip y asignarla a un load balancer
+  - set_fact:
+      infoblox_rango: "{{ infoblox_rango_produccion }}"
+    when:
+      - infoblox_tipo_red == "P"
+      - infoblox_macaddress != ""
+
+  - set_fact:
+      infoblox_rango: "{{ infoblox_rango_gestion }}"
+    when:
+      - infoblox_tipo_red == "G"
+      - infoblox_macaddress != ""
+
+  - set_fact:
+      infoblox_url: "{{ infoblox_url_api }}record:host?_return_fields=ipv4addrs"
+      infoblox_body_api: "{\"configure_for_dns\": false,\"name\":\"host_loadbalancer\",\"ipv4addrs\":[{\"ipv4addr\":\"func:nextavailableip:{{infoblox_senha_balanceo}}\"}]}"
+    when:
+      - infoblox_macaddress == ""
+
+#Para obtener una ip y asignarla a una maquina virtual
+  - set_fact:
+      infoblox_url: "{{ infoblox_url_api }}fixedaddress?_return_fields=ipv4addr"
+      infoblox_body_api: "{\"ipv4addr\":\"func:nextavailableip:{{ infoblox_rango }}\",\"mac\":\"{{infoblox_macaddress}}\",\"comment\":\"Generado por Red Hat Consulting @2018\"}"
+    when:
+      - infoblox_macaddress != ""
+
+  - name: "SENHA ::: InfoBlox ::: Asignacion de IP -- Reservacion de IP dentro de DHCP."
+    uri:
+      url: "{{ infoblox_url }}"
+      method: POST
+      headers:
+        Content-Type: "{{ infoblox_content_type }}"
+      body: "{{ infoblox_body_api }}"
+      body_format: json
+      validate_certs: no
+      return_content: yes
+      follow_redirects: yes
+      user: "{{ infoblox_usuario }}"
+      password: "{{ infoblox_contrasenia }}"
+      status_code: 201
+    register: infoblox_resultado
+    ignore_errors: True
+
+  - name: "SENHA ::: InfoBlox  ::: Asignacion de IP -- Proceso correcto de reservacion de IP dentro de DHCP de maquina virtual."
+    set_fact:
+      infoblox_ip_individual: "{{ infoblox_resultado.json.ipv4addr }}"
+      infoblox_proceso:
+        codigo: "99"
+        mensaje: "Proceso OK"
+        salida_ipasignada: "{{ infoblox_resultado.json.ipv4addr }}"
+        entrada_macaddress: "{{infoblox_macaddress}}"
+        entrada_subred: "{{infoblox_rango}}"
+      infoblox_ips_todas: "{{ infoblox_ips_todas }}{{ infoblox_resultado.json.ipv4addr }},"
+    when:
+      - infoblox_resultado is succeeded
+      - infoblox_resultado.json is defined
+      - infoblox_resultado.json.ipv4addr is defined
+      - infoblox_resultado.json.ipv4addr != ""
+      - infoblox_macaddress != ""
+
+  - name: "SENHA ::: InfoBlox  ::: Asignacion de IP -- Proceso correcto de reservacion de IP para Load Balancers."
+    set_fact:
+      infoblox_proceso:
+        codigo: "99"
+        mensaje: "Proceso OK asignacion de load balancer"
+        salida_ipasignada: "{{ infoblox_resultado.json.ipv4addrs[0].ipv4addr }}"
+        entrada_macaddress: ""
+        entrada_subred: "{{infoblox_senha_balanceo}}"
+      infoblox_ips_todas: "{{ infoblox_ips_todas }}{{ infoblox_resultado.json.ipv4addrs[0].ipv4addr }},"
+    when:
+      - infoblox_resultado is succeeded
+      - infoblox_resultado.json is defined
+      - infoblox_resultado.json.ipv4addrs is defined
+      - infoblox_resultado.json.ipv4addrs[0].ipv4addr != ""
+      - infoblox_macaddress == ""
+
+###################SEPARACION DE IPS#############################
+  - set_fact:
+      infoblox_ips_produccion: "{{ infoblox_ips_produccion }}{{ infoblox_resultado.json.ipv4addr }},"
+    when:
+      - infoblox_tipo_red == "P"
+      - infoblox_resultado is succeeded
+      - infoblox_resultado.json is defined
+      - infoblox_resultado.json.ipv4addr is defined
+      - infoblox_resultado.json.ipv4addr != ""
+      - infoblox_macaddress != ""
+
+  - set_fact:
+      infoblox_ips_gestion: "{{ infoblox_ips_gestion }}{{ infoblox_resultado.json.ipv4addr }},"
+    when:
+      - infoblox_tipo_red == "G"
+      - infoblox_resultado is succeeded
+      - infoblox_resultado.json is defined
+      - infoblox_resultado.json.ipv4addr is defined
+      - infoblox_resultado.json.ipv4addr != ""
+      - infoblox_macaddress != ""
+###################SEPARACION DE IPS#############################
+
+  - name: "SENHA ::: InfoBlox  ::: Asignacion de IP -- Error dentro de la reservacion de IP dentro de DHCP."
+    set_fact:
+        codigo: "02"
+        mensaje: "Proceso de asignacion de IP NO satisfactorio"
+        salida_ipasignada: ""
+        entrada_macaddress: "{{infoblox_macaddress}}"
+        entrada_subred: ""
+    when: infoblox_resultado is failed
+
+# Cambio realizado para asignar la nueva IP dentro de DHCP
+  - name: "SENHA ::: InfoBlox  ::: Asignacion de IP -- Actulizacion del servicio DHCP."
+    import_tasks: refreshDHCP.yml

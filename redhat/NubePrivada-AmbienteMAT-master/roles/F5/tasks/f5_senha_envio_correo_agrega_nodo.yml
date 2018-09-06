@@ -1,0 +1,168 @@
+---
+# tasks file for f5_senha_envio_correo
+- name: Imprimir resultado
+  debug:
+    var: f5_resultado_agrega
+
+- name: Obtener timestamp del sistema
+  shell: "date +%Y%m%d%H%M%S"
+  register: fecha_inicio_proceso
+  
+- name: Tiempo Fin
+  command: date +%Y-%m-%d %H:%M:%S
+  register: findate
+  ignore_errors: True
+
+- set_fact:
+    finvariabletiempo: "{{ findate.end[:19] }}"
+  when: findate.end != ""  
+
+- set_fact:
+    nombre_archivoan_f5: "{{ numero_de_ticket }}-SEHNAF5AgregarNodo_{{ fecha_inicio_proceso.stdout }}"
+  ignore_errors: True
+  
+- debug:
+    msg: "{{ nombre_archivoan_f5 }}"
+
+- name: Inicio de archivo HTML
+  copy: 
+    dest: "/tmp/{{ nombre_archivoan_f5 }}.html"
+    content: |
+            <html>
+               <head>
+                  <title>Resumen de despliegue</title>
+                  <meta charset="UTF-8">
+                  <meta name="viewport" content="width=device-width, initial-scale=1">
+                  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+                  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+                  <div class="jumbotron jumbotron-fluid" style="background-color:white;padding-top: 0px;padding-bottom: 0px">
+                    <div class="container">
+                       <img src="https://drive.google.com/uc?id=1QqaTGiBl0y9HeAlZ_iqyLP21y_YdBbay&export=download" class="img-responsive"> 
+                    </div>
+                  </div>
+               </head>
+               <body>
+                 <div class="container">
+  ignore_errors: True
+
+- name: Creación de tabla Datos Generales y Presentación
+  blockinfile:
+    path:  "/tmp/{{ nombre_archivoan_f5 }}.html"
+    marker: ""
+    block: |
+            <!-- Tabla de contenido -->
+                         <table class="table table-striped">
+                              <tr>
+                                <th style="color:white; background-color:#3C79C2; text-align:center; font-weight: bold" colspan="2">DATOS GENERALES</th>
+                              </tr>
+                              <tr>
+                                 <td>Número de ticket:  </td>
+                                 <td> {{ estructura_ambiente.senha_generales.numero_de_ticket }} </td>
+                              </tr>
+                              <tr>
+                                 <td>Nombre del solicitante:  </td>
+                                 <td> {{ estructura_ambiente.senha_generales.nombre_solicitante }} </td>
+                              </tr>
+                              <tr>
+                                 <td>Correo del solicitante:  </td>
+                                 <td> {{ estructura_ambiente.senha_generales.correo_solicitante }} </td>
+                              </tr>
+                              <tr>
+                                 <td>Centro de datos:  </td>
+                                 <td> {{ estructura_ambiente.senha_generales.centro_datos_sat }} </td>
+                              </tr>
+                              <tr>
+                                 <td>Fecha de creación de servicio:  </td>
+                                 <td> {{ estructura_ambiente.senha_generales.fecha_inicio_proceso }} </td>
+                              </tr>
+                              <tr>
+                                 <td>Fecha de término de despliegue:  </td>
+                                 <td> {{ finvariabletiempo }} </td>
+                              </tr>                          
+                         </table>
+                         <table class="table table-striped">
+                              <tr>
+                                <th style="color:white; background-color:#3C79C2; text-align:center; font-weight: bold" colspan="3">CAPA DE PRESENTACIÓN</th>
+                              </tr>
+                            <tr>
+                               <td style="vertical-align:middle; text-align:center" rowspan="7">Balanceador</td>
+                               <td style="color:white; background-color:#A4A4A4; text-align:center; font-weight: bold" colspan="2">{{ f5_entrada_nombrepool }}</td>
+                            </tr>
+                            <tr>
+                               <td> IP:  </td>
+                               <td> {{ f5_entrada_ipnodo }} </td>
+                            </tr>
+                            <tr>
+                               <td> Puerto:  </td>
+                               <td> {{ f5_entrada_puerto }} </td>
+                            </tr>                        
+                         </table>
+  when:
+    - f5_resultado_agrega is succeeded
+    - f5_existencia_pool == true
+  ignore_errors: True
+   
+- name: Final de archivo HTML
+  blockinfile:
+    path: "/tmp/{{ nombre_archivoan_f5 }}.html"
+    marker: ""
+    block: |
+        <!-- final de archivo-->
+                </div>
+              </body>
+          </html>
+  ignore_errors: True      
+        
+- name: Tarea de envio de correo del proceso
+  import_role:
+    name: general
+    tasks_from: general_enviocorreo
+  vars:
+    general_correo_de: "senha.notificacion@gmail.com"
+    general_correo_para: "{{ correo_solicitante }}"
+    general_correo_concopia: "{{ lista_correo_electronico }}"
+    general_correo_asunto: Folio {{ numero_de_ticket }} - Despliegue Completado - SEHNA F5 Agregar Nodo
+    general_correo_cuerpo: | 
+                            <br/>Datos generales del despliegue con el folio <b>{{ numero_de_ticket }}</b>:
+                            <br/>
+                            <ul>
+                            <li>Item desplegado: <b>SEHNA F5 Agregar Nodo {{f5_entrada_ipnodo}} al pool {{ f5_entrada_nombrepool }}</b></li>
+                            <li>Solicitante / Correo:  <b>{{ nombre_solicitante }}</b> / <b>{{ correo_solicitante }}</b></li>
+                            <li>Estado de desplliegue: <b>Exitoso</b></li>
+                            </ul>
+                            <br/>
+                            <br/>Documentos anexos
+                            <ul>
+                            <li>Documento detalle de elementos desplegados HTML: <b>{{ nombre_archivoan_f5 }}.html</b></li>
+                            </ul>                                                                                                                       
+    general_correo_adjuntos: "/tmp/{{ nombre_archivoan_f5 }}.html"
+  when:
+    - f5_resultado_agrega is succeeded
+    - f5_existencia_pool == true  
+  ignore_errors: True
+  
+- name: Tarea de envio de correo del proceso escenario fallido
+  import_role:
+    name: general
+    tasks_from: general_enviocorreo
+  vars:
+    general_correo_de: "senha.notificacion@gmail.com"
+    general_correo_para: "{{ correo_solicitante }}"
+    general_correo_concopia: "{{ lista_correo_electronico }}"
+    general_correo_asunto: Folio {{ numero_de_ticket }} - Despliegue Fallido - SEHNA F5 Agregar Nodo
+    general_correo_cuerpo: | 
+                            <br/>Datos generales del despliegue con el folio <b>{{ numero_de_ticket }}</b>:
+                            <br/>
+                            <ul>
+                            <li>Item desplegado: <b>SEHNA F5 Agregar Nodo {{f5_entrada_ipnodo}} al pool {{ f5_entrada_nombrepool }}</b></li>
+                            <li>Solicitante / Correo:  <b>{{ nombre_solicitante }}</b> / <b>{{ correo_solicitante }}</b></li>
+                            <li>Estado de despliegue: <b>Fallido</b></li>
+                            </ul>
+                            <br/>
+                            <br/>Mensaje de error:
+                            <ul>
+                            <li>{{ f5_proceso.descripcion }}</li>
+  when:
+    - f5_resultado_agrega is failed
+...

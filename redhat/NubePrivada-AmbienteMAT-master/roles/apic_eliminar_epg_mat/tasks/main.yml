@@ -1,0 +1,44 @@
+---
+# tasks file for apic_eliminar_epg_mat
+- name: Eliminar un EPG
+  aci_epg:
+    hostname: "{{host_name}}"
+    username: "{{usuario}}"
+    password: "{{password}}"
+    tenant: "{{apic_tenant}}"
+    app_profile: "{{acronimo_aplicacion}}"
+    epg: "{{ epg_presentacion }}"
+    description: Web Intranet EPG
+    bd: "{{bd}}"
+    state: absent
+    validate_certs: false
+  ignore_errors: True
+
+- name: Eliminar un EPG
+  aci_epg:
+    hostname: "{{host_name}}"
+    username: "{{usuario}}"
+    password: "{{password}}"
+    tenant: "{{apic_tenant}}"
+    app_profile: "{{acronimo_aplicacion}}"
+    epg: "{{ epg_procesamiento }}"
+    description: Web Intranet EPG
+    bd: "{{bd}}"
+    state: absent
+    validate_certs: false
+  ignore_errors: True
+
+- name: Eliminar un EPG
+  aci_epg:
+    hostname: "{{host_name}}"
+    username: "{{usuario}}"
+    password: "{{password}}"
+    tenant: "{{apic_tenant}}"
+    app_profile: "{{acronimo_aplicacion}}"
+    epg: "{{ epg_datos }}"
+    description: Web Intranet EPG
+    bd: "{{bd}}"
+    state: absent
+    validate_certs: false
+  ignore_errors: True
+...

@@ -1,0 +1,12 @@
+---
+# defaults file for vmware
+vmware_usuario: "cfme_tsmx"
+vmware_contrasenia: "cfM3_Pu3_L4B"
+vmware_vcenterhost: "10.20.0.96"
+vmware_cluster: "CloudCluster01"
+vmware_carpeta: "/SENHA orquestration"
+vmware_datacenter: "Datacenter01"
+provider_id: "1000000000003"
+max_retries: 3
+retry_interval: 20
+vmware_continua_proceso: true

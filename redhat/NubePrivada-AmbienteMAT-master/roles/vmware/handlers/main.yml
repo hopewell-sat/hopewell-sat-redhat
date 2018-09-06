@@ -1,0 +1,51 @@
+---
+# handlers file for vmware
+
+- name: Add TAGs to VM
+  uri:
+    url: "{{ find_vm_url }}/tags"
+    method: POST
+    validate_certs: no
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type:  application/json
+    body_format: json
+    body:
+      action: assign
+      resources:
+        - category: "senha_ambiente"
+          name: "senha_ambiente_desarrollo"
+        - category: "senha_nube"
+          name: "senha_privada_vmware"
+        #- category: "senha_arq_mat"
+          #name: "senha_mat_rhel7"
+  listen: "Add Custom Attributes and assing TAGs to VMware VM"
+  ignore_errors: True
+     
+- name: Add Custom Attributes to VM
+  uri:
+    url: "{{ find_vm_url }}/custom_attributes"
+    method: POST
+    validate_certs: no
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type:  application/json
+    body_format: json
+    body:
+      action: add
+      resources:
+        - name: "Work Order"
+          value: "{{ numero_de_ticket  }}"
+        - name: "General"
+          #value: "{{ nombre_general  }}"
+          value: "General 01"
+        - name: "Central"
+          #value: "{{ nombre_central  }}"
+          value: "Central 01"
+        - name: "Aplicación"
+          value: "{{ nombre_aplicacion }}"
+        - name: "Versión"
+          value: "{{ version_proyecto }}"
+  listen: "Add Custom Attributes and assing TAGs to VMware VM"
+  ignore_errors: True
+...

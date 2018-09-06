@@ -1,0 +1,5 @@
+---
+# defaults file for comunicar_informacion_ambiente
+cuenta_correo: "senhausu@localhost.localdomain"
+ansible_hostname: "TSMXSENDEVANTW01"
+correo_solicitante: ""

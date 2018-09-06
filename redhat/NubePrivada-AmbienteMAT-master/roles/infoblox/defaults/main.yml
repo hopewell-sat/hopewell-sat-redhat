@@ -1,0 +1,12 @@
+---
+# defaults file for infoblox
+infoblox_module_host: "10.20.0.51"
+infoblox_usuario: "admin"
+infoblox_contrasenia: "smartvm"
+infoblox_url_api: "https://{{ infoblox_module_host }}/wapi/v2.7/"
+infoblox_content_type: "application/json"
+infoblox_senha_balanceo: "10.187.32.0/19"
+infoblox_senha_gestion: "10.40.0.0/24"
+infoblox_senha_produccion: "172.16.0.0/16"
+infoblox_rango_gestion: "10.40.0.10-10.40.0.254"
+infoblox_rango_produccion: "172.16.0.10-172.16.0.254"

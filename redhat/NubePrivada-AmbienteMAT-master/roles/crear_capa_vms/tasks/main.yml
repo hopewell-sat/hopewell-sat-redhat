@@ -1,0 +1,36 @@
+---
+# Generacion de capa de Presentacion
+- name: "SENHA ::: Creacion de VM  ::: Identificacion de capa -- Validacion de datos capa presentacion."
+  import_tasks: crear_capa_presentacion.yml
+  when:
+    - omitir_capa_presentacion != "t"
+
+- name: "SENHA ::: F5  ::: Creacion de Load Balancer -- Creacion LB presentacion."
+  include_role:
+    name: crear_lb
+  vars:
+    tipo_capa: "presentacion"
+  when:
+    - omitir_capa_presentacion != "t"
+
+# Generacion de capa de Procesamiento
+- name: "SENHA ::: Creacion de VM  ::: Identificacion de capa -- Validacion de datos capa procesamiento."
+  import_tasks: crear_capa_procesamiento.yml
+  when:
+    - omitir_capa_procesamiento != "t"
+
+- name: "SENHA ::: F5  ::: Creacion de Load Balancer -- Creacion LB procesamiento."
+  include_role:
+    name: crear_lb
+  vars:
+    tipo_capa: "procesamiento"
+  when:
+    - omitir_capa_procesamiento != "t"
+    - balanceador_de_carga_procesamiento != "t"
+
+# Generacion de capa de Datos
+- name: "SENHA ::: Creacion de VM  ::: Identificacion de capa -- Validacion de datos capa datos."
+  import_tasks: crear_capa_datos.yml
+  when:
+    - omitir_capa_datos != "t"
+...

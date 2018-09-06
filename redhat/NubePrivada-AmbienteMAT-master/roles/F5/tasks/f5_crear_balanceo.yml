@@ -1,0 +1,86 @@
+- name: "Fecha de inicio proceso F5"
+  set_fact:
+    f5_fecha_inicio: ansible_date_time.iso8601
+  when: true == true
+
+- name: "SENHA :::  F5 -- Validacion de existencia de virtual server."
+  uri:
+    url: "https://{{ f5_servidor }}/mgmt/tm/ltm/virtual/~{{ f5_particion }}~{{ f5_entrada_nombrepool }}vs"
+    method: GET
+    headers:
+      Content-Type: "application/json"
+      X-F5-Auth-Token: "{{ f5_token }}"
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 404
+  register: f5_resultado_validacion_balanceo
+  ignore_errors: True
+  when:
+    - f5_creacion_pool == true
+    - f5_existencia_pool == false
+
+- name: "SENHA :::  F5 -- Creacion de virtual server."
+  uri:
+    url: "https://{{ f5_servidor }}/mgmt/tm/ltm/virtual"
+    method: POST
+    headers:
+      Content-Type: "application/json"
+      X-F5-Auth-Token: "{{ f5_token }}"
+    body: "{\"name\":\"{{ f5_entrada_nombrepool }}vs\",\"destination\":\"{{ f5_entrada_ipvirtual }}:{{ f5_entrada_puerto }}\",\"ipProtocol\":\"tcp\",\"pool\":\"{{ f5_entrada_nombrepool }}po\", \"sourceAddressTranslation\": {\"type\":\"automap\"},\"profiles\": [{\"name\":\"/{{ f5_particion }}/perfil_tcp\", \"context\":\"clientside\" },{ \"name\":\"/{{ f5_particion }}/perfil_tcp_wan_optimizado\", \"context\":\"serverside\" },\"/{{ f5_particion }}/perfil_http\"],\"persist\": [ {\"name\": \"{{ f5_entrada_tipopersistencia }}\"} ]}"
+    body_format: json
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200, 201, 202
+  register: f5_resultado
+  ignore_errors: True
+  when:
+    - f5_creacion_pool == true
+    - f5_existencia_pool == false
+    - f5_resultado_validacion_balanceo is succeeded
+
+- name: "Fecha de inicio proceso F5"
+  set_fact:
+    f5_fecha_fin: ansible_date_time.iso8601
+  when: true == true
+
+- name: "SENHA :::  F5 -- Creacion virtual server OK."
+  set_fact:
+    f5_proceso:
+      codigo: "99"
+      descripcion: "Proceso satisfactorio de creacion de Balanceador de Carga."
+      entrada_nombre_pool: "{{f5_entrada_nombrepool}}po"
+      entrada_ip_virtual: "{{f5_entrada_ipvirtual}}"
+      entrada_puerto: "{{f5_entrada_puerto}}"
+      entrada_ips: "{{f5_entrada_ipsnodos}}"
+      entrada_protocolo: "{{f5_entrada_protocolo}}"
+      entrada_t_balanceo: "{{f5_entrada_tipobalanceo}}"
+      entrada_t_persistencia: "{{f5_entrada_tipopersistencia}}"
+      fecha_inicio: "{{ f5_fecha_inicio }}"
+      fecha_fin: "{{ f5_fecha_fin }}"
+  when:
+    - f5_resultado is succeeded
+    - f5_creacion_pool == true
+    - f5_existencia_pool == false
+
+- name: "SENHA :::  F5 -- Creacion virtual server fallida."
+  set_fact:
+    f5_proceso:
+      codigo: "02"
+      descripcion: "Proceso FALLIDO por duplicidad en el nombre del pool."
+      entrada_nombre_pool: "{{f5_entrada_nombrepool}}po"
+      entrada_ip_virtual: "{{f5_entrada_ipvirtual}}"
+      entrada_puerto: "{{f5_entrada_puerto}}"
+      entrada_ips: "{{f5_entrada_ipsnodos}}"
+      entrada_protocolo: "{{f5_entrada_protocolo}}"
+      entrada_t_balanceo: "{{f5_entrada_tipobalanceo}}"
+      entrada_t_persistencia: "{{f5_entrada_tipopersistencia}}"
+      fecha_inicio: "{{ f5_fecha_inicio }}"
+      fecha_fin: "{{ f5_fecha_fin }}"
+  when:
+    - f5_resultado is failed or f5_creacion_pool == false or f5_existencia_pool == true
+
+- include_tasks: f5_senha_rollback.yml
+  when:
+    - f5_resultado is failed

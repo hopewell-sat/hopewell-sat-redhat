@@ -1,0 +1,9 @@
+---
+# vars file for apic_crear_egps_mat
+  host_name: 10.20.0.254
+  usuario: admin
+  password: smartvm1
+#  epg_web: web
+#  epg_proc: procesamiento
+#  epg_datos: datos
+...

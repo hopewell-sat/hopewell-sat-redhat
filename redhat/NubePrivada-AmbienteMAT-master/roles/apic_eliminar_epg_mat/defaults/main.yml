@@ -1,0 +1,6 @@
+---
+# defaults file for apic_eliminar_epg_mat
+ap: "default"
+epg: "epg_default"
+bd: "default"
+...

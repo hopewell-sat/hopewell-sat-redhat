@@ -1,0 +1,35 @@
+ 
+- hosts: localhost
+    
+  tasks:
+
+    - set_fact:
+        f5_entrada_nombrepool: "{{f5_tw_nombre}}"
+        f5_entrada_puerto: "{{f5_tw_puerto}}"
+        f5_entrada_ipsnodos: "{{f5_tw_ips}}"
+
+    - name: Realizando rollback de F5 paso 1 de 5 F5/tasks/f5_eliminarvs.yml
+      import_role:
+        name: F5
+        tasks_from: f5_eliminarvs
+  
+    - name: Realizando rollback de F5 paso 2 de 5 F5/tasks/f5_login.yml
+      import_role:
+        name: F5
+        tasks_from: f5_login
+        
+    - name: Realizando rollback de F5 paso 3 de 5 F5/tasks/f5_validar_pool.yml
+      import_role:
+        name: F5
+        tasks_from: f5_validar_pool  
+
+    - name: Realizando rollback de F5 paso 4 de 5 F5/tasks/f5_eliminar_pool.yml
+      import_role:
+        name: F5
+        tasks_from: f5_eliminar_pool        
+        
+    - name: Realizando rollback de F5 paso 5 de 5 F5/tasks/f5_elimina_ip.yml
+      import_role:
+        name: F5
+        tasks_from: f5_elimina_ip
+

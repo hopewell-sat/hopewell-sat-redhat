@@ -1,0 +1,150 @@
+---
+- name: "SENHA ::: Pre validaciones  ::: Maquinas virtuales -- ."
+  import_role:
+    name: vmware
+    tasks_from: vmware_senha_prevalidacion
+
+#- name: "Aqui debe entrar la excepcion"
+#  listen: SENHA Excepcion
+#  command: fallido
+
+#Presentacion
+- name: "SENHA ::: Pre validaciones  ::: F5 -- Acceso a consola capa presentacion."
+  import_role:
+    name: F5
+    tasks_from: f5_login
+  when:
+    - omitir_capa_presentacion != "t"
+
+- name: "SENHA ::: Pre validaciones  ::: F5 -- Validacion de capa presentacion."
+  include_role:
+    name: F5
+    tasks_from: f5_validar_pool
+  vars:
+    f5_entrada_nombrepool: "{{ entrada_nombrepool_pres }}"
+  when:
+    - omitir_capa_presentacion != "t"
+
+- name: "SENHA ::: Pre validaciones  ::: F5 -- Inclusion de role de transformacion para envio correo capa presentacion."
+  import_role:
+    name: aplicar_diccionario
+    tasks_from: main
+  when:
+    - omitir_capa_presentacion != "t"
+    - f5_existencia_pool == True
+
+#De aqui se envia el correo
+- name: "SENHA ::: Pre validaciones  ::: F5 -- Envio correo capa presentacion."
+  include_role:
+    name: general
+    tasks_from: general_enviocorreo
+  vars:
+    general_correo_de: "senha.notificacion@gmail.com"
+    general_correo_para: "{{ correo_solicitante }}"
+    general_correo_concopia: "{{ lista_correo_electronico }}"
+    general_correo_asunto: "Folio {{ estructura_ambiente.senha_generales.numero_de_ticket }} - Despliegue Fallido - {{ nombre_catalogo }}"
+    general_correo_cuerpo: |
+                            <br/>Datos generales del despliegue con el folio <b>{{ estructura_ambiente.senha_generales.numero_de_ticket }}</b>:
+                            <br/>
+                            <ul>
+                            <li>Item desplegado: <b>{{ nombre_catalogo }}</b></li>
+                            <li>Solicitante / Correo:  <b>{{ estructura_ambiente.senha_generales.nombre_solicitante }}</b> / <b>{{ estructura_ambiente.senha_generales.correo_solicitante }}</b></li>
+                            <li>Aplicación / Versión:  <b>{{ estructura_ambiente.senha_generales.nombre_aplicacion }}</b> / <b>{{ estructura_ambiente.senha_generales.version_proyecto }}</b></li>
+                            <li>Ambiente: <b>{{ estructura_ambiente.senha_generales.selector_de_ambiente }}</b></li>
+                            <li>Prevalidación con error: <b> Validación de LB en capa presentación </b></li>
+                            </ul>
+                            <br/>
+                            <br/>Mensaje de error:
+                            <ul>
+                            <li>SENHA ha detectado un componente existente por el cual no se puede generar todo el stack de arquitectura MAT. Resource pool de F5 existente <b>{{ entrada_nombrepool_pres }} </b> </li>
+                            </ul>
+    general_correo_adjuntos: ""
+    tipo_evento_notificacion: "error_de_prevalidacion"
+  when:
+    - omitir_capa_presentacion != "t"
+    - f5_existencia_pool == True
+
+- name: "SENHA ::: Pre validaciones  ::: F5 -- Finalizacion de proceso general."
+  fail:
+    msg: "El pool de balanceador de carga ya existe dentro del appliance de F5."
+  when:
+    - omitir_capa_presentacion != "t"
+    - f5_existencia_pool == True
+
+#Procesamiento
+- name: "SENHA ::: Pre validaciones  ::: F5 -- Acceso a consola capa procesamiento."
+  import_role:
+    name: F5
+    tasks_from: f5_login
+  when:
+    - omitir_capa_procesamiento != "t"
+    - balanceador_de_carga_procesamiento != "t"
+
+- set_fact:
+    f5_existencia_pool: False
+  when:
+    - balanceador_de_carga_procesamiento != "t"
+    - omitir_capa_procesamiento != "t"
+
+
+- name: "SENHA ::: Pre validaciones  ::: F5 -- Validacion de capa procesamiento."
+  include_role:
+    name: F5
+    tasks_from: f5_validar_pool
+  vars:
+    f5_entrada_nombrepool: "{{ entrada_nombrepool_proc }}"
+  when:
+    - balanceador_de_carga_procesamiento != "t"
+    - omitir_capa_procesamiento != "t"
+
+- name: "SENHA ::: Pre validaciones  ::: F5 -- Inclusion de role de transformacion para envio correo capa procesamiento."
+  import_role:
+    name: aplicar_diccionario
+    tasks_from: main
+  when:
+    - balanceador_de_carga_procesamiento != "t"
+    - omitir_capa_procesamiento != "t"
+    - f5_existencia_pool == True
+
+- name: "SENHA ::: Pre validaciones  ::: F5 -- Envio correo capa procesamiento."
+  include_role:
+    name: general
+    tasks_from: general_enviocorreo
+  vars:
+    general_correo_de: "senha.notificacion@gmail.com"
+    general_correo_para: "{{ correo_solicitante }}"
+    general_correo_concopia: "{{ lista_correo_electronico }}"
+    general_correo_asunto: "Folio {{ estructura_ambiente.senha_generales.numero_de_ticket }} - Despliegue Fallido - {{ nombre_catalogo }}"
+    general_correo_cuerpo: |
+                            <br/>Datos generales del despliegue con el folio <b>{{ estructura_ambiente.senha_generales.numero_de_ticket }}</b>.-
+                            <br/>
+                            <ul>
+                            <li>Item desplegado: <b>{{ nombre_catalogo }}</b></li>
+                            <li>Solicitante / Correo:  <b>{{ estructura_ambiente.senha_generales.nombre_solicitante }}</b> / <b>{{ estructura_ambiente.senha_generales.correo_solicitante }}</b></li>
+                            <li>Aplicación / Versión:  <b>{{ estructura_ambiente.senha_generales.nombre_aplicacion }}</b> / <b>{{ estructura_ambiente.senha_generales.version_proyecto }}</b></li>
+                            <li>Ambiente: <b>{{ estructura_ambiente.senha_generales.selector_de_ambiente }}</b></li>
+                            <li>Prevalidación con error: <b> Validación de LB en capa procesamiento </b></li>
+                            </ul>
+                            <br/>
+                            <br/>Mensaje de error.-
+                            <ul>
+                            <li>SENHA ha detectado un componente existente por el cual no se puede generar todo el stack de arquitectura MAT. Resource pool de F5 existente <b>{{ entrada_nombrepool_proc }} </b> </li>
+                            </ul>
+    general_correo_adjuntos: ""
+    tipo_evento_notificacion: "error_de_prevalidacion"
+  when:
+    - balanceador_de_carga_procesamiento != "t"
+    - omitir_capa_procesamiento != "t"
+    - f5_existencia_pool == True
+
+- name: "SENHA ::: Pre validaciones  ::: F5 -- Finalizacion de proceso general."
+  fail:
+    msg: "El pool de balanceador de carga ya existe dentro del appliance de F5."
+  when:
+    - balanceador_de_carga_procesamiento != "t"
+    - omitir_capa_procesamiento != "t"
+    - f5_existencia_pool == True
+
+- set_fact:
+    f5_existencia_pool: False
+  when: True == True

@@ -1,0 +1,25 @@
+- name: Obteniendo el detalle de cada datastore aprovisionamiento SENHA
+  uri:
+    url: "{{ item.href }}"
+    method: GET
+    body_format: json
+    validate_certs: False
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type: "application/json"
+    status_code: 200
+  register: general_datastore
+
+
+- set_fact:
+    espacio_total: "{{ (general_datastore.json.total_space|int / 1000000000 ) | round(2) }}"
+    espacio_disponible: "{{ (general_datastore.json.free_space|int / 1000000000) | round(2) }}"
+
+
+- set_fact:
+    espacio_total_disponible_html: '{{ (espacio_total_disponible_html|float) + (espacio_disponible|float) }}'
+    espacio_total_html: '{{ (espacio_total_html|float) + (espacio_total|float) }}'
+    general_lista_datastores: '{{ general_lista_datastores }}<tr><td style="vertical-align:middle; text-align:center" rowspan="4">{{general_datastore.json.name}}</td></tr><tr><td> Espacio total:  </td><td> {{ espacio_total }} G</td><tr><td> Espacio disponible:  </td><td> {{ espacio_disponible }} G</td></tr><tr><td>Tipo de almacenamiento: </td><td>{{ general_datastore.json.store_type }}</td></tr>'
+  when: general_datastore is succeeded
+
+

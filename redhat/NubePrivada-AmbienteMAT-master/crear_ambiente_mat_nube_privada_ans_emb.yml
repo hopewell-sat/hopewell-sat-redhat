@@ -1,0 +1,13 @@
+---
+- name: Valores  Generados y Obtenidos
+  hosts: localhost
+  gather_facts: no
+  roles:
+    - calcular_variables_ambiente_mat
+    - prevalidaciones
+    - crear_capa_vms
+#AFM    - configurar_conectividad
+    - registro_ci
+    - aplicar_diccionario
+    - comunicar_informacion_ambiente
+...

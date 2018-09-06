@@ -1,0 +1,8 @@
+---
+# vars file for apic_buscar_app_profile
+  host_name: 10.20.0.254
+  usuario: admin
+  password: smartvm1
+  apic_tenant: common
+  #El tenan para el sat es Unico (Se reemplazara el tenan common por el otorgado a SAT_SENHA
+...

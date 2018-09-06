@@ -1,0 +1,26 @@
+# @  Author Alan Flores Mendoza
+# @  Parametros de entrada 
+# vars:
+#    f5_entrada_nombrepool: "capa_pres_odi_tcp"
+#    f5_entrada_ipnodo: "192.168.10.12"
+#    f5_entrada_puerto: "80"
+# @  Variables de retorno
+#    f5_proceso
+# @  Descripcion
+# @@ Esta secuencia de metodos realiza la adicion de un nodo a un pool de recursos existentes basado en parametros de entrada mencionados en los renglones primarios
+
+- name: Ejecutando una sola tarea desde F5/tasks/f5_login.yml
+  import_role:
+    name: F5
+    tasks_from: f5_login
+    
+- name: Ejecutando una sola tarea desde F5/tasks/f5_validar_pool.yml
+  import_role:
+    name: F5
+    tasks_from: f5_validar_pool
+
+- name: Ejecutando una sola tarea desde F5/tasks/f5_agrega_nodo.yml
+  import_role:
+    name: F5
+    tasks_from: f5_agrega_nodo
+

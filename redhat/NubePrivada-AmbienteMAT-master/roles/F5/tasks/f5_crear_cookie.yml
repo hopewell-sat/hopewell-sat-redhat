@@ -1,0 +1,31 @@
+- name: "SENHA :::  F5 -- Creacion de cookie."
+  uri:
+    url: "https://{{ f5_servidor }}/mgmt/tm/ltm/persistence/cookie/~cookie_{{ f5_entrada_nombrepool }}"
+    method: POST
+    headers:
+      Content-Type: "application/json"
+      X-F5-Auth-Token: "{{ f5_token }}"
+    body: "{\"name\":\"cookie_{{ f5_entrada_nombrepool }}\"}"      
+    body_format: json
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200
+  register: f5_resultado_cookie
+  ignore_errors: True
+  when:
+    - f5_token != ""
+
+- name: "SENHA :::  F5 -- Creacion cookie OK."
+  set_fact:
+    f5_entrada_tipopersistencia: "cookie_{{ f5_entrada_nombrepool }}"
+  when:
+    - f5_resultado_cookie is succeeded
+    - f5_token != ""
+
+- name: "SENHA :::  F5 -- Creacion cookie fallida."
+  set_fact:
+    f5_entrada_tipopersistencia: ""
+  when:
+    - f5_resultado_cookie is failed
+    - f5_token != ""

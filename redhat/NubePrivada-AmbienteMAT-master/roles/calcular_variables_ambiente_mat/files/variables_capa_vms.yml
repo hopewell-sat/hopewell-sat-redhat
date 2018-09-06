@@ -1,0 +1,13 @@
+---
+maquina_creada:
+  nombre_vm: "SENPREDESAMA01"
+  vmware_proceso:
+    codigo: "99"
+    mensaje: "Proceso OK"
+    entrada_nombrevm: "SENPREDESAMA01"
+    salida_uuid: "4232f1a1-cf07-756e-3ae6-f84110c0a263"
+    salida_vmgenerada: "SENPREDESAMA01"
+    nics: []
+    inicio_proceso: "2018-02-25T16:25:56.000Z"
+    termino_proceso: "2018-02-25T16:23:00.000Z"
+...

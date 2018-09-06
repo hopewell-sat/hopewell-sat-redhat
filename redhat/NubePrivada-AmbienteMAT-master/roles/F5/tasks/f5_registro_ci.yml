@@ -1,0 +1,61 @@
+- name: Obtener variable "nombre_catalogo" para informacion de correo electronico
+  set_fact:
+    nombre_catalogo: "{{ awx_job_template_name | regex_replace('miq_','') | regex_replace('_provision','') }}"
+  when:
+    - awx_job_template_name is defined
+
+- name: Asignacion variable entrada_nombrepool_proc
+  set_fact:
+    entrada_nombrepool_proc: "{{ entrada_nombrepool }}"
+
+#Registro CI para load balancer presentacion
+- name: "SENHA ::: Registro CI  ::: Alta balanceador de carga -- Capa de presentacion."
+  include_role:
+    name: oracle
+    tasks_from: oracle_persistir_balanceadorcis
+  vars:
+    tipo_de_registro: "En ensamblaje"
+    clase_de_ci: "03"
+    id_de_elemento: "{{ entrada_nombrepool }}"
+    fecha_de_registro: "{{ inivariabletiempo }}"
+    centro_de_datos: "{{ centro_datos_sat }}"
+    ambiente: "{{ selector_de_ambiente }}"
+    capa: "pre"
+    work_order: "{{ numero_de_ticket }}"
+    area_general: "{{ nombre_general }}"
+    area_central: "{{ nombre_central }}"
+    id_de_servicio: "{{ nombre_catalogo }}"
+    id_de_aplicacion: "{{ nombre_aplicacion }}"
+    version_de_aplicacion: "{{ version_proyecto }}"
+    tenant: "XD"
+    vip: "{{f5_entrada_ipvirtual}}"
+    algoritmo_de_balanceo: "{{ f5_entrada_tipobalanceo }}"
+    tipo_de_persistencia: "{{ f5_entrada_tipopersistencia }}"
+    puerto_de_listener: "{{ f5_entrada_puerto }}"
+    lista_de_nodos: "{{ f5_entrada_ipsnodos }}"
+
+#Registro CI para load balancer procesamiento
+- name: "SENHA ::: Registro CI  ::: Alta balanceador de carga -- Capa de procesamiento."
+  include_role:
+    name: oracle
+    tasks_from: oracle_persistir_balanceadorcis
+  vars:
+    tipo_de_registro: "En ensamblaje"
+    clase_de_ci: "03"
+    id_de_elemento: "{{ entrada_nombrepool_proc }}"
+    centro_de_datos: "{{ centro_datos_sat }}"
+    ambiente: "{{ selector_de_ambiente }}"
+    capa: "pro"
+    fecha_de_registro: "{{ inivariabletiempo }}"
+    work_order: "{{ numero_de_ticket }}"
+    area_general: "{{ nombre_general }}"
+    area_central: "{{ nombre_central }}"
+    id_de_servicio: "{{ nombre_catalogo }}"
+    id_de_aplicacion: "{{ nombre_aplicacion }}"
+    version_de_aplicacion: "{{ version_proyecto }}"
+    tenant: "XD"
+    vip: "{{f5_entrada_ipvirtual}}"
+    algoritmo_de_balanceo: "{{ f5_entrada_tipobalanceo }}"
+    tipo_de_persistencia: "{{ f5_entrada_tipopersistencia }}"
+    puerto_de_listener: "{{ f5_entrada_puerto }}"
+    lista_de_nodos: "{{ f5_entrada_ipsnodos }}"

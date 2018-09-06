@@ -1,0 +1,34 @@
+---
+- debug:
+    msg: "Ejecutando archivo crear_capa_procesamiento para el rol crear_capas_vm"
+
+- set_fact:
+   f5_temporal_vmware: ""
+   infoblox_ips_gestion: ""
+   infoblox_ips_produccion: ""
+
+#AFM- name: "Obteniendo la plantilla a utilizar en la capa procesamiento"
+#AFM  import_role:
+#AFM    name: general
+#AFM    tasks_from: vmware_plantilla_procesamiento
+
+- name: Creación de VMs
+  include_role:
+    name: vmware
+    tasks_from: crear_mv
+  vars:
+    nombre_vm: "{{ item }}"
+    vmware_nombre_vm: "{{ item }}"
+    tipo_capa: "procesamiento"
+    vmware_template: "{{plantilla_procesamiento}}"
+    vmware_memory_mb: "{{ capa_procesamiento_ram }}"
+    vmware_num_cpus: "{{ capa_procesamiento_cpu }}"
+  with_items: "{{ capa_procesamiento_hostnames }}"
+
+#Reinicio de variable de IPs por capa
+- set_fact:
+   f5_procesamiento_ips_gestion: "{{ infoblox_ips_gestion[:-1] }}"
+   f5_procesamiento_ips_produccion: "{{ infoblox_ips_produccion[:-1] }}"
+   f5_temporal_vmware_procesamiento: "{{ f5_temporal_vmware[:-1] }}"
+
+...

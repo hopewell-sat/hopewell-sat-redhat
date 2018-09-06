@@ -1,0 +1,32 @@
+---
+- debug:
+    msg: "Ejecutando archivo crear_capa_datos para el rol crear_capas_vm"
+
+- set_fact:
+   f5_temporal_vmware: ""
+   infoblox_ips_gestion: ""
+   infoblox_ips_produccion: ""
+
+#AFM- name: "Obteniendo la plantilla a utilizar en la capa datos"
+#AFM  import_role:
+#AFM    name: general
+#AFM    tasks_from: vmware_plantilla_datos
+
+- name: Creación de VMs
+  include_role:
+    name: vmware
+    tasks_from: crear_mv
+  vars:
+    nombre_vm: "{{ item }}"
+    vmware_nombre_vm: "{{ item }}"
+    tipo_capa: "datos"
+    vmware_template: "{{plantilla_datos}}"
+    vmware_memory_mb: "{{ capa_datos_ram }}"
+    vmware_num_cpus: "{{ capa_datos_cpu }}"
+  with_items: "{{ capa_datos_hostnames }}"
+
+- set_fact:
+   f5_datos_ips_gestion: "{{ infoblox_ips_gestion[:-1] }}"
+   f5_datos_ips_produccion: "{{ infoblox_ips_produccion[:-1] }}"
+   f5_temporal_vmware_datos: "{{ f5_temporal_vmware[:-1] }}"
+...

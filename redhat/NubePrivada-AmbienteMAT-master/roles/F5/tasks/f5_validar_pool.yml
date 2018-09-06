@@ -1,0 +1,28 @@
+- name: "Validacion de exisitencia de pools {{ f5_token }}"
+  uri:
+    url: "https://{{ f5_servidor }}/mgmt/tm/ltm/pool/~{{ f5_particion }}~{{ f5_entrada_nombrepool }}po"
+    method: GET
+    headers:
+      Content-Type: "application/json"
+      X-F5-Auth-Token: "{{ f5_token }}"
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200
+  register: f5_validacion
+  ignore_errors: True
+  when:
+    - f5_token != ""
+
+- set_fact:
+    f5_existencia_pool: true
+  when:
+    - f5_validacion is succeeded
+
+- set_fact:
+    f5_existencia_pool: false
+  when:
+    - f5_validacion is failed
+
+- name:  "Valor en variable {{ f5_existencia_pool }}po"
+  command: echo "{{ f5_existencia_pool }}"

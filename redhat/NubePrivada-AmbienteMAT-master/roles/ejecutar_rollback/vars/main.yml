@@ -1,0 +1,3 @@
+---
+# vars file for ejecutar_rollback
+rollback_ips_capas: ""

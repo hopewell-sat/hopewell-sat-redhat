@@ -1,0 +1,14 @@
+---
+# vars file for infoblox
+infoblox_proceso: ""
+infoblox_cadena_reservacion: ""
+infoblox_body_api: ""
+infoblox_url: ""
+infoblox_ip_individual: ""
+infoblox_tmp_rango: ""
+infoblox_tipo_red: ""
+infoblox_proceso_gestion: ""
+infoblox_proceso_produccion: ""
+infoblox_ips_todas: ""
+infoblox_ips_gestion: ""
+infoblox_ips_produccion: ""

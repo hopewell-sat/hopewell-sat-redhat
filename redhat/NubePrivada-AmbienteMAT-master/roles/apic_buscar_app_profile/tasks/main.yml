@@ -1,0 +1,16 @@
+---
+# tasks file for apic_buscar_app_profile
+- name: Query an AP
+  aci_ap:
+    host: "{{host_name}}"
+    username: "{{usuario}}"
+    password: "{{password}}"
+    tenant: "{{apic_tenant}}"
+    ap: "{{acronimo_aplicacion}}"
+    state: query
+    validate_certs: no
+  register: salida_buscar_app_profile
+- name: Imprimir resultado
+  debug:
+    var: salida_buscar_app_profile
+...

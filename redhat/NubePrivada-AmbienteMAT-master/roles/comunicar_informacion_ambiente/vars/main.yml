@@ -1,0 +1,10 @@
+---
+# vars file for comunicar_informacion_ambiente
+#diccionario_valor_descripcion:
+#  lp: "LabPuebla"
+#  dev: "Desarrollo"
+#  uat: "Calidad (UAT)"
+#  pro: "Producción"
+#  str: "Estrés"
+#  t: "Si"
+#  f: "No"

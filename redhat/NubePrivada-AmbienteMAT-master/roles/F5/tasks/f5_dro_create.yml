@@ -1,0 +1,45 @@
+
+- name: Create DRO entry for F5
+  uri:
+    url: "{{ manageiq.api_url }}/api/generic_objects"
+    method: POST
+    validate_certs: no
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type:  application/json
+    body_format: json
+    body:
+      action: create
+      name: "{{ f5_entrada_nombrepool }}"
+      generic_object_definition:
+        href: "{{ manageiq.api_url }}/api/generic_object_definitions/1000000000004"
+      property_attributes:
+        dro_f5_nombre: "{{ f5_entrada_ipvirtual }}"
+        dro_f5_vip: "{{ f5_dialogo_ipvirtual }}"
+        dro_f5_nodos: "{{ f5_entrada_ipsnodos }}"
+        dro_f5_protocolo:	"{{ f5_entrada_protocolo }}"
+        dro_f5_puerto: "{{ f5_entrada_puerto }}"
+        dro_f5_algoritmo: "{{ f5_entrada_tipobalanceo }}"
+        dro_f5_persistencia: "{{ f5_entrada_tipopersistencia }}"
+            
+      associations:
+        service:
+        - href: "{{ manageiq.api_url }}/api/{{ manageiq.service }}"
+  register: dro
+      
+           
+- name: Add DRO to service
+  uri:
+    url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}"
+    method: POST
+    validate_certs: no
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type:  application/json
+    body_format: json
+    body:
+      action: add_resource
+      resource:
+        resource:
+          href: "{{ dro.json.results[0].href }}"    
+     

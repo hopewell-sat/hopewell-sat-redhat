@@ -1,0 +1,40 @@
+# @  Author Alan Flores Mendoza
+# @  Parametros de entrada 
+# vars:
+#    f5_entrada_nombrepool: "capa_pres_odi_tcp"
+#    f5_entrada_ipvirtual: "172.10.10.25"
+#    f5_entrada_ipsnodos: "192.168.10.8,192.168.10.9"
+#    f5_entrada_protocolo: "tcp" # "tcp","udp","http","https","icmp"
+#    f5_entrada_puerto: "80"
+#    f5_entrada_tipobalanceo: "round-robin" #  "round-robin", o "least-connections-member".
+#    f5_entrada_tipopersistencia: "cookie" # dest_addr
+# @  Variables de retorno
+#    f5_proceso
+# @  Descripcion
+# @@ Esta secuencia de metodos el rollback de los elementos generados basado en parametros de entrada mencionados en los renglones primarios
+
+- name: Realizando rollback de F5 paso 2 de 5 F5/tasks/f5_login.yml
+  import_role:
+    name: F5
+    tasks_from: f5_login
+    
+- name: Realizando rollback de F5 paso 1 de 5 f5_eliminarvs.yml
+  import_role:
+    name: F5
+    tasks_from: f5_eliminarvs
+
+- name: Realizando rollback de F5 paso 3 de 5 F5/tasks/f5_validar_pool.yml
+  import_role:
+    name: F5
+    tasks_from: f5_validar_pool  
+
+- name: Realizando rollback de F5 paso 4 de 5 F5/tasks/f5_eliminar_pool.yml
+  import_role:
+    name: F5
+    tasks_from: f5_eliminar_pool        
+    
+- name: Realizando rollback de F5 paso 5 de 5 F5/tasks/f5_elimina_ip.yml
+  import_role:
+    name: F5
+    tasks_from: f5_elimina_ip
+

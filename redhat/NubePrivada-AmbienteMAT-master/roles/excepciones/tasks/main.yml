@@ -1,0 +1,4 @@
+---
+- name: "SENHA ::: Excepcion General  ::: Flujo de excepcion general."
+  fail:
+    msg: "{{excepcion[{{ global_excepcion }}]}}"

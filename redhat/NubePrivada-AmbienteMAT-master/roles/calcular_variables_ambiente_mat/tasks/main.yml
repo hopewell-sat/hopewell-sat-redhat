@@ -1,0 +1,208 @@
+---
+
+- name: "SENHA :::  Calcular variables -- Fecha de inicio."
+  shell: "date +%Y-%m-%d\\ %H:%M:%S"
+  register: tstamp_inicio
+
+- name: "SENHA :::  Calcular variables -- Impresion de variables de entrada."
+  vars:
+    declared_variables: |
+        Module Variables ("vars"):
+        --------------------------------
+        {{ vars | to_nice_json }}
+        Environment Variables ("environment"):
+        --------------------------------
+        {{ environment | to_nice_json }}
+        GROUP NAMES Variables ("group_names"):
+        --------------------------------
+        {{ group_names | to_nice_json }}
+        GROUPS Variables ("groups"):
+        --------------------------------
+        {{ groups | to_nice_json }}
+        HOST Variables ("hostvars"):
+        --------------------------------
+        {{ hostvars | to_nice_json }}
+  debug:
+    msg: "{{ declared_variables.split('\n')}}"
+  tags: debug_info
+
+- set_fact:
+    tmp_identificar_balanceador_procesamiento: "t"
+  when:
+    - balanceador_de_carga_procesamiento is defined
+    - balanceador_de_carga_procesamiento == "t"
+
+- set_fact:
+    tmp_identificar_umbral_storage: "t"
+  when:
+    - continuar_riesgo_umbral_storage is defined
+    - continuar_riesgo_umbral_storage == "t"
+
+- name: "SENHA :::  Calcular variables -- Obtener variable nombre_catalogo."
+  set_fact:
+    nombre_catalogo: "{{ awx_job_template_name | regex_replace('miq_','') | regex_replace('_provision','') }}"
+  when:
+    - awx_job_template_name is defined
+
+- set_fact:
+    balanceador_de_carga_procesamiento: "{{tmp_identificar_balanceador_procesamiento}}"
+    continuar_riesgo_umbral_storage: "{{tmp_identificar_umbral_storage}}"
+    nombre_catalogo: "{{ nombre_catalogo }}"
+
+- name: "SENHA :::  Calcular variables -- Declaracion de variable para manejo de errores."
+  set_fact:
+    error_flujo_general: "Ocurrio un error al generar el ambiente."
+    acronimo_aplicacion: "{{ nombre_aplicacion.split(',')[0] }}"
+    tmp_nombre_aplicacion: "{{ nombre_aplicacion.split(',')[1] }}"
+    nombre_aplicacion: "{{ tmp_nombre_aplicacion }}"
+
+- name: "SENHA ::: Generacion de variables generales"
+  set_fact:
+    entrada_nombrepool_proc: "sna{{ centro_de_datos }}{{ acronimo_aplicacion }}v{{ version_proyecto | regex_replace('\\.','s')}}{{selector_de_ambiente}}prolb"
+    entrada_protocolo_proc: "{{ entrada_protocolo_proc }}"
+    entrada_puerto_proc: "{{ entrada_puerto_proc }}"
+    entrada_tipobalanceo_proc: "{{ entrada_tipobalanceo_lb_proc }}"
+    entrada_tipopersistencia_proc: "{{ entrada_tipopersistencia_lb_proc }}"
+    entrada_nombrepool_pres: "sna{{ centro_de_datos }}{{ acronimo_aplicacion }}v{{ version_proyecto | regex_replace('\\.','s')}}{{selector_de_ambiente}}prelb"
+    entrada_protocolo_pres: "{{ entrada_protocolo_pres }}"
+    entrada_puerto_pres: "{{ entrada_puerto_pres }}"
+    entrada_tipobalanceo_pres: "{{ entrada_tipobalanceo_lb_pres }}"
+    entrada_tipopersistencia__pres: "{{ entrada_tipopersistencia_lb_pres }}"
+    cuenta_correo: "{{ correo_solicitante }}"
+    lista_cuenta_correo: "{{ lista_correo_electronico }}"
+
+# DEFINICION OMISION DE CAPAS AFM
+- name: "SENHA :::  Calcular variables -- Definiendo la omision de la capa de presentacion."
+  set_fact:
+    omitir_capa_presentacion: "t"
+  when: no_vm_presentacion == "0" or vmware_template_presentacion == ""
+
+- name: "SENHA :::  Calcular variables -- Definiendo la omision de la capa de prcesamiento."
+  set_fact:
+    omitir_capa_procesamiento: "t"
+  when: no_vm_procesamiento == "0" or vmware_template_procesamiento == ""
+
+- name: "SENHA :::  Calcular variables -- Definiendo la omision de la capa de datos."
+  set_fact:
+    omitir_capa_datos: "t"
+  when: no_vm_datos == "0" or vmware_template_datos == ""
+
+- name: "SENHA :::  Calcular variables -- Creada hostname capa de presentacion."
+  set_fact:
+    hostname_item: "sna{{ centro_de_datos }}{{ acronimo_aplicacion }}v{{ version_proyecto | regex_replace('\\.','s') }}{{ selector_de_ambiente }}pretecn{{ '%02d' | format(item|int) }}"
+  with_sequence: count="{{ no_vm_presentacion }}"
+  register: hostname_result
+
+- set_fact:
+    capa_presentacion_hostnames: "{{ hostname_result.results | map(attribute='ansible_facts.hostname_item') | list }}"
+
+- name: "SENHA :::  Calcular variables -- Creada hostname capa de procesamiento."
+  set_fact:
+    hostname_item: "sna{{ centro_de_datos }}{{ acronimo_aplicacion }}v{{ version_proyecto | regex_replace('\\.','s') }}{{ selector_de_ambiente }}protecn{{ '%02d' | format(item|int) }}"
+  with_sequence: count="{{ no_vm_procesamiento }}"
+  register: hostname_result
+
+- set_fact:
+    capa_procesamiento_hostnames: "{{ hostname_result.results | map(attribute='ansible_facts.hostname_item') | list }}"
+
+- name: "SENHA :::  Calcular variables -- Creada hostname capa de datos."
+  set_fact:
+    hostname_item: "sna{{ centro_de_datos }}{{ acronimo_aplicacion }}v{{ version_proyecto | regex_replace('\\.','s') }}{{ selector_de_ambiente }}dattecn{{ '%02d' | format(item|int) }}"
+  with_sequence: count="{{ no_vm_datos }}"
+  register: hostname_result
+
+- set_fact:
+    capa_datos_hostnames: "{{ hostname_result.results | map(attribute='ansible_facts.hostname_item') | list }}"
+
+- name: "SENHA :::  Calcular variables -- Creacion de datos de AP CISCO APIC."
+  set_fact:
+    ap: "ap_{{ selector_de_ambiente }}_{{ nombre_aplicacion }}_{{ version_proyecto | regex_replace('\\.','') }}"
+    epg_presentacion: "epg_{{ selector_de_ambiente }}_web_{{ nombre_aplicacion }}v{{ version_proyecto | regex_replace('\\.','s') }}"
+    epg_procesamiento: "epg_{{ selector_de_ambiente }}_procesamiento_{{ nombre_aplicacion }}v{{ version_proyecto | regex_replace('\\.','s') }}"
+    epg_datos: "epg_{{ selector_de_ambiente }}_datos_{{ nombre_aplicacion }}v{{ version_proyecto | regex_replace('\\.','s') }}"
+    epg_exterior: "epg_{{ selector_de_ambiente }}_exterior_{{ nombre_aplicacion }}v{{ version_proyecto | regex_replace('\\.','s') }}"
+    aci_contrato_presentacion: "cto_{{ selector_de_ambiente }}_web_{{ nombre_aplicacion }}v{{ version_proyecto | regex_replace('\\.','s') }}"
+    aci_contrato_procesamiento: "cto_{{ selector_de_ambiente }}_procesamiento_{{ nombre_aplicacion }}v{{ version_proyecto | regex_replace('\\.','s') }}"
+    aci_contrato_datos: "cto_{{ selector_de_ambiente }}_datos_{{ nombre_aplicacion }}v{{ version_proyecto | regex_replace('\\.','s') }}"
+    aci_contrato_exterior: "cto_{{ selector_de_ambiente }}_exterior_{{ nombre_aplicacion }}v{{ version_proyecto | regex_replace('\\.','s') }}"
+    id_plantilla_presetacion: "{{ vmware_template_presentacion.split(',')[0] }}"
+    plantilla_presentacion: "{{ vmware_template_presentacion.split(',')[1] }}"
+    descripcion_plantilla_presentacion: "{{ vmware_template_presentacion.split(',')[2] }}"
+    id_plantilla_procesamiento: "{{ vmware_template_procesamiento.split(',')[0] }}"
+    plantilla_procesamiento: "{{ vmware_template_procesamiento.split(',')[1] }}"
+    descripcion_plantilla_procesamiento: "{{ vmware_template_procesamiento.split(',')[2] }}"
+    id_plantilla_datos: "{{ vmware_template_datos.split(',')[0] }}"
+    plantilla_datos: "{{ vmware_template_datos.split(',')[1] }}"
+    descripcion_plantilla_datos: "{{ vmware_template_datos.split(',')[2] }}"
+    omitir_capa_presentacion: "{{omitir_capa_presentacion}}"
+    omitir_capa_procesamiento: "{{omitir_capa_procesamiento}}"
+    omitir_capa_datos: "{{omitir_capa_datos}}"
+#    vmware_template_presentacion: "{{descripcion_plantilla_presentacion}}"
+#    vmware_template_procesamiento: "{{descripcion_plantilla_procesamiento}}"
+#    vmware_template_datos: "{{descripcion_plantilla_datos}}"
+
+- set_fact:
+    estructura_ambiente:
+      senha_generales:
+        numero_de_ticket: "{{  numero_de_ticket }}"
+        nombre_solicitante: "{{ nombre_solicitante }}"
+        correo_solicitante: "{{ correo_solicitante }}"
+        lista_correo_electronico: "{{ lista_correo_electronico }}"
+        centro_datos_sat: "{{ centro_de_datos }}"
+        selector_de_ambiente: "{{ selector_de_ambiente }}"
+        acronimo_aplicacion: "{{ acronimo_aplicacion }}"
+        nombre_aplicacion: "{{ tmp_nombre_aplicacion }}"
+        version_proyecto: "{{ version_proyecto }}"
+        continuar_riesgo_umbral_storage: "{{ tmp_identificar_umbral_storage }}"
+        contrasena_root_vms: ""
+        contrasena_admin_vms: ""
+        generales_compuestos:
+          hora: ""
+          fecha: ""
+        fecha_inicio_proceso: "{{ tstamp_inicio.stdout }}"
+        fecha_termino_proceso: ""
+        aci_epg: ""
+        aci_app: ""
+        aci_contrato: ""
+      senha_presentacion:
+        presentacion_sabor: "{{ tamanio_presentacion }}"
+        no_vm_presentacion: "{{ no_vm_presentacion }}"
+        vmware_template_presentacion: "{{ descripcion_plantilla_presentacion }}"
+        balanceador_carga_presentacion: "f"
+        puerto_escucha_presentacion: "{{ entrada_puerto_pres }}"
+        maquinas_virtuales: []
+        balanceador: ""
+        aci_epg: ""
+        aci_contrato: ""
+      senha_procesamiento:
+        procesamiento_sabor: "{{ tamanio_procesamiento }}"
+        no_vm_procesamiento: "{{ no_vm_procesamiento }}"
+        vmware_template_procesamiento: "{{ descripcion_plantilla_procesamiento }}"
+        puerto_escucha_procesamiento: "{{ entrada_puerto_proc }}"
+        balanceador_carga_procesamiento: "{{ tmp_identificar_balanceador_procesamiento }}"
+        maquinas_virtuales: []
+        balanceador: ""
+        aci_epg: ""
+      senha_datos:
+        datos_sabor: "{{ tamanio_datos }}"
+        no_vm_datos: "{{ no_vm_datos }}"
+        vmware_template_datos: "{{ descripcion_plantilla_datos }}"
+        maquinas_virtuales: []
+        aci_epg: ""
+        aci_contrato: ""
+
+- set_fact:
+    balanceador_de_carga_procesamiento: "{{ tmp_identificar_balanceador_procesamiento }}"
+
+- name: "SENHA :::  Calcular variables -- Impresion de variables calculadas."
+  vars:
+    declared_variables: |
+        Module Variables ("vars"):
+        --------------------------------
+        {{ vars | to_nice_json }}
+  debug:
+    msg: "{{ declared_variables.split('\n')}}"
+  tags: debug_info
+
+
+...

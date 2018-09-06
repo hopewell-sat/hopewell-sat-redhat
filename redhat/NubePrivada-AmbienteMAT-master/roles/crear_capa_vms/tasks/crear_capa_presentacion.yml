@@ -1,0 +1,33 @@
+---
+- set_fact:
+   f5_temporal_vmware: ""
+   infoblox_ips_gestion: ""
+   infoblox_ips_produccion: ""
+
+#AFM- name: "SENHA ::: Creacion de VM  ::: Obtencion de plantilla -- "
+#AFM  import_role:
+#AFM    name: general
+#AFM    tasks_from: vmware_plantilla_presentacion
+
+- name: "SENHA ::: Creacion de VM  ::: Crea maquina virtual -- Creacion de mv capa presentacion "
+  include_role:
+    name: vmware
+    tasks_from: crear_mv
+  vars:
+    nombre_vm: "{{ item }}"
+    vmware_nombre_vm: "{{ item }}"
+    tipo_capa: "presentacion"
+    vmware_template: "{{plantilla_presentacion}}"
+    vmware_memory_mb: "{{ capa_presentacion_ram }}"
+    vmware_num_cpus: "{{ capa_presentacion_cpu }}"
+  with_items: "{{ capa_presentacion_hostnames }}"
+
+#Reinicio de variable de IPs por capa
+- set_fact:
+   f5_presentacion_ips_gestion: "{{ infoblox_ips_gestion[:-1] }}"
+   f5_presentacion_ips_produccion: "{{ infoblox_ips_produccion[:-1] }}"
+   f5_temporal_vmware_presentacion: "{{ f5_temporal_vmware[:-1] }}"
+
+- debug:
+    msg: "{{ f5_temporal_vmware_presentacion }}"
+...

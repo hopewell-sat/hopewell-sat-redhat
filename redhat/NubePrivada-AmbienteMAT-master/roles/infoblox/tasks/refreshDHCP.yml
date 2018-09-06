@@ -1,0 +1,45 @@
+#
+# Comentarios de toma de red para SENHA 19 Junio 2019
+# Esta linea fue comentada para asignar directamente una IP de una red en infoblox, el servicio
+# no cambia en la manera de asignar las variables.
+#
+  - name: "SENHA ::: InfoBlox  ::: Actualizacion de servicio DHCP -- Obteniendo Grids para la iteracion."
+    uri:
+      url: "{{ infoblox_url_api }}grid"
+      method: GET
+      headers:
+        Content-Type: "{{ infoblox_content_type }}"
+      validate_certs: no
+      return_content: yes
+      follow_redirects: yes
+      user: "{{ infoblox_usuario }}"
+      password: "{{ infoblox_contrasenia }}"
+      status_code: 200
+    register: infoblox_refresh
+    ignore_errors: True
+
+  - set_fact:
+      infoblox_body_api: "{\"member_order\" : \"SEQUENTIALLY\", \"service_option\": \"ALL\", \"sequential_delay\" : 10}"
+    when: infoblox_refresh is succeeded
+
+  - name: "SENHA ::: InfoBlox  ::: Actualizacion de servicio DHCP -- Realizacion actualizacion de servicios a partir de los grids."
+    uri:
+      url: "{{ infoblox_url_api }}{{ref_grids._ref}}?_function=restartservices"
+      method: POST
+      headers:
+        Content-Type: "{{ infoblox_content_type }}"
+      body: "{{ infoblox_body_api }}"
+      body_format: json
+      validate_certs: no
+      return_content: yes
+      follow_redirects: yes
+      user: "{{ infoblox_usuario }}"
+      password: "{{ infoblox_contrasenia }}"
+      status_code: 200
+    ignore_errors: True
+    with_items: "{{ infoblox_refresh.json }}"
+    loop_control:
+      loop_var: ref_grids
+    when:
+      - infoblox_refresh is succeeded
+      - infoblox_refresh.json is defined

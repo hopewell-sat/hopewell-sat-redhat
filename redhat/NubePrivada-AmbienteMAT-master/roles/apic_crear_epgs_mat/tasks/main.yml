@@ -1,0 +1,128 @@
+---
+# tasks file for apic_crear_egps_mat
+- name: Crear un nuevo EPG WEB
+  aci_epg:
+    host: "{{host_name}}"
+    username: "{{usuario}}"
+    password: "{{password}}"
+    tenant: "{{apic_tenant}}"
+    ap: "{{ acronimo_aplicacion }}"
+    epg: "{{ epg_presentacion }}"
+    description: Web Internet EPG
+    bd: "{{bd}}"
+#    preferred_group: yes
+    validate_certs: no
+  register: apic_crear_egps_mat_web
+
+- name: Add a new contract subject
+  aci_contract:
+    host: "{{host_name}}"
+    username: "{{usuario}}"
+    password: "{{password}}"
+    tenant: "{{apic_tenant}}"
+    contract: "{{aci_contrato_presentacion}}"
+    description: "Perfil de aplicación para comunicación de ambiente MAT"
+    scope: application-profile
+    state: present
+    validate_certs: no
+  register: salida_creacion_contrato
+- name: Imprimir resultado
+  debug:
+    var: salida_creacion_contrato
+
+- name: Crear un nuevo EPG Procesamiento
+  aci_epg:
+    host: "{{host_name}}"
+    username: "{{usuario}}"
+    password: "{{password}}"
+    tenant: "{{apic_tenant}}"
+    ap: "{{acronimo_aplicacion}}"
+    epg: "{{epg_procesamiento}}"
+    description: Procesamiento Internet EPG
+    bd: "{{bd}}"
+#    preferred_group: yes
+    validate_certs: no
+  register: apic_crear_egps_mat_pro
+
+- name: Add a new contract subject
+  aci_contract:
+    host: "{{host_name}}"
+    username: "{{usuario}}"
+    password: "{{password}}"
+    tenant: "{{apic_tenant}}"
+    contract: "{{aci_contrato_procesamiento}}"
+    description: "Perfil de aplicación para comunicación de ambiente MAT"
+    scope: application-profile
+    state: present
+    validate_certs: no
+  register: salida_creacion_contrato
+- name: Imprimir resultado
+  debug:
+    var: salida_creacion_contrato
+
+- name: Crear un nuevo EPG Datos
+  aci_epg:
+    host: "{{host_name}}"
+    username: "{{usuario}}"
+    password: "{{password}}"
+    tenant: "{{apic_tenant}}"
+    ap: "{{acronimo_aplicacion}}"
+    epg: "{{epg_datos}}"
+    description: Datos Internet EPG
+    bd: "{{bd}}"
+#    preferred_group: yes
+    validate_certs: no
+  register: apic_crear_egps_mat_dat
+
+- name: Crear un nuevo EPG Datos
+  aci_epg:
+    host: "{{host_name}}"
+    username: "{{usuario}}"
+    password: "{{password}}"
+    tenant: "{{apic_tenant}}"
+    ap: "{{acronimo_aplicacion}}"
+    epg: "{{epg_exterior}}"
+    description: Exterior EPG
+    bd: "{{bd}}"
+#    preferred_group: yes
+    validate_certs: no
+  register: apic_crear_egps_mat_ext
+
+- name: Add a new contract
+  aci_contract:
+    host: "{{host_name}}"
+    username: "{{usuario}}"
+    password: "{{password}}"
+    tenant: "{{apic_tenant}}"
+    contract: "{{aci_contrato_datos}}"
+    description: "Perfil de aplicación para comunicación de ambiente MAT"
+    scope: application-profile
+    state: present
+    validate_certs: no
+  register: salida_creacion_contrato
+- name: Imprimir resultado
+  debug:
+    var: salida_creacion_contrato
+
+- debug:
+    var: estructura_ambiente
+
+- name: Registrando variable de respuesta "CISCO ACI"
+  set_fact:
+    aci_epg:
+      senha_presentacion:
+        aci_epg:
+          descripcion: "{{apic_crear_egps_mat_web.salida_crear_app_profile.config.fvAp.attributes.descr}}"
+          nombre: "{{apic_crear_egps_mat_web.salida_crear_app_profile.config.fvAp.attributes.name}}"
+        aci_contrato: "ctc_web"
+      senha_procesamiento:
+        aci_epg:
+          descripcion: "{{apic_crear_egps_mat_pro.salida_crear_app_profile.config.fvAp.attributes.descr}}"
+          nombre: "{{apic_crear_egps_mat_pro.salida_crear_app_profile.config.fvAp.attributes.name}}"
+        aci_contrato: "ctc_procesamiento"
+      senha_datos:
+        aci_epg:
+          descripcion: "{{apic_crear_egps_mat_dat.salida_crear_app_profile.config.fvAp.attributes.descr}}"
+          nombre: "{{apic_crear_egps_mat_dat.salida_crear_app_profile.config.fvAp.attributes.name}}"
+        aci_contrato: "ctc_datos"
+...

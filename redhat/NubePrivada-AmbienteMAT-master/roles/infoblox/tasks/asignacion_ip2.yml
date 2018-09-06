@@ -1,0 +1,105 @@
+#
+# Comentarios de toma de red para SENHA 19 Junio 2019
+# Esta linea fue comentada para asignar directamente una IP de una red en infoblox, el servicio
+# no cambia en la manera de asignar las variables.
+#
+# body: "{\"ipv4addr\":\"func:nextavailableip:{{infoblox_subred}}/{{infoblox_bits}}\",\"mac\":\"{{infoblox_macaddress}}\",\"comment\":\"Generado por Red Hat Consulting @2018\"}"
+# Cambio a las 5 de la tarde
+# body: "{\"ipv4addr\":\"func:nextavailableip:{{infoblox_senha_gestion}}\",\"mac\":\"{{infoblox_macaddress}}\",\"comment\":\"Generado por Red Hat Consulting @2018\"}"
+
+#  infoblox_cadena_reservacion: "\"mac\":\"{{infoblox_macaddress}}\","
+
+#  version 2  en 23-07-2018 soporte para ausencia de valor MAC_ADDRESS
+
+  - name: "Reservar siguiente IP disponible de API INFOBLOX. proporcionando MAC ADDRESS"
+    uri:
+      url: "{{ infoblox_url_api }}fixedaddress?_return_fields=ipv4addr"
+      method: POST
+      headers:
+        Content-Type: "{{ infoblox_content_type }}"
+      body: "{\"ipv4addr\":\"func:nextavailableip:{{infoblox_senha_gestion}}\",\"mac\":\"{{infoblox_macaddress}}\",\"comment\":\"Generado por Red Hat Consulting @2018\"}"
+      body_format: json
+      validate_certs: no
+      return_content: yes
+      follow_redirects: yes
+      user: "{{ infoblox_usuario }}"
+      password: "{{ infoblox_contrasenia }}"
+      status_code: 201
+    register: infoblox_resultado
+    ignore_errors: True
+    when:
+      - infoblox_macaddress != ""
+
+  - name: "Asignando correcta de IP a VM"
+    set_fact:
+      infoblox_proceso:
+        codigo: "99"
+        mensaje: "Proceso OK"
+        salida_ipasignada: "{{ infoblox_resultado.json.ipv4addr }}"
+        entrada_macaddress: "{{infoblox_macaddress}}"
+        entrada_subred: "{{infoblox_senha_gestion}}"
+      f5_temporal_vmware: "{{ f5_temporal_vmware }}{{ infoblox_resultado.json.ipv4addr }},"
+    when:
+      - infoblox_macaddress != ""
+      - infoblox_resultado is succeeded
+      - infoblox_resultado.json is defined
+      - infoblox_resultado.json.ipv4addr is defined
+      - infoblox_resultado.json.ipv4addr != ""
+
+  - name: "Error de ejecucion para la mac address {{infoblox_macaddress}}"
+    set_fact:
+        codigo: "02"
+        mensaje: "Proceso de asignacion de IP NO satisfactorio"
+        salida_ipasignada: ""
+        entrada_macaddress: "{{infoblox_macaddress}}"
+        entrada_subred: "{{infoblox_senha_gestion}}"
+    when:
+      - infoblox_macaddress != ""
+      - infoblox_resultado is failed
+
+  - name: "Reservar siguiente IP disponible de API INFOBLOX. sin proporcionar MAC ADDRESS"
+    uri:
+      url: "{{ infoblox_url_api }}record:host?_return_fields=ipv4addrs"
+      method: POST
+      headers:
+        Content-Type: "{{ infoblox_content_type }}"
+      body: "{\"configure_for_dns\": false,\"name\":\"{{infoblox_hostname}}\",\"ipv4addrs\":[{\"ipv4addr\":\"func:nextavailableip:{{infoblox_senha_gestion}}\"}]}"
+      body_format: json
+      validate_certs: no
+      return_content: yes
+      follow_redirects: yes
+      user: "{{ infoblox_usuario }}"
+      password: "{{ infoblox_contrasenia }}"
+      status_code: 201
+    register: infoblox_resultado
+    ignore_errors: True
+    when:
+      - infoblox_macaddress == ""
+
+  - name: "Asignando correcta de IP a VM sin proporcionar MAC_ADDRESS"
+    set_fact:
+      infoblox_proceso:
+        codigo: "99"
+        mensaje: "Proceso OK"
+        salida_ipasignada: "{{ infoblox_resultado.json.ipv4addrs[0].ipv4addr}}"
+        entrada_macaddress: "{{infoblox_macaddress}}"
+        entrada_subred: "{{infoblox_senha_gestion}}"
+      f5_temporal_vmware: "{{ f5_temporal_vmware }}{{ infoblox_resultado.json.ipv4addrs[0].ipv4addr }},"
+    when:
+      - infoblox_macaddress == ""
+      - infoblox_resultado is succeeded
+      - infoblox_resultado.json is defined
+      - infoblox_resultado.json.ipv4addrs is defined
+      - infoblox_resultado.json.ipv4addrs[0].ipv4addr is defined
+      - infoblox_resultado.json.ipv4addrs[0].ipv4addr != ""
+
+  - name: "Error de ejecucion de asignacion IP sin proporcionar MAC_ADDRESS"
+    set_fact:
+        codigo: "02"
+        mensaje: "Proceso de asignacion de IP NO satisfactorio"
+        salida_ipasignada: ""
+        entrada_macaddress: "{{infoblox_macaddress}}"
+        entrada_subred: "{{infoblox_senha_gestion}}"
+    when:
+      - infoblox_macaddress == ""
+      - infoblox_resultado is failed

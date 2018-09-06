@@ -1,0 +1,205 @@
+---
+# tasks file for registro_ci
+
+- name: "Fecha con formato"
+  shell: date +%Y-%m-%d\\ %H:%M:%S
+  register: detarea
+  ignore_errors: True
+
+- set_fact:
+    registro_ci_servicio: "{{ manageiq.service | regex_replace('services/','') }}"
+
+#Registro CI para servicio
+- name: "SENHA ::: Registro CI  ::: Alta Servicio -- Registro de servicio."
+  include_role:
+    name: oracle
+    tasks_from: oracle_persistir_servicioscis
+  vars:
+    tipo_de_registro: "{{ registro_ci_tiporegistro }}"
+    clase_de_ci: "01"
+    id_de_elemento: "{{ nombre_catalogo }}"
+    centro_de_datos: "{{ centro_datos_sat }}"
+    ambiente: "{{ selector_de_ambiente }}"
+    work_order: "{{ numero_de_ticket }}"
+    fecha_de_registro: "{{ detarea.end[:19] }}"
+    area_general: "{{ nombre_general }}"
+    area_central: "{{ nombre_central }}"
+    id_de_aplicacion: "{{ acronimo_aplicacion }}"
+    version_de_aplicacion: "{{ version_proyecto }}"
+    tipo_de_servicio: "{{ nombre_catalogo }}"
+
+#Registro CI para capa presentacion
+- name: "SENHA ::: Registro CI  ::: Alta maquinas virtuales -- Capa de presentacion."
+  include_role:
+    name: oracle
+    tasks_from: oracle_persistir_mvirtualcis
+  vars:
+    tipo_de_registro: "{{ registro_ci_tiporegistro }}"
+    clase_de_ci: "02"
+    id_de_elemento: "{{ item.vmware_proceso.entrada_nombrevm }}"
+    centro_de_datos: "{{ centro_datos_sat }}"
+    ambiente: "{{ selector_de_ambiente }}"
+    capa: "pre"
+    fecha_de_registro: "{{ detarea.end[:19] }}"
+    work_order: "{{ numero_de_ticket }}"
+    area_general: "{{ nombre_general }}"
+    area_central: "{{ nombre_central }}"
+    id_de_servicio: "{{ nombre_catalogo }}"
+    id_de_aplicacion: "{{ acronimo_aplicacion }}"
+    version_de_aplicacion: "{{ version_proyecto }}"
+    id_de_imagen: "{{id_plantilla_presetacion}}"
+    nombre_de_imagen: "{{ item.vmware_proceso.plantilla }}"
+    tipo_de_tecnologia: "TECNOLOGIA DURO"
+    uuid: "{{ item.vmware_proceso.salida_uuid }}"
+    cantidad_de_cpu: "{{ capa_presentacion_cpu }}"
+    cantidad_de_ram: "{{ capa_presentacion_ram }}"
+    cantidad_de_nic: "2"
+    lista_de_mac_address_ip_prod: "{{ item.infoblox_proceso_produccion.salida_ipasignada }}/{{ item.infoblox_proceso_produccion.entrada_macaddress }}"
+    lista_de_mac_address_ip_gest: "{{ item.infoblox_proceso_gestion.salida_ipasignada }}/{{ item.infoblox_proceso_gestion.entrada_macaddress }}"
+  with_items: "{{ estructura_ambiente.senha_presentacion.maquinas_virtuales }}"
+  when:
+    - omitir_capa_presentacion != "t"
+
+#Registro CI para capa procesamiento
+- name: "SENHA ::: Registro CI  ::: Alta maquinas virtuales -- Capa de procesamiento."
+  include_role:
+    name: oracle
+    tasks_from: oracle_persistir_mvirtualcis
+  vars:
+    tipo_de_registro: "{{ registro_ci_tiporegistro }}"
+    clase_de_ci: "02"
+    id_de_elemento: "{{ item.vmware_proceso.entrada_nombrevm }}"
+    centro_de_datos: "{{ centro_datos_sat }}"
+    ambiente: "{{ selector_de_ambiente }}"
+    capa: "pro"
+    fecha_de_registro: "{{ detarea.end[:19] }}"
+    work_order: "{{ numero_de_ticket }}"
+    area_general: "{{ nombre_general }}"
+    area_central: "{{ nombre_central }}"
+    id_de_servicio: "{{ nombre_catalogo }}"
+    id_de_aplicacion: "{{ acronimo_aplicacion }}"
+    version_de_aplicacion: "{{ version_proyecto }}"
+    id_de_imagen: "{{id_plantilla_procesamiento}}"
+    nombre_de_imagen: "{{ item.vmware_proceso.plantilla }}"
+    tipo_de_tecnologia: "TECNOLOGIA DURO"
+    uuid: "{{ item.vmware_proceso.salida_uuid }}"
+    cantidad_de_cpu: "{{ capa_procesamiento_cpu }}"
+    cantidad_de_ram: "{{ capa_procesamiento_ram }}"
+    cantidad_de_nic: "2"
+    lista_de_mac_address_ip_prod: "{{ item.infoblox_proceso_produccion.salida_ipasignada }}/{{ item.infoblox_proceso_produccion.entrada_macaddress }}"
+    lista_de_mac_address_ip_gest: "{{ item.infoblox_proceso_gestion.salida_ipasignada }}/{{ item.infoblox_proceso_gestion.entrada_macaddress }}"
+  with_items: "{{ estructura_ambiente.senha_procesamiento.maquinas_virtuales }}"
+  when:
+    - omitir_capa_procesamiento != "t"
+
+#Registro CI para capa datos
+- name: "SENHA ::: Registro CI  ::: Alta maquinas virtuales -- Capa de datos."
+  include_role:
+    name: oracle
+    tasks_from: oracle_persistir_mvirtualcis
+  vars:
+    tipo_de_registro: "{{ registro_ci_tiporegistro }}"
+    clase_de_ci: "02"
+    id_de_elemento: "{{ item.vmware_proceso.entrada_nombrevm }}"
+    centro_de_datos: "{{ centro_datos_sat }}"
+    ambiente: "{{ selector_de_ambiente }}"
+    capa: "dat"
+    fecha_de_registro: "{{ detarea.end[:19] }}"
+    work_order: "{{ numero_de_ticket }}"
+    area_general: "{{ nombre_general }}"
+    area_central: "{{ nombre_central }}"
+    id_de_servicio: "{{ nombre_catalogo }}"
+    id_de_aplicacion: "{{ acronimo_aplicacion }}"
+    version_de_aplicacion: "{{ version_proyecto }}"
+    id_de_imagen: "{{id_plantilla_datos}}"
+    nombre_de_imagen: "{{ item.vmware_proceso.plantilla }}"
+    tipo_de_tecnologia: "TECNOLOGIA DURO"
+    uuid: "{{ item.vmware_proceso.salida_uuid }}"
+    cantidad_de_cpu: "{{ capa_datos_cpu }}"
+    cantidad_de_ram: "{{ capa_datos_ram }}"
+    cantidad_de_nic: "2"
+    lista_de_mac_address_ip_prod: "{{ item.infoblox_proceso_produccion.salida_ipasignada }}/{{ item.infoblox_proceso_produccion.entrada_macaddress }}"
+    lista_de_mac_address_ip_gest: "{{ item.infoblox_proceso_gestion.salida_ipasignada }}/{{ item.infoblox_proceso_gestion.entrada_macaddress }}"
+  with_items: "{{ estructura_ambiente.senha_datos.maquinas_virtuales }}"
+  when:
+    - omitir_capa_datos != "t"
+
+#Registro CI para load balancer presentacion
+- name: "SENHA ::: Registro CI  ::: Alta balanceador de carga -- Capa de presentacion."
+  include_role:
+    name: oracle
+    tasks_from: oracle_persistir_balanceadorcis
+  vars:
+    tipo_de_registro: "{{ registro_ci_tiporegistro }}"
+    clase_de_ci: "03"
+    id_de_elemento: "{{ entrada_nombrepool_pres }}"
+    fecha_de_registro: "{{ detarea.end[:19] }}"
+    centro_de_datos: "{{ centro_datos_sat }}"
+    ambiente: "{{ selector_de_ambiente }}"
+    capa: "pre"
+    work_order: "{{ numero_de_ticket }}"
+    area_general: "{{ nombre_general }}"
+    area_central: "{{ nombre_central }}"
+    id_de_servicio: "{{ nombre_catalogo }}"
+    id_de_aplicacion: "{{ acronimo_aplicacion }}"
+    version_de_aplicacion: "{{ version_proyecto }}"
+    tenant: "XD"
+    vip: "{{procesamiento_iplb_pres}}"
+    algoritmo_de_balanceo: "{{ entrada_tipobalanceo_lb_pres }}"
+    tipo_de_persistencia: "{{ entrada_tipopersistencia_lb_pres }}"
+    puerto_de_listener: "{{ entrada_puerto_pres }}"
+    lista_de_nodos: "{{ f5_presentacion_ips_produccion }}"
+  when:
+    - omitir_capa_presentacion != "t"
+
+#Registro CI para load balancer procesamiento
+- name: "SENHA ::: Registro CI  ::: Alta balanceador de carga -- Capa de procesamiento."
+  include_role:
+    name: oracle
+    tasks_from: oracle_persistir_balanceadorcis
+  vars:
+    tipo_de_registro: "{{ registro_ci_tiporegistro }}"
+    clase_de_ci: "03"
+    id_de_elemento: "{{ entrada_nombrepool_proc }}"
+    fecha_de_registro: "{{ detarea.end[:19] }}"
+    centro_de_datos: "{{ centro_datos_sat }}"
+    ambiente: "{{ selector_de_ambiente }}"
+    capa: "pro"
+    work_order: "{{ numero_de_ticket }}"
+    area_general: "{{ nombre_general }}"
+    area_central: "{{ nombre_central }}"
+    id_de_servicio: "{{ nombre_catalogo }}"
+    id_de_aplicacion: "{{ acronimo_aplicacion }}"
+    version_de_aplicacion: "{{ version_proyecto }}"
+    tenant: "XD"
+    vip: "{{procesamiento_iplb_proc}}"
+    algoritmo_de_balanceo: "{{ entrada_tipobalanceo_lb_proc }}"
+    tipo_de_persistencia: "{{ entrada_tipopersistencia_lb_proc }}"
+    puerto_de_listener: "{{ entrada_puerto_proc }}"
+    lista_de_nodos: "{{ f5_procesamiento_ips_produccion }}"
+  when:
+    - omitir_capa_procesamiento != "t"
+    - balanceador_de_carga_procesamiento != "t"
+
+#HRT Registro CI para Perfil de aplicación
+#AFM- name: "SENHA ::: Registro CI  ::: Alta perfil de aplicacion"
+#AFM  include_role:
+#AFM    name: oracle
+#AFM    tasks_from: oracle_persistir_applicationcis
+#AFM  vars:
+#AFM    tipo_de_registro: "{{ registro_ci_tiporegistro }}"
+#AFM    clase_de_ci: "04"
+#AFM    id_de_elemento: "{{ ap }}"
+#AFM    centro_de_datos: "{{ centro_datos_sat }}"
+#AFM    ambiente: "{{ selector_de_ambiente }}"
+#AFM    fecha_de_registro: "{{ detarea.end[:19] }}"
+#AFM    work_order: "{{ numero_de_ticket }}"
+#AFM    area_general: "{{ nombre_general }}"
+#AFM    area_central: "{{ nombre_central }}"
+#AFM    id_de_servicio: "{{ nombre_catalogo }}"
+#AFM    id_de_aplicacion: "{{ nombre_aplicacion }}"
+#AFM    version_de_aplicacion: "{{ version_proyecto }}"
+#AFM    tenant: "{{apic_tenant}}"
+#AFM    lista_de_epg: "{{epg_presentacion}}, {{epg_procesamiento}}, {{epg_datos}}, {{epg_exterior}}"
+#AFM  when:
+#AFM    - apic_crear_app_profile == "t"

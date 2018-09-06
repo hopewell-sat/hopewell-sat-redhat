@@ -1,0 +1,161 @@
+---
+
+- include_tasks: general_managaIQStorage.yml
+
+- name: Obtener timestamp de inicio del proceso
+  shell: "date +%Y-%m-%d\\ %H:%M:%S"
+  register: fecha
+
+- set_fact:
+    general_correo_archivo_temporal: "/tmp/ReporteDataStores_{{ fecha.stdout | regex_replace('-') | regex_replace(':') | regex_replace(' ') }}.html"
+    umbral_riesgo: '{{ (espacio_total_html|float) * (0.8|float) }}'
+    umbral_critico: '{{ (espacio_total_html|float) * (0.9|float) }}'
+    espacio_ocupado: '{{ ((espacio_total_html|float) - (espacio_total_disponible_html|float)) }}'
+
+- set_fact:
+    espacio_disponible_umbral: '{{ ((umbral_riesgo|float) - (espacio_ocupado|float)) }}'
+
+- set_fact:
+    porcentaje_espacio_ocupado: '{{ ( ((espacio_ocupado|float) * (100.00|float)) / (espacio_total_html|float) ) }}'
+
+- set_fact:
+    porcentaje_espacio_umbral: '{{ ( ((espacio_disponible_umbral|float) * (100.00|float)) / (espacio_total_html|float) ) }}'
+
+- set_fact:
+    porcentaje_espacio_disponible: '{{ (100|float)- (porcentaje_espacio_ocupado|float) }}'
+
+
+- name: Inicio de archivo HTML
+  copy:
+    dest: "{{ general_correo_archivo_temporal }}"
+    content: |
+              <html>
+                 <head>
+                    <title>Resumen de despliegue</title>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+                    <div class="jumbotron jumbotron-fluid" style="background-color:white;padding-top: 0px;padding-bottom: 0px">
+                      <div class="container">
+                         <img src="https://drive.google.com/uc?id=1QqaTGiBl0y9HeAlZ_iqyLP21y_YdBbay&export=download" class="img-responsive"> 
+                      </div>
+                    </div>
+                 </head>
+                 <body>
+                   <div class="container">
+                           <table class="table table-striped">
+                                <tr>
+                                  <th style="color:white; background-color:#3C79C2; text-align:center; font-weight: bold" colspan="2">DATOS GENERALES</th>
+                                </tr>
+                              <tr>
+                                 <td>Nombre del solicitante:  </td>
+                                 <td> {{ estructura_ambiente.senha_generales.nombre_solicitante }} </td>
+                              </tr>
+                              <tr>
+                                 <td>Correo del solicitante:  </td>
+                                 <td> {{ estructura_ambiente.senha_generales.correo_solicitante }} </td>
+                              </tr>
+                              <tr>
+                                 <td>Centro de datos:  </td>
+                                 <td> {{ estructura_ambiente.senha_generales.centro_datos_sat }} </td>
+                              </tr>
+                              <tr>
+                                 <td>Fecha / Hora:  </td>
+                                 <td> {{ fecha.stdout }} </td>
+                              </tr>
+                           </table>
+                           <table class="table table-striped">
+                              <tr>
+                                <th style="color:white; background-color:#3C79C2; text-align:center; font-weight: bold" colspan="2">ESTADO ACTUAL</th>
+                              </tr>
+                              <tr>
+                                 <td width="50%">Espacio total:  </td>
+                                 <td width="50%"> {{ espacio_total_html }} GB
+                                      <div class="progress progress-striped">
+                                        <div class="progress-bar" role="progressbar" style="width: 100%;font-weight: bolder;font-size:20px">
+                                        </div>
+                                      </div>
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>Umbral de riesgo:  </td>
+                                 <td> {{ umbral_riesgo }}  GB 
+                                      <div class="progress progress-striped">
+                                        <div class="progress-bar" role="progressbar" style="width: 80%;font-weight: bolder;font-size:20px">
+                                        </div>
+                                        <div class="progress-bar progress-bar-warning" role="progressbar" style="width: 20%;">
+                                        </div>
+                                      </div>
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>Umbral crítico:  </td>
+                                 <td> {{ umbral_critico }} GB 
+                                      <div class="progress progress-striped">
+                                        <div class="progress-bar" role="progressbar" style="width: 90%;font-weight: bolder;font-size:20px">
+                                        </div>
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" style="width: 10%;">
+                                        </div>
+                                      </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                 <td>Espacio total disponible:  </td>
+                                 <td>   {{ espacio_total_disponible_html }} GB
+                                      <div class="progress progress-striped">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" style="width: {{ porcentaje_espacio_ocupado }}%;">
+                                        </div>
+                                        <div class="progress-bar progress-bar-success" role="progressbar" style="width: {{ porcentaje_espacio_disponible }}%;font-weight: bolder;font-size:20px">
+                                        </div>
+                                      </div>
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <td>Espacio disponible hasta umbral de riesgo:  </td>
+                                 <td> {{ espacio_disponible_umbral }} GB
+                                      <div class="progress progress-striped">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" style="width: {{ porcentaje_espacio_ocupado }}%;">
+                                        </div>
+                                        <div class="progress-bar progress-bar-success" role="progressbar" style="width: {{ porcentaje_espacio_umbral }}%;font-weight: bolder;font-size:20px">
+                                        </div>
+                                        <div class="progress-bar progress-bar-warning" role="progressbar" style="width: 20%;">
+                                        </div>
+                                 </td>
+                              </tr>
+                           </table>
+                           <table class="table table-striped">
+                                <tr>
+                                  <th style="color:white; background-color:#3C79C2; text-align:center; font-weight: bold" colspan="3">DATASTORES</th>
+                                </tr>
+                                {{ general_lista_datastores }}
+                           </table>
+                 </body>
+              </html>
+  ignore_errors: True
+
+
+- include_tasks: general_enviocorreo.yml
+  vars:
+    general_correo_de: "senha.notificacion@gmail.com"
+    general_correo_para: "{{ correo_solicitante }}"
+    general_correo_concopia: ""
+    general_correo_asunto: "{{ awx_job_template_name | regex_replace('miq_','') | regex_replace('_provision','') }}"
+    general_correo_cuerpo: |
+                            <br/>Datos generales del reporte.-
+                            <br/>
+                            <ul>
+                            <li>Solicitante / Correo:  <b>{{ estructura_ambiente.senha_generales.nombre_solicitante }}</b> / <b>{{ estructura_ambiente.senha_generales.correo_solicitante }}</b></li>
+                            <li>Centro de datos:  <b>{{ estructura_ambiente.senha_generales.centro_datos_sat }}</b></li>
+                            <li>Fecha / Hora:  <b>{{ fecha.stdout }}</b></li>
+                            </ul>
+                            <br/>Documento anexo.-
+                            <ul>
+                            <li>Documento detalle de reporte en formato HTML: <b>{{ general_correo_archivo_temporal | regex_replace("/tmp/")}}</b></li>
+                            </ul>
+    general_correo_adjuntos: "{{ general_correo_archivo_temporal }}"
+    tipo_evento_notificacion: "umbral_de_riesgo"
+
+
+...

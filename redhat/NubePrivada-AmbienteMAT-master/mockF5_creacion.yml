@@ -1,0 +1,41 @@
+---
+- hosts: localhost
+#  vars:
+#    f5_entrada_nombrepool: "capa_pres_odi_tcp"
+#    f5_entrada_ipvirtual: "172.10.10.25"
+#    f5_entrada_ipsnodos: "192.168.10.8,192.168.10.9"
+#    f5_entrada_protocolo: "tcp" # "tcp","udp","http","https","icmp"
+#    f5_entrada_puerto: "80"
+#    f5_entrada_tipobalanceo: "round-robin" #  "round-robin", o "least-connections-member".
+#    f5_entrada_tipopersistencia: "cookie" # dest_addr
+  tasks:
+
+    - set_fact:
+        f5_entrada_nombrepool: "{{ f5_dialogo_nombrep }}"
+        f5_entrada_ipvirtual: "{{ f5_dialogo_ipvirtual }}"
+        f5_entrada_ipsnodos: "{{ f5_dialogo_ips }}"
+        f5_entrada_protocolo: "{{ f5_dialogo_protocolo }}"
+        f5_entrada_puerto: "{{ f5_dialogo_puerto }}"
+        f5_entrada_tipobalanceo: "{{ f5_dialogo_balanceo }}"
+        f5_entrada_tipopersistencia: "{{ f5_dialogo_persistencia }}"
+  
+    - name: Ejecutando una sola tarea desde F5/tasks/f5_login.yml
+      import_role:
+        name: F5
+        tasks_from: f5_login
+        
+    - name: Ejecutando una sola tarea desde F5/tasks/f5_validar_pool.yml
+      import_role:
+        name: F5
+        tasks_from: f5_validar_pool
+        
+    - name: Ejecutando una sola tarea desde F5/tasks/f5_crear_pool_rest.yml
+      import_role:
+        name: F5
+        tasks_from: f5_crear_pool_rest
+
+    - name: Ejecutando una sola tarea desde F5/tasks/f5_crear_balanceo.yml
+      import_role:
+        name: F5
+        tasks_from: f5_crear_balanceo
+...

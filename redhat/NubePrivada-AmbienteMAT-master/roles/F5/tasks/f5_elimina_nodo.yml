@@ -1,0 +1,45 @@
+- name: "Fecha de inicio proceso eliminacion nodo"
+  set_fact:
+    f5_fecha_inicio: ansible_date_time.iso8601
+
+- name: Elimina nodo de resource pool exisitente
+  uri:
+    url: "https://{{ f5_servidor }}/mgmt/tm/ltm/pool/~{{f5_particion}}~{{f5_entrada_nombrepool}}po/members/~{{f5_particion}}~{{f5_entrada_ipsnodos}}:{{f5_entrada_puerto}}"
+    method: DELETE
+    headers:
+      Content-Type: "application/json"
+      X-F5-Auth-Token: "{{ f5_token }}"
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200
+  register: f5_resultado_eliminacion
+  ignore_errors: True
+  when:
+    - f5_existencia_pool == true
+
+- name: "Fecha de inicio proceso F5"
+  set_fact:
+    f5_fecha_fin: ansible_date_time.iso8601
+
+- name: "Eliminacion de nodo en resource pool F5"
+  set_fact:
+    f5_proceso:
+      codigo: "99"
+      descripcion: "Proceso OK"
+      instancia: "{{ f5_resultado_eliminacion }}"
+      fecha_inicio: "{{ f5_fecha_inicio }}"
+      fecha_fin: "{{ f5_fecha_fin }}"
+  when:
+    - f5_resultado_eliminacion is succeeded
+
+- name: "Eliminacion de nodo en resource pool F5"
+  set_fact:
+    f5_proceso:
+      codigo: "02"
+      descripcion: "Proceso fallo no se puede eliminar el nodo dentro del pool"
+      instancia: ""
+      fecha_inicio: "{{ f5_fecha_inicio }}"
+      fecha_fin: "{{ f5_fecha_fin }}"
+  when:
+    - f5_resultado_eliminacion is failed

@@ -1,0 +1,49 @@
+- set_fact:
+    f5_string_temporal: ""
+
+- set_fact:
+    f5_string_temporal: "{{f5_string_temporal}}\"{{ item }}:{{f5_entrada_puerto}}\","
+  with_items: "{{ f5_entrada_ipsnodos.split(',') }}"
+
+- debug:
+    msg: "{{ item }}"
+  with_items: "{{ f5_string_temporal.split(',') }}"
+
+- name: "SENHA :::  F5 -- Creacion de resource pool."
+  uri:
+    url: "https://{{ f5_servidor }}/mgmt/tm/ltm/pool"
+    method: POST
+    headers:
+      Content-Type: "application/json"
+      X-F5-Auth-Token: "{{ f5_token }}"
+    body: "{\"name\":\"{{ f5_entrada_nombrepool }}po\", \"monitor\":\"/{{ f5_particion }}/monitoreo_tcp\", \"members\": [{{ f5_string_temporal }}], \"loadBalancingMode\": \"{{ f5_entrada_tipobalanceo }}\"}"
+    body_format: json
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200
+  register: f5_resultado_creacion
+  ignore_errors: True
+  when:
+    - f5_token != ""
+    - f5_existencia_pool == false
+
+- name: "SENHA :::  F5 -- Fecha fin."
+  set_fact:
+    f5_fecha_fin: ansible_date_time.iso8601
+
+- name: "SENHA :::  F5 -- Creacion resource pool OK."
+  set_fact:
+    f5_creacion_pool: true
+  when:
+    - f5_resultado_creacion is succeeded
+    - f5_token != ""
+    - f5_existencia_pool == false
+
+- name: "SENHA :::  F5 -- Creacion resource pool fallida."
+  set_fact:
+    f5_creacion_pool: false
+  when:
+    - f5_resultado_creacion is failed
+    - f5_token != ""
+    - f5_existencia_pool == false

@@ -1,0 +1,125 @@
+---
+# tasks file for ejecutar_rollback
+- debug:
+    msg: "Ejecutando archivo main para el rol ejecutar_rollback con pausa de 8 minutos"
+
+- pause:
+    minutes: 8
+
+- name: "SENHA ::: Rollback  ::: Aplicacion de diccionario de datos -- Asignacion de transformaciones."
+  include_role:
+    name: aplicar_diccionario
+    tasks_from: main
+
+- name: "SENHA ::: Rollback  ::: EPG -- "
+  include_role:
+    name: apic_eliminar_app_profile
+    tasks_from: main
+
+- name: "SENHA ::: Rollback  ::: App Profiles -- "
+  include_role:
+    name: apic_eliminar_app_profile
+    tasks_from: main
+
+- set_fact:
+    f5_entrada_nombrepool: "{{ entrada_nombrepool_proc }}"
+    f5_entrada_ipvirtual: "{{ procesamiento_iplb_proc }}"
+    f5_entrada_ipsnodos: "{{ f5_procesamiento_ips_produccion }}"
+    f5_entrada_protocolo: "{{ entrada_protocolo_proc }}"
+    f5_entrada_puerto: "{{ entrada_puerto_proc }}"
+    f5_entrada_tipobalanceo: "{{ entrada_tipobalanceo_lb_proc }}"
+    f5_entrada_tipopersistencia: "{{ entrada_tipopersistencia_lb_proc }}"
+  when:
+    - balanceador_de_carga_procesamiento != "t"
+    - omitir_capa_procesamiento != "t"
+
+- name: "SENHA ::: Rollback  ::: F5 -- Load balancer capa procesamiento"
+  include_role:
+    name: F5
+    tasks_from: f5_senha_rollback
+  when:
+    - balanceador_de_carga_procesamiento != "t"
+    - omitir_capa_procesamiento != "t"
+
+- set_fact:
+    f5_entrada_nombrepool: "{{ entrada_nombrepool_pres }}"
+    f5_entrada_ipvirtual: "{{ procesamiento_iplb_pres}}"
+    f5_entrada_ipsnodos: "{{ f5_presentacion_ips_produccion }}"
+    f5_entrada_protocolo: "{{ entrada_protocolo_pres }}"
+    f5_entrada_puerto: "{{ entrada_puerto_pres }}"
+    f5_entrada_tipobalanceo: "{{ entrada_tipobalanceo_lb_pres }}"
+    f5_entrada_tipopersistencia: "{{ entrada_tipopersistencia_lb_pres }}"
+  when:
+    - omitir_capa_presentacion != "t"
+
+- name: "SENHA ::: Rollback  ::: F5 -- Load balancer capa presentacion"
+  include_role:
+    name: F5
+    tasks_from: f5_senha_rollback
+  when:
+    - omitir_capa_presentacion != "t"
+
+- name: "SENHA ::: Rollback  ::: VMware -- Eliminacion de maquinas virtuales"
+  include_role:
+    name: vmware
+    tasks_from: decomisar_mv
+  vars:
+    uuid_vm: "{{ item.vmware_proceso.salida_uuid }}"
+  with_items: "{{ estructura_ambiente.senha_presentacion.maquinas_virtuales }} + {{ estructura_ambiente.senha_procesamiento.maquinas_virtuales }} + {{ estructura_ambiente.senha_datos.maquinas_virtuales }}"
+
+# Inicia Rollback para InfoBlox
+
+   #Llenando variables de presentacion
+#- set_fact:
+#    rollback_ips_capas: "{{f5_temporal_vmware_presentacion}}"
+#  when: omitir_capa_presentacion != "t"
+
+   #Llenando variables de procesamiento
+#- set_fact:
+#    rollback_ips_capas: "{{rollback_ips_capas}},{{f5_temporal_vmware_procesamiento}}"
+#  when: omitir_capa_procesamiento != "t"
+
+   #Llenando variables de datos
+#- set_fact:
+#    rollback_ips_capas: "{{rollback_ips_capas}},{{f5_temporal_vmware_datos}}"
+#  when: omitir_capa_datos != "t"
+- set_fact:
+    rollback_ips_capas: "{{infoblox_ips_todas}}"
+  when: infoblox_ips_todas != ""
+
+- name: "SENHA ::: Rollback  ::: InfoBlox -- Proceso general"
+  include_role:
+    name: infoblox
+    tasks_from: Infoblox_senha_rollback
+
+- name: "SENHA ::: Rollback  ::: Envio correo -- Proceso con aplicacion de rollback."
+  import_role:
+    name: general
+    tasks_from: general_enviocorreo
+  vars:
+    general_correo_de: "senha.notificacion@gmail.com"
+    general_correo_para: "{{ correo_solicitante }}"
+    general_correo_concopia: "{{ lista_correo_electronico }}"
+    general_correo_asunto: "Folio {{ estructura_ambiente.senha_generales.numero_de_ticket }} - Despliegue fallido - {{ nombre_catalogo }}"
+    general_correo_cuerpo: |
+                            <br/>Datos generales del despliegue con el folio <b>{{ estructura_ambiente.senha_generales.numero_de_ticket }}</b>:
+                            <br/>
+                            <ul>
+                            <li>Item desplegado: <b>{{ nombre_catalogo }}</b></li>
+                            <li>Solicitante / Correo:  <b>{{ estructura_ambiente.senha_generales.nombre_solicitante }}</b> / <b>{{ estructura_ambiente.senha_generales.correo_solicitante }}</b></li>
+                            <li>Aplicación / Versión:  <b>{{ estructura_ambiente.senha_generales.nombre_aplicacion }}</b> / <b>{{ estructura_ambiente.senha_generales.version_proyecto }}</b></li>
+                            <li>Ambiente: <b>{{ estructura_ambiente.senha_generales.selector_de_ambiente }}</b></li>
+                            <li>Estado de desplliegue: <b>Fallido</b></li>
+                            </ul>
+                            <br/>
+                            <br/>Mensaje de error:
+                            <ul>
+                            <li>{{ error_flujo_general }}</li>
+                            </ul>
+    general_correo_adjuntos: ""
+    tipo_evento_notificacion: "resultado_fallido"
+  ignore_errors: True
+
+- name: "SENHA ::: Rollback  ::: General -- Proceso general no generado correcto."
+  fail:
+    msg: "La creacion de ambiente fallo. Se ejecuto rollback de los elementos creados."

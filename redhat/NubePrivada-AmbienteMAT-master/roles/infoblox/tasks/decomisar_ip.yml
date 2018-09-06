@@ -1,0 +1,64 @@
+  - name: "SENHA ::: InfoBlox ::: Eliminar de IP -- Recoleccion de datos de infoblox."
+    uri:
+      url: "{{ infoblox_url_api }}ipv4address?ip_address={{infoblox_ipeliminar}}"
+      method: GET
+      headers:
+        Content-Type: "{{ infoblox_content_type }}"
+      body_format: json
+      validate_certs: no
+      return_content: yes
+      follow_redirects: yes
+      user: "{{ infoblox_usuario }}"
+      password: "{{ infoblox_contrasenia }}"
+      status_code: 200
+    register: infoblox_consulta
+    ignore_errors: True
+
+  - name: "SENHA ::: InfoBlox ::: Eliminar de IP -- Recoleccion de datos de infoblox incorrecta."
+    set_fact:
+      infoblox_proceso:
+        codigo: "02"
+        mensaje: "No se pudo realizar la consulta de informacion para determinar la eliminacion de IP"
+        entrada_ipeliminada: "{{ infoblox_ipeliminar}}"
+        salida_ref: ""
+    when:
+      - infoblox_consulta is failed
+
+  - name: "SENHA ::: InfoBlox ::: Eliminar de IP -- Proceso de eliminacion de IP."
+    uri:
+      url: "{{infoblox_url_api}}{{infoblox_consulta.json[0]._ref}}"
+      method: DELETE
+      headers:
+        Content-Type: "{{ infoblox_content_type }}"
+      body_format: json
+      validate_certs: no
+      return_content: yes
+      follow_redirects: yes
+      user: "{{ infoblox_usuario }}"
+      password: "{{ infoblox_contrasenia }}"
+      status_code: 200
+    register: infoblox_resultado
+    when:
+      - infoblox_consulta is succeeded
+      - infoblox_consulta.json is defined
+
+  - name: "SENHA ::: InfoBlox ::: Eliminar de IP -- Proceso satisfactorio."
+    set_fact:
+      infoblox_proceso:
+        codigo: "99"
+        mensaje: "Proceos OK"
+        entrada_ipeliminada: "{{ infoblox_ipeliminar}}"
+        salida_ref: "{{infoblox_consulta.json[0]._ref}}"
+    when:
+      - infoblox_resultado is succeeded
+      - infoblox_resultado.json is defined
+
+  - name: "SENHA ::: InfoBlox ::: Eliminar de IP -- Proceso NO satisfactorio."
+    set_fact:
+      infoblox_proceso:
+        codigo: "02"
+        mensaje: "Proceos no OK"
+        entrada_ipeliminada: "{{ infoblox_ipeliminar}}"
+        salida_ref: ""
+    when:
+      - infoblox_resultado is failed
