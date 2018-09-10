@@ -1,20 +1,16 @@
 ---
-- hosts: localhost
+- name: variable manageiq
+  debug:
+    msg: var=manageiq.api_url
 
-  tasks:
-    - name: variable manageiq
-      debug:
-        msg: var=manageiq.api_url
+- name: manageiq.api_token
+  debug:
+    msg: var=manageiq.api_token
 
+- name: var=manageiq.service
+  debug:
+    msg: var=manageiq.service
 
-    - name: manageiq.api_token
-      debug:
-        msg: var=manageiq.api_token
-
-    - name: var=manageiq.service
-      debug:
-        debug: var=manageiq.service
-
-    - name: var=manageiq.event_target
-      debug:
-        msg: var=manageiq.event_target
+- name: var=manageiq.event_target
+  debug:
+    msg: var=manageiq.event_target
