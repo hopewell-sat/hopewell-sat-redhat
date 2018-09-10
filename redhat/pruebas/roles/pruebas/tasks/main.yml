@@ -10,3 +10,11 @@
 
 - name: var=manageiq.event_target
   debug: var=manageiq.event_target
+
+- name: Set the Service URL
+  set_fact:
+    svc_url: "/api/{{ manageiq.service }}"
+
+- name: Set the VM URL
+  set_fact:
+    vm_url: "/api/{{ manageiq.event_target }}"
