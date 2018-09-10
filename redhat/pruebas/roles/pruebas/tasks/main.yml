@@ -1,4 +1,10 @@
+---
 - hosts: localhost
+  connection: local
+  vars:
+    log_bucket:
+        bucket_name: redhat_test
+
   tasks:
   - debug: var=manageiq.api_url
   - debug: var=manageiq.api_token
