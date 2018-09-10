@@ -8,8 +8,17 @@
 - name: var=manageiq.service
   debug: var=manageiq.service
 
-- name: var=manageiq.event_target
-  debug: var=manageiq.event_target
+- name: var=manageiq.vms
+  debug: var=manageiq.vms
+
+- name: var=manageiq.service_catalogs
+  debug: var=manageiq.service_catalogs
+
+- name: var=manageiq.service_dialogs
+  debug: var=manageiq.service_dialogs
+
+- name: var=manageiq.tasks
+  debug: var=manageiq.tasks
 
 - name: Set the Service URL
   set_fact:
@@ -17,4 +26,4 @@
 
 - name: Set the VM URL
   set_fact:
-    vm_url: "/api/{{ manageiq.event_target }}"
+    vm_url: "/api/{{ manageiq.vms }}"
