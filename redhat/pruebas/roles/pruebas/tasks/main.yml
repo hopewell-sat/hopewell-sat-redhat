@@ -19,11 +19,3 @@
 
 - name: var=manageiq.tasks
   debug: var=manageiq.tasks
-
-- name: Set the Service URL
-  set_fact:
-    svc_url: "/api/{{ manageiq.service }}"
-
-- name: Set the VM URL
-  set_fact:
-    vm_url: "/api/{{ manageiq.vms }}"
