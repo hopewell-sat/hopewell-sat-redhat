@@ -4,6 +4,6 @@
   gather_facts: no
   roles:
 #    - excepciones
-    - F5
+#    - F5
     - pruebas
 ...
