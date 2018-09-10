@@ -17,5 +17,5 @@
 - name: var=manageiq.service_dialogs
   debug: var=manageiq.service_dialogs
 
-- name: var=manageiq.tasks
+- name: var=manageiq.tasks pruebas de Israel
   debug: var=manageiq.tasks
