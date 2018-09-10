@@ -3,10 +3,17 @@
   connection: local
   vars:
     log_bucket:
-        bucket_name: redhat_test
+      bucket_name: redhat_test
 
   tasks:
-  - debug: var=manageiq.api_url
-  - debug: var=manageiq.api_token
-  - debug: var=manageiq.service
-  - debug: var=manageiq.event_target
+    - name: variable manageiq
+    - debug: var=manageiq.api_url
+
+    - name: manageiq.api_token
+    - debug: var=manageiq.api_token
+
+    - name: var=manageiq.service
+    - debug: var=manageiq.service
+
+    - name: var=manageiq.event_target
+    - debug: var=manageiq.event_target
