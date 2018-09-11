@@ -33,5 +33,4 @@
 
 - name: "Display all name"
   debug:
-    var: item
-  loop: "{{ info_servicio_reg.json.resources | json_query('info_servicio_reg.json.resources[*].name') }}" 
+    msg: "{{ info_servicio_reg.json.resources }}"
