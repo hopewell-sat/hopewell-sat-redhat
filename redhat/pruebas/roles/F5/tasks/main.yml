@@ -3,6 +3,9 @@
   shell: 'curl --user admin:smartvm -i -k -X GET -H "Accept: application/json" https://10.20.0.65/api/auth?requester_type=ui'
   register: token
 
+- debug:
+    msg: "{{ token }}"
+
 - name: "Obtencion de los catalogos y sus items de servicio de ManageIQ"
   uri:
     url: "https://10.20.0.65/api/auth"
@@ -14,4 +17,4 @@
   register: manageIQ_resultado
 
 - debug:
-    msg: manageIQ_resultado
+    msg: "{{ manageIQ_resultado }}"
