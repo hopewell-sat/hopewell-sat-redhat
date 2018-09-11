@@ -37,4 +37,4 @@
   loop: "{{ info_servicio_reg.json | json_query(query) }}"
   vars:
     query: "info_servicio_reg.json.resources[?name=='Comunicaciones'].{name: name}"
-    msg: "{{ item }}"
+    #msg: "{{ item }}"
