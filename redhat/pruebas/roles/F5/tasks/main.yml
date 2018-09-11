@@ -1,13 +1,12 @@
 ---
 - name: "Obtencion de los catalogos y sus items de servicio de ManageIQ"
   uri:
-    #url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}"
     url: "https://10.20.0.65/api/service_catalogs?expand=resources,service_templates"
     method: GET
     validate_certs: false
     body_format: json
     headers:
-      X-Auth-Token: "{{ manageiq.api_token }}"
+      X-Auth-Token: "{{ token }}"
       Content-Type: "application/json"
     return_content: yes
   register: manageIQ_resultado
