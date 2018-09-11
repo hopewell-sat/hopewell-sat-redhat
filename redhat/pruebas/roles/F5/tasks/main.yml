@@ -1,5 +1,5 @@
 ---
-- name: Obteniendo la informacion de token para posteriores llamados
+- name: Llamado de manageIQ resultado
   uri:
     url: "https://10.20.0.65/api/service_catalogs?expand=resources,service_templates"
     method: GET
