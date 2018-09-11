@@ -8,6 +8,4 @@
     validate_certs: false
     body_format: json
   register: manageIQ_resultado
-
-- debug:
-    msg: "{{ manageIQ_resultado }}"
+- debug: manageIQ_resultado
