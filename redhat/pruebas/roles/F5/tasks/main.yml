@@ -1,8 +1,10 @@
 ---
 - name: "Obtencion de los catalogos y sus items de servicio de ManageIQ"
   uri:
-    url: "https://10.20.0.65/api/service_catalogs?expand=resources,service_templates"
+    url: "https://10.20.0.65/api/auth"
     method: GET
+    user: "admin"
+    password: "smartvm"
     validate_certs: false
     body_format: json
   register: manageIQ_resultado

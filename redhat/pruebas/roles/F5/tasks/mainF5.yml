@@ -20,7 +20,7 @@
   when: f5_resultado is succeeded
 
 #  name: "Asignacion de token fallido F5"
-  
+
 - set_fact:
     f5_token: ""
   when: f5_resultado is failed
