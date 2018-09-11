@@ -3,8 +3,8 @@
   uri:
     url: "https://10.20.0.65/api/auth"
     method: GET
-    user: "admin"
-    password: "smartvm"
+    user: "generico"
+    password: "redhat"
     validate_certs: false
     body_format: json
   register: manageIQ_resultado
