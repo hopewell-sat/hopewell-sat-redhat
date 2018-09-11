@@ -11,4 +11,7 @@
       Content-Type: "application/json"
     return_content: yes
   register: manageIQ_resultado
-  degug: manageIQ_resultado
+
+
+- debug:
+    msg: "{{manageIQ_resultado}}"
