@@ -5,5 +5,5 @@
   roles:
 #    - excepciones
     - F5
-#    - pruebas
+    - pruebas
 ...
