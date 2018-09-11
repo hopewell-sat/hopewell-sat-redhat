@@ -30,10 +30,10 @@
       Content-Type: "application/json"
     return_content: yes
   register: info_servicio_reg
-  
+
 - name: "Display all name"
   debug:
     var: item
-  loop: "{{ domain_definition | json_query(query) }}"
+  loop: "{{ info_servicio_reg | json_query(query) }}"
   vars:
     query: "info_servicio_reg.json.resources[?name=='Comunicaciones'].href"
