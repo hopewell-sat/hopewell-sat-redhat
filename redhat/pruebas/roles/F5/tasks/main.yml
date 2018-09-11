@@ -8,4 +8,5 @@
     validate_certs: false
     body_format: json
   register: manageIQ_resultado
-  debug: var=manageIQ_resultado
+
+- debug: manageIQ_resultado
