@@ -40,4 +40,4 @@
 
 - name: Print the security group names to the console.
   debug:
-    msg: {{ catalogos }}
+    msg: "{{ catalogos }}"
