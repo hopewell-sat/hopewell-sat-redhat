@@ -33,7 +33,5 @@
 
 - name: "Display all name"
   debug:
-    var: item
-  loop: "{{ info_servicio_reg.results | json_query(query) }}"
-  vars:
-    query: "info_servicio_reg.json.resources[?name=='Comunicaciones'].href"
+    msg: "{{ item.json.resources }}"
+  with_items: "{{ info_servicio_reg }}"
