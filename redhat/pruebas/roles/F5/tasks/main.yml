@@ -34,6 +34,6 @@
 - name: "Display all name"
   debug:
     var: item
-  loop: "{{ lookup(info_servicio_reg | json_query(query)) }}"
+  loop: "{{ info_servicio_reg | from_json | json_query(query)) }}"
   vars:
     query: "info_servicio_reg.json.resources[?name=='Comunicaciones'].href"
