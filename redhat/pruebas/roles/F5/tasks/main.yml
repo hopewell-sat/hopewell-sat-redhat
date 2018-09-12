@@ -19,7 +19,7 @@
 - debug:
     msg: "{{ manageIQ_resultado.json.auth_token }}"
 
-- name: "SENHA ::: AWS S3 ::: Obtener información del servicio"
+- name: "Obtener catalogo de servicios"
   uri:
     url: "https://10.20.0.65/api/service_catalogs?expand=resources,service_templates"
     method: GET
@@ -29,7 +29,19 @@
       X-Auth-Token: "{{ manageIQ_resultado.json.auth_token }}"
       Content-Type: "application/json"
     return_content: yes
-  register: info_servicio_reg
+  register: catalogo_servicios
+
+- name: "Obtener servicios desplegados por service_request"
+  uri:
+    url: "https://10.20.0.65/api/services?expand=resources"
+    method: GET
+    validate_certs: false
+    body_format: json
+    headers:
+      X-Auth-Token: "{{ manageIQ_resultado.json.auth_token }}"
+      Content-Type: "application/json"
+    return_content: yes
+  register: servicios_activos
 
 - name: crear arreglo de catalogos
   set_fact: catalogos=[]
