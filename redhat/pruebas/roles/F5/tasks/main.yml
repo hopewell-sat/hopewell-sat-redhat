@@ -31,9 +31,12 @@
     return_content: yes
   register: info_servicio_reg
 
+- name: crear arreglo de catalogos
+  set_fact: catalogos=[]
+
 - name: "Display all name busqueda de item por catalogo"
-  debug:
-    msg: "{{ item }}"
-  register: resultado
+  set_fact: catalogos=" {{ catalogo | item.name}}"
   with_items: "{{ info_servicio_reg.json.resources }}"
-  when: item.name  == "Comunicaciones"
+
+- name: Print the security group names to the console.
+  debug: var=catalogos
