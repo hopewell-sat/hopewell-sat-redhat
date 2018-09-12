@@ -48,7 +48,7 @@
 
 - name: "Display all name busqueda de item por catalogo"
   set_fact: catalogos= "{{ item }}"
-  with_items: "{{ info_servicio_reg.json.resources }}"
+  with_items: "{{ catalogo_servicios.json.resources }}"
 
 - name: Impresion en consola de catalogos.
   debug:
