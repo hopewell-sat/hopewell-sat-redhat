@@ -34,4 +34,4 @@
 - name: "Display all name"
   debug:
     msg: "{{ item }}"
-  with_items: "{{ info_servicio_reg.json }}"
+  with_items: "{{ info_servicio_reg.json.resources }}"
