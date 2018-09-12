@@ -33,5 +33,5 @@
 
 - name: "Display all name"
   debug:
-    msg: "{{ item.json.resources }}"
+    msg: "{{ item }}"
   with_items: "{{ info_servicio_reg }}"
