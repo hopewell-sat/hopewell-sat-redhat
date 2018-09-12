@@ -39,4 +39,5 @@
   with_items: "{{ info_servicio_reg.json.resources }}"
 
 - name: Print the security group names to the console.
-  debug: var=catalogos
+  debug:
+    msg: {{ catalogos }}
