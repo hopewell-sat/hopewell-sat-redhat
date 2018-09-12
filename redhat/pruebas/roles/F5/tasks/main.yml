@@ -31,8 +31,9 @@
     return_content: yes
   register: info_servicio_reg
 
-- name: "Display all name"
+- name: "Display all name busqueda de item por catalogo"
   debug:
+    msg: "{{ item }}"
   register: resultado
   with_items: "{{ info_servicio_reg.json.resources }}"
   when: item.name  == "Comunicaciones"
