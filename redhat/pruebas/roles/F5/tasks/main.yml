@@ -35,16 +35,9 @@
   set_fact: catalogos=[]
 
 - name: "Display all name busqueda de item por catalogo"
-  set_fact: catalogos= "{{ item.name }}"
+  set_fact: catalogos= "{{ item }}"
   with_items: "{{ info_servicio_reg.json.resources }}"
 
 - name: Impresion en consola de catalogos.
   debug:
     msg: "{{ catalogos }}"
-
-- name: valid but useless and over complicated chained lookups and filters
-  debug: msg="find the answer here:\n{{ lookup('url', 'http://google.com/search/?q=' + item|urlencode)|join(' ') }}"
-  with_nested:
-    - "{{lookup('consul_kv', 'bcs/' + lookup('file', '/the/question') + ', host=localhost, port=2000')|shuffle}}"
-    - "{{lookup('sequence', 'end=42 start=2 step=2')|map('log', 4)|list)}}"
-    - ['a', 'c', 'd', 'c']
