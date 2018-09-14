@@ -4,7 +4,7 @@
         centro_datos_sat: "{{ diccionario_valor_descripcion[centro_datos_sat] }}"
   ignore_errors: True
 
-- name: Agregar clientes
+- name: Modificacion de clientes
   uri:
     url: "https://{{ api_url }}:{{ api_port }}/platform/4/protocols/nfs/exports/111"
     method: PUT
