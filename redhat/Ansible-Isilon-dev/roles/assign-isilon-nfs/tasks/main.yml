@@ -6,8 +6,8 @@
 
 - name: Agregar clientes
   uri:
-    url: "https://{{ api_url }}:{{ api_port }}/platform/4/protocols/nfs/exports"
-    method: POST
+    url: "https://{{ api_url }}:{{ api_port }}/platform/4/protocols/nfs/exports/111"
+    method: PUT
     headers:
       x-isi-ifs-target-type: container
     body: "{\"paths\":[\"/ifs/nfs/exports/{{ directory_name }}\"],\"all_dirs\": true,\"read_write_clients\": [{{ read_write_clients_ip_list }}],\"root_clients\": [{{ root_clients_ip_list }}] ,\"read_only_clients\": [{{ read_only_clients_ip_list }}] }"
@@ -33,7 +33,7 @@
   #import_role:
     #name: assign-isilon-nfs
     #tasks_from: assign-isilon-nfs_handlers.yml
-    
+
 - name: Obtener timestamp del sistema
   shell: "date +%Y-%m-%d_%H:%M:%S"
   register: fecha_inicio_proceso
