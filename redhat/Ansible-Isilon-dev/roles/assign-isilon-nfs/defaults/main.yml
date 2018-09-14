@@ -1,0 +1,8 @@
+---
+#numero_de_ticket: "CH000000000000000003"
+#nombre_solicitante: "default"
+#directory_name: "default"
+#read_write_clients_ip_list: "default"
+#root_clients_ip_list: "default"
+#read_only_clients_ip_list: "default"
+...

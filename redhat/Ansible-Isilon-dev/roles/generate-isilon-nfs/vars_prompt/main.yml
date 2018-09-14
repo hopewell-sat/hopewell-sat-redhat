@@ -1,0 +1,6 @@
+---
+- name: directory_name
+  prompt: "Nombre del directorio a validar"
+- name: quota
+  prompt: "Quota a asignar (Hard limit)"
+...

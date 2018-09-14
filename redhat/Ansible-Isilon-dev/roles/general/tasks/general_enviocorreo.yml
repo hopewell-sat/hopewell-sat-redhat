@@ -1,0 +1,38 @@
+---
+
+#- debug:
+#    msg: "{{ gen_correo_servidor }}"
+
+#- debug:
+#    msg: "{{ general_correo_para }}"
+    
+#- debug:
+#    msg: "{{ general_correo_asunto }}"
+
+- name: Tarea de envio de correo del proceso
+  mail:
+    host: "{{ gen_correo_servidor }}"
+    port: "{{ gen_correo_puerto }}"
+    from: "{{ general_correo_de }}"
+    to: "{{ general_correo_para }}"
+    cc: "{{ general_correo_concopia }}"
+    subject: "{{ general_correo_asunto }}"
+    body: "{{ general_correo_cuerpo }}"
+    subtype: html
+    attach: "{{ general_correo_adjuntos }}"
+  retries: 3
+  delay: 5
+  register: general_correo_info
+  ignore_errors: True
+  
+- name: "Notificacion de correo enviada satisfactoriamente"
+  command: echo ""
+  when: 
+    - general_correo_info is succeeded
+  
+- name: "Error de comunicacion con el servicio de correo"
+  command: echo ""
+  when: 
+    - general_correo_info is failed  
+  
+... 

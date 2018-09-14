@@ -1,0 +1,24 @@
+---
+- name: "Definiendo a partir de parametros de entrada la plantilla de la capa procesamiento"
+  set_fact:
+    vmware_template: "{{ gen_plantilla_o_CH }}"
+  when: estructura_ambiente.senha_procesamiento.vmware_template_procesamiento == gen_clave_procesamiento1 or estructura_ambiente.senha_procesamiento.vmware_template_procesamiento == "Plantilla_RHEL_WL"
+
+- name: "Definiendo a partir de parametros de entrada la plantilla de la capa procesamiento"
+  set_fact:
+    vmware_template: "{{ gen_plantilla_o_CH }}"
+  when: estructura_ambiente.senha_procesamiento.vmware_template_procesamiento == gen_clave_procesamiento2 or estructura_ambiente.senha_procesamiento.vmware_template_procesamiento == "Plantilla_OEL_WL"
+
+- name: "Definiendo a partir de parametros de entrada la plantilla de la capa procesamiento"
+  set_fact:
+    vmware_template: "{{ gen_plantilla_o_WIN }}"
+  when: estructura_ambiente.senha_procesamiento.vmware_template_procesamiento == gen_clave_procesamiento3 or estructura_ambiente.senha_procesamiento.vmware_template_procesamiento == "Plantilla_WIN_WL"
+    
+- name: "Asignacion por defecto capa procesamiento"
+  set_fact:
+    vmware_template: "{{ gen_plantilla_defecto }}"
+  when: 
+    - estructura_ambiente.senha_procesamiento.vmware_template_procesamiento != gen_clave_procesamiento1 
+    - estructura_ambiente.senha_procesamiento.vmware_template_procesamiento != gen_clave_procesamiento2 
+    - estructura_ambiente.senha_procesamiento.vmware_template_procesamiento != gen_clave_procesamiento3     
+... 

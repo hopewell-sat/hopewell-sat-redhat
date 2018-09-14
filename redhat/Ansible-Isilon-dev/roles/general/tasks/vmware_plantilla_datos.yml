@@ -1,0 +1,24 @@
+---
+- name: "Definiendo a partir de parametros de entrada la plantilla de la capa datos"
+  set_fact:
+    vmware_template: "{{ gen_plantilla_d_CH }}"
+  when: estructura_ambiente.senha_datos.vmware_template_datos == gen_clave_datos1 or estructura_ambiente.senha_datos.vmware_template_datos == "Plantilla_RHEL_PostgreSQL"
+
+- name: "Definiendo a partir de parametros de entrada la plantilla de la capa datos"
+  set_fact:
+    vmware_template: "{{ gen_plantilla_d_CH }}"
+  when: estructura_ambiente.senha_datos.vmware_template_datos == gen_clave_datos2 or estructura_ambiente.senha_datos.vmware_template_datos == "Plantilla_OEL_Oracle"    
+
+- name: "Definiendo a partir de parametros de entrada la plantilla de la capa datos"
+  set_fact:
+    vmware_template: "{{ gen_plantilla_d_WIN }}"
+  when: estructura_ambiente.senha_datos.vmware_template_datos == gen_clave_datos3 or estructura_ambiente.senha_datos.vmware_template_datos == "Plantilla_WIN_SLQServer"     
+    
+- name: "Asignacion por defecto capa datos"
+  set_fact:
+    vmware_template: "{{ gen_plantilla_defecto }}"
+  when: 
+    - estructura_ambiente.senha_datos.vmware_template_datos != gen_clave_datos1
+    - estructura_ambiente.senha_datos.vmware_template_datos != gen_clave_datos2
+    - estructura_ambiente.senha_datos.vmware_template_datos != gen_clave_datos3
+... 

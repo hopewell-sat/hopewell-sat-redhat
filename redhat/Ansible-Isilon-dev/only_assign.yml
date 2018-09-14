@@ -1,0 +1,6 @@
+---
+- name: Asign NFS to VM, Isilon
+  hosts: localhost
+  roles:
+    - assign-isilon-nfs
+...

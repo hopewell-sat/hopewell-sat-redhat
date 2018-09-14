@@ -1,0 +1,8 @@
+---
+- debug:
+    msg: "Ejecutando archivo Aplicar diccionario para el rol generate-isilon-nfs
+    
+- set_fact:
+    aci_ap:
+      centro_datos_sat: "{{ diccionario_valor_descripcion[centro_datos_sat] }}"
+...

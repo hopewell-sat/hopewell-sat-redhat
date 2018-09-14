@@ -1,0 +1,15 @@
+---
+- debug:
+    msg: "Ejecutando archivo Aplicar diccionario para el rol apic_crear_app_profile"
+    
+- set_fact:
+    estructura_perfil_aplicacion:
+      aci_ap:
+        centro_datos_sat: "{{ diccionario_valor_descripcion[centro_datos_sat] }}"
+        selector_de_ambiente: "{{ diccionario_valor_descripcion[selector_de_ambiente] }}"
+  ignore_errors: True  
+
+- name: Estructura de ambiente ACI gnerada
+  debug:
+    var: estructura_perfil_aplicacion
+...

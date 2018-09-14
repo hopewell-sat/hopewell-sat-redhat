@@ -1,0 +1,30 @@
+---
+- debug: var=manageiq.api_url
+- debug: var=manageiq.api_token
+- debug: var=manageiq.service
+
+- name: Generando la url de manageIQ
+  set_fact:
+    provider_url: "{{ manageiq.api_url }}/api/data_stores"
+
+- name: Obteniendo el resultado de los datastore al momento de ejecutar el aprovisionamiento SENHA
+  uri:
+    url: "{{ provider_url }}"
+    method: GET
+    body_format: json
+    validate_certs: False
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type: "application/json"
+    status_code: 200
+  register: general_storage
+
+
+- include_tasks: general_reporteDataStore.yml
+  with_items: "{{general_storage.json.resources}}"
+
+  
+#- debug:
+#    msg: "{{ item.href }}"
+#  with_items: "{{general_storage.json.resources}}"
+#  when: general_storage is succeeded
