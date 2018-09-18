@@ -5,10 +5,16 @@
   ignore_errors: True
 
 - set_fact:
-    frwcil: "{{ read_write_clients_ip_list | regex_replace('\"','')}}"
-    frcil: "{{ root_clients_ip_list | regex_replace('\"','')}}"
-    frocil: "{{ read_only_clients_ip_list | regex_replace('\"','')}}"
+    frwcil: "{{ read_write_clients_ip_list | regex_replace('\"','\\'')}}"
+    frcil: "{{ root_clients_ip_list | regex_replace('\"','\\'')}}"
+    frocil: "{{ read_only_clients_ip_list | regex_replace('\"', '\\'')}}"
   ignore_errors: True
+
+- set_fact:
+    urlBody: "\"read_write_clients\":[{{ read_write_clients_ip_list }}], \"root_clients\": [{{ root_clients_ip_list }}]"
+
+- name: urlBody
+  debug: var=urlBody
 
 - name: frwcil
   debug: var=frwcil
@@ -19,8 +25,8 @@
 - name: frocil
   debug: var=frocil
 
-- name: Obtener Carpetas
-  shell: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/111 -X PUT -k -u admin:smartvm -v --data '{'read_write_clients': [{{ frwcil }}], 'root_clients': [{{ frcil }}]}'"
+- name: Actualizar directorio
+  shell: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/111 -X PUT -k -u admin:smartvm -v --data '{\"read_write_clients\": [{{ frwcil }}], \"root_clients\": [{{ frcil }}]}'"
   register: salida
 
 - set_fact:
