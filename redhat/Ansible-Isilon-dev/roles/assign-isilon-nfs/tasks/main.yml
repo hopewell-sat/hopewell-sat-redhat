@@ -1,17 +1,34 @@
 ---
 - set_fact:
-    frwcil: "{{ read_write_clients_ip_list | regex_replace('\\') | regex_replace(' ') }}"
+      isilon_nfs:
+        centro_datos_sat: "{{ diccionario_valor_descripcion[lp] }}"
   ignore_errors: True
 
-- name: frwcil
-  debug: var=frwcil
+- name: Limpieza de variables 12
+  set_fact:
+    fact_read_write_clients_ip_list: "{{ read_write_clients_ip_list | regex_replace('\\', '') }}"
+    fact_root_clients_ip_list: "{{ root_clients_ip_list | regex_replace('\\', '') }}"
+    fact_read_only_clients_ip_list: "{{ read_only_clients_ip_list | regex_replace('\\', '') }}"
+
+- set_fact:
+    frwcil: "{{ read_write_clients_ip_list | regex_replace('\\.') | regex_replace(' ') }}"
+  ignore_errors: True
+
+
+
+
+
+
+
+- name: read_write_clients_ip_list
+  debug: var=fact_read_write_clients_ip_list
 - name: root_clients_ip_list
   debug: var=fact_root_clients_ip_list
 - name: read_only_clients_ip_list
   debug: var=fact_read_only_clients_ip_list
 
 - name: Obtener Carpetas
-  shell: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/111 -X PUT -k -u admin:smartvm -v --data '{'read_write_clients': [{{ frwcil }}], 'root_clients': [{{ root_clients_ip_list }}]}'"
+  shell: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/111 -X PUT -k -u admin:smartvm -v --data '{'read_write_clients': [{{ read_write_clients_ip_list }}], 'root_clients': [{{ root_clients_ip_list }}]}'"
   register: salida
 
 - set_fact:
