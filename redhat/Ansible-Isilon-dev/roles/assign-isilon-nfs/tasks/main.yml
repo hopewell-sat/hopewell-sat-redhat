@@ -4,15 +4,16 @@
         centro_datos_sat: "{{ diccionario_valor_descripcion[centro_datos_sat] }}"
   ignore_errors: True
 
-- set_fact:
-    frwcil: "{{ read_write_clients_ip_list | regex_replace('\"','\\'')}}"
-    frcil: "{{ root_clients_ip_list | regex_replace('\"','\\'')}}"
-    frocil: "{{ read_only_clients_ip_list | regex_replace('\"', '\\'')}}"
-  ignore_errors: True
+#- set_fact:
+#    frwcil: "{{ read_write_clients_ip_list | regex_replace('\"','\\'')}}"
+#    frcil: "{{ root_clients_ip_list | regex_replace('\"','\\'')}}"
+#    frocil: "{{ read_only_clients_ip_list | regex_replace('\"', '\\'')}}"
+#  ignore_errors: True
 
 - set_fact:
     urlHeader: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/111 -X PUT -k -u admin:smartvm -v --data"
     urlBody: "{\"read_write_clients\":[{{ read_write_clients_ip_list }}], \"root_clients\": [{{ root_clients_ip_list }}]}"
+
 
 - name: urlHeader
   debug: var=urlHeader
@@ -20,9 +21,27 @@
 - name: urlBody
   debug: var=urlBody
 
-- name: Actualizar directorio
-  shell: " {{urlHeader}} '{{ urlBody }}'"
+
+- name: Agregar clientes
+  uri:
+    url: "https://{{ api_url }}:{{ api_port }}/platform/4/protocols/nfs/exports/111"
+    method: PUT
+    headers:
+      x-isi-ifs-target-type: container
+    body: "{{ urlBody }}"
+    body_format: json
+    user: "{{ api_user }}"
+    password: "{{ api_pass }}"
+    force_basic_auth: yes
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200,201
   register: salida
+
+#- name: Actualizar directorio
+#  shell: " {{urlHeader}} '{{ urlBody }}'"
+#  register: salida
 
 - set_fact:
     salida_error: "{{ salida.failed }}"
