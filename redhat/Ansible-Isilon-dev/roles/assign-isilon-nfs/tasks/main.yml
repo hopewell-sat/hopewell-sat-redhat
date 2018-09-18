@@ -21,7 +21,23 @@
 - name: urlBody
   debug: var=urlBody
 
-
+- name: Modificar Directorio
+  uri:
+    url: "https://{{ api_url }}:{{ api_port }}/platform/4/protocols/nfs/exports/111"
+    method: PUT
+    headers:
+      x-isi-ifs-target-type: container
+    body: "{\"paths\":[\"/ifs/nfs/exports/{{ directory_name }}\"],\"all_dirs\": true,\"read_write_clients\": [{{ read_write_clients_ip_list }}],\"root_clients\": [{{ root_clients_ip_list }}] ,\"read_only_clients\": [{{ read_only_clients_ip_list }}] }"
+    body_format: json
+    user: "{{ api_user }}"
+    password: "{{ api_pass }}"
+    force_basic_auth: yes
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200,201
+  register: salida
+  
 - name: Agregar clientes
   uri:
     url: "https://{{ api_url }}:{{ api_port }}/platform/4/protocols/nfs/exports/111"
