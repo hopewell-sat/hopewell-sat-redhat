@@ -4,7 +4,6 @@
         centro_datos_sat: "{{ diccionario_valor_descripcion[lp] }}"
   ignore_errors: True
 
-- name: Limpieza de variables 12
 - set_fact:
     frwcil: "{{ read_write_clients_ip_list | regex_replace('\\.') | regex_replace(' ') }}"
   ignore_errors: True
