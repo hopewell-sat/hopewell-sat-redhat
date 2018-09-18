@@ -1,7 +1,7 @@
 ---
 - set_fact:
       isilon_nfs:
-        centro_datos_sat: "{{ diccionario_valor_descripcion[lp] }}"
+        centro_datos_sat: "{{ diccionario_valor_descripcion[centro_datos_sat] }}"
   ignore_errors: True
 
 - set_fact:
@@ -11,22 +11,14 @@
   ignore_errors: True
 
 - set_fact:
+    urlHeader: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/111 -X PUT -k -u admin:smartvm -v --data"
     urlBody: "{\"read_write_clients\":[{{ read_write_clients_ip_list }}], \"root_clients\": [{{ root_clients_ip_list }}]}"
 
 - name: urlBody
   debug: var=urlBody
 
-- name: frwcil
-  debug: var=frwcil
-
-- name: frcil
-  debug: var=frcil
-
-- name: frocil
-  debug: var=frocil
-
 - name: Actualizar directorio
-  shell: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/111 -X PUT -k -u admin:smartvm -v --data '{{ urlBody }}'"
+  shell: " {{urlHeader}} '{{ urlBody }}'"
   register: salida
 
 - set_fact:

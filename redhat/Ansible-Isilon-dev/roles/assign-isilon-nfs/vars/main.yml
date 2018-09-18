@@ -6,7 +6,8 @@ api_port: 8080
 read_write_clients_ip_list: "\"10.20.0.51\""
 root_clients_ip_list: "\"10.20.0.51\",\"10.20.1.0/24\",\"10.20.3.0/255.255.255.0\""
 read_only_clients_ip_list: "\"10.20.2.250\",\"10.20.2.0/24\""
-#Aplicar diccionario  
+centro_datos_sat: "Laboratorio Puebla"
+#Aplicar diccionario
 diccionario_valor_descripcion:
   lp: "Laboratorio Puebla"
 ...
