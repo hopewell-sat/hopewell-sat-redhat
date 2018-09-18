@@ -4,14 +4,13 @@
         centro_datos_sat: "{{ diccionario_valor_descripcion[lp] }}"
   ignore_errors: True
 
-- name: Limpieza de variables
-  set_fact:
-    fact_read_write_clients_ip_list: "{{ read_write_clients_ip_list | regex_replace('\\', '') }}"
-    fact_root_clients_ip_list: "{{ root_clients_ip_list | regex_replace('\\', '') }}"
-    fact_read_only_clients_ip_list: "{{ read_only_clients_ip_list | regex_replace('\\', '') }}"
+- name: Limpieza de variables 12
+- set_fact:
+    frwcil: "{{ read_write_clients_ip_list | regex_replace('\\.') | regex_replace(' ') }}"
+  ignore_errors: True
 
 - name: read_write_clients_ip_list
-  debug: var=fact_read_write_clients_ip_list
+  debug: var=frwcil
 - name: root_clients_ip_list
   debug: var=fact_root_clients_ip_list
 - name: read_only_clients_ip_list
