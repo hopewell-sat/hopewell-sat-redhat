@@ -17,7 +17,7 @@
     method: PUT
     headers:
       x-isi-ifs-target-type: container
-    body: "{\"all_dirs\": true,\"read_write_clients\": [{{ read_write_clients_ip_list }}],\"root_clients\": [{{ root_clients_ip_list }}] ,\"read_only_clients\": [{{ read_only_clients_ip_list }}] }"
+    body: '{\"read_write_clients\": [{{ read_write_clients_ip_list }}],\"root_clients\": [{{ root_clients_ip_list }}] ,\"read_only_clients\": [{{ read_only_clients_ip_list }}] }'
     body_format: json
     user: "{{ api_user }}"
     password: "{{ api_pass }}"
