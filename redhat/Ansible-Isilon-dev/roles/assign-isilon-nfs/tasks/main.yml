@@ -6,7 +6,7 @@
 
 - name: Obtener directorios
   uri:
-    url: "https://{{ api_url }}:{{ api_port }}/platform/4/protocols/nfs/exports/"
+    url: "https://10.20.0.46:8080/platform/4/protocols/nfs/exports/"
     method: GET
     headers:
       x-isi-ifs-target-type: container

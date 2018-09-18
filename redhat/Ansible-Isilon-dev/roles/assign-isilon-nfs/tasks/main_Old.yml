@@ -1,0 +1,20 @@
+---
+- name: Obtener directorios
+  uri:
+    url: "https://10.20.0.46:8080/platform/4/protocols/nfs/exports/"
+    method: GET
+    headers:
+      x-isi-ifs-target-type: container
+    user: "{{ api_user }}"
+    password: "{{ api_pass }}"
+    force_basic_auth: yes
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 404
+  register: directorios
+
+- name: directorios
+  debug: var=directorios
+
+...
