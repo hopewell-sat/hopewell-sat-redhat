@@ -6,8 +6,8 @@
 
 - set_fact:
     frwcil: "{{ read_write_clients_ip_list | regex_replace('\"','')}}"
-    frcil: "{{ root_clients_ip_list }}"
-    frocil: "{{ read_only_clients_ip_list }}"
+    frcil: "{{ root_clients_ip_list | regex_replace('\"','')}}"
+    frocil: "{{ read_only_clients_ip_list | regex_replace('\"','')}}"
   ignore_errors: True
 
 - name: frwcil
