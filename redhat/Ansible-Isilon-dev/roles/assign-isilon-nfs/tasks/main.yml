@@ -11,7 +11,7 @@
   ignore_errors: True
 
 - set_fact:
-    urlBody: "\"read_write_clients\":[{{ read_write_clients_ip_list }}], \"root_clients\": [{{ root_clients_ip_list }}]"
+    urlBody: "{\"read_write_clients\":[{{ read_write_clients_ip_list }}], \"root_clients\": [{{ root_clients_ip_list }}]}"
 
 - name: urlBody
   debug: var=urlBody
