@@ -11,8 +11,13 @@
 - name: read_only_clients_ip_list
   debug: var=read_only_clients_ip_list
 
+- name: limpiar comillas
+
+
+
+
 - name: Obtener Carpetas
-  shell: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/111 -X PUT -k -u admin:smartvm -v --data '{re0ad_write_clients: [{{ read_write_clients_ip_list }}], root_clients: [{{ root_clients_ip_list }}]}'"
+  shell: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/111 -X PUT -k -u admin:smartvm -v --data '{'read_write_clients': [{{ 'read_write_clients_ip_list' }}], 'root_clients': [{{ root_clients_ip_list }}]}'"
   register: salida
 
 - set_fact:
