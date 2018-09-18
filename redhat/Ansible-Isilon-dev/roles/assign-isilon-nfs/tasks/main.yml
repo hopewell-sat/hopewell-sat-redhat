@@ -5,11 +5,10 @@
   ignore_errors: True
 
 - name: Limpieza de variables
-  set_fact:
-    fact_read_write_clients_ip_list: "{{ read_write_clients_ip_list | regex_replace('(\\)', '') }}"
+  vars:
+    fact_read_write_clients_ip_list: "{{ read_write_clients_ip_list | regex_replace('\\') | regex_replace('') }}"
     fact_root_clients_ip_list: "{{ root_clients_ip_list | regex_replace('(\\)', '') }}"
     fact_read_only_clients_ip_list: "{{ read_only_clients_ip_list | regex_replace('(\\)', '') }}"
-    
 
 - name: read_write_clients_ip_list
   debug: var=fact_read_write_clients_ip_list
