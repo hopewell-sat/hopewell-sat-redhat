@@ -13,7 +13,7 @@
 
 - name: Crear directorio
   uri:
-    url: "https://10.20.0.46:8080/platform/4/protocols/nfs/exports/111"
+    url: "https://10.20.0.46:8080/platform/1/protocols/nfs/exports/111"
     method: PUT
     headers:
       x-isi-ifs-target-type: container
