@@ -4,55 +4,6 @@
         centro_datos_sat: "{{ diccionario_valor_descripcion[lp] }}"
   ignore_errors: True
 
-- name: Validar directorio
-  uri:
-    url: "https://{{ api_url }}:{{ api_port }}/namespace/ifs/nfs/exports/{{ directory_name }}"
-    method: GET
-    headers:
-      x-isi-ifs-target-type: container
-    user: "{{ api_user }}"
-    password: "{{ api_pass }}"
-    force_basic_auth: yes
-    validate_certs: no
-    return_content: yes
-    follow_redirects: yes
-    status_code: 404
-
-- name: Agregar clientes new
-  uri:
-    url: "https://{{ api_url }}:{{ api_port }}/platform/4/protocols/nfs/exports/111"
-    method: PUT
-    headers:
-      x-isi-ifs-target-type: container
-    body: "{\"read_write_clients\": [{{ read_write_clients_ip_list }}],\"root_clients\": [{{ root_clients_ip_list }}] ,\"read_only_clients\": [{{ read_only_clients_ip_list }}] }"
-    body_format: json
-    user: "{{ api_user }}"
-    password: "{{ api_pass }}"
-    force_basic_auth: yes
-    validate_certs: no
-    return_content: yes
-    follow_redirects: yes
-    status_code: 200,201
-  register: salida
-
-- name: Obtener directorios
-  uri:
-    url: "https://10.20.0.46:8080/platform/4/protocols/nfs/exports/"
-    method: GET
-    headers:
-      x-isi-ifs-target-type: container
-    user: "{{ api_user }}"
-    password: "{{ api_pass }}"
-    force_basic_auth: yes
-    validate_certs: no
-    return_content: yes
-    follow_redirects: yes
-    status_code: 404
-  register: directorios
-
-- name: directorios
-  debug: var=directorios
-
 - set_fact:
     frwcil: "{{ read_write_clients_ip_list | regex_replace('\"','')}}"
     frcil: "{{ root_clients_ip_list | regex_replace('\"','')}}"
@@ -71,17 +22,6 @@
 - name: Obtener Carpetas
   shell: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/111 -X PUT -k -u admin:smartvm -v --data '{'read_write_clients': [{{ frwcil }}], 'root_clients': [{{ frcil }}]}'"
   register: salida
-
-
-
-
-
-
-
-
-
-
-
 
 - set_fact:
     salida_error: "{{ salida.failed }}"
