@@ -4,6 +4,24 @@
         centro_datos_sat: "{{ diccionario_valor_descripcion[lp] }}"
   ignore_errors: True
 
+- name: Obtener directorios
+  uri:
+    url: "https://{{ api_url }}:{{ api_port }}/platform/4/protocols/nfs/exports/"
+    method: GET
+    headers:
+      x-isi-ifs-target-type: container
+    user: "{{ api_user }}"
+    password: "{{ api_pass }}"
+    force_basic_auth: yes
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 404
+  register: directorios
+
+- name: directorios
+  debug: var=directorios
+
 - set_fact:
     frwcil: "{{ read_write_clients_ip_list | regex_replace('\"','')}}"
     frcil: "{{ root_clients_ip_list | regex_replace('\"','')}}"
