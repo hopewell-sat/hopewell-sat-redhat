@@ -27,7 +27,7 @@
 
 - name: Obtener datos directorio ---- {{ directory_name }}
   set_fact: directorio ="{{ item }}
-  with_items: {{ directorios }}
+  with_items: "{{ directorios }}"
   when: item.description == "{{ directory_name }}"
 
 - name: Agregar arreglo de ips a ---- {{ directory_name }}
