@@ -25,12 +25,12 @@
     status_code: 404
   register: directorios
 
-- name: Obtener datos directorio ---- {{ directory_name }}
+- name: Obtener datos directorio ---- "{{ directory_name }}"
   set_fact: directorio ="{{ item }}
   with_items: "{{ directorios }}"
   when: item.description == "{{ directory_name }}"
 
-- name: Agregar arreglo de ips a ---- {{ directory_name }}
+- name: Agregar arreglo de ips a ---- "{{ directory_name }}"
   set_fact:
     urlHeader: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/{{ directorio.id }} -X PUT -k -u admin:smartvm -v --data"
     urlBody: "{\"read_write_clients\":[ {{ directorio.read_write_clients}}, {{ read_write_clients_ip_list }}], \"root_clients\": [{{ directorio.root_clients }},{{ root_clients_ip_list }}]}, \"read_only_clients\": [ {{ directorio.read_only_clients }},{{ read_only_clients_ip_list }}]"
