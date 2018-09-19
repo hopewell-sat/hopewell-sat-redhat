@@ -10,9 +10,10 @@
 #    frocil: "{{ read_only_clients_ip_list | regex_replace('\"', '\\'')}}"
 #  ignore_errors: True
 
-- name: Validar directorio
+
+- name: Obtener Directorios
   uri:
-    url: "https://{{ api_url }}:{{ api_port }}/namespace/ifs/nfs/exports/{{ directory_name }}"
+    url: "https://{{ api_url }}:{{ api_port }}/platform/4/protocols/nfs/exports/"
     method: GET
     headers:
       x-isi-ifs-target-type: container
@@ -23,11 +24,17 @@
     return_content: yes
     follow_redirects: yes
     status_code: 404
+  register: directorios
 
-- set_fact:
-    urlHeader: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/111 -X PUT -k -u admin:smartvm -v --data"
-    urlBody: "{\"read_write_clients\":[{{ read_write_clients_ip_list }}], \"root_clients\": [{{ root_clients_ip_list }}]}"
+- name: Obtener id Directorio {{ directory_name }}
+  set_fact: directorio ="{{ item }}
+  with_items: {{ directorios }}
+  when: item.description	  == "{{ directory_name }}"
 
+- name: Agregar arreglo {{ directory_name }}
+  set_fact:
+    urlHeader: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/{{ directorio.id }} -X PUT -k -u admin:smartvm -v --data"
+    urlBody: "{\"read_write_clients\":[ {{ directorio.read_write_clients}}, {{ read_write_clients_ip_list }}], \"root_clients\": [{{ directorio.root_clients }},{{ root_clients_ip_list }}]}, \"read_only_clients\": [ {{ directorio.read_only_clients }},{{ read_only_clients_ip_list }}]"
 
 - name: urlHeader
   debug: var=urlHeader
@@ -70,9 +77,9 @@
     status_code: 200,201
   register: salida
 
-#- name: Actualizar directorio
-#  shell: " {{urlHeader}} '{{ urlBody }}'"
-#  register: salida
+- name: Actualizar directorio
+  shell: " {{urlHeader}} '{{ urlBody }}'"
+  register: salida
 
 - set_fact:
     salida_error: "{{ salida.failed }}"
