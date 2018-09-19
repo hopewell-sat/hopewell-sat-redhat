@@ -1,8 +1,8 @@
 ---
-- set_fact:
-      isilon_nfs:
-        centro_datos_sat: "{{ diccionario_valor_descripcion[centro_datos_sat] }}"
-  ignore_errors: True
+#- set_fact:
+#      isilon_nfs:
+#        centro_datos_sat: "{{ diccionario_valor_descripcion[centro_datos_sat] }}"
+#  ignore_errors: True
 
 #- set_fact:
 #    frwcil: "{{ read_write_clients_ip_list | regex_replace('\"','\\'')}}"
@@ -41,7 +41,8 @@
     method: PUT
     headers:
       x-isi-ifs-target-type: container
-    body: "{\"paths\":[\"/ifs/nfs/exports/{{ directory_name }}\"],\"all_dirs\": true,\"read_write_clients\": [{{ read_write_clients_ip_list }}],\"root_clients\": [{{ root_clients_ip_list }}] ,\"read_only_clients\": [{{ read_only_clients_ip_list }}] }"
+#    body: "{\"paths\":[\"/ifs/nfs/exports/{{ directory_name }}\"],\"all_dirs\": true,\"read_write_clients\": [{{ read_write_clients_ip_list }}],\"root_clients\": [{{ root_clients_ip_list }}] ,\"read_only_clients\": [{{ read_only_clients_ip_list }}] }"
+    body: "{{ urlBody }}"
     body_format: json
     user: "{{ api_user }}"
     password: "{{ api_pass }}"
