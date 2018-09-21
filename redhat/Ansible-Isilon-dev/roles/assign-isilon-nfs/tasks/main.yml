@@ -29,7 +29,7 @@
 #- name: debug salida directorios to json
 #  debug: var=directorios.json.exports
 - name: crear arreglo de catalogos
-  set_fact: directorio
+  set_fact: foo
 
 - name: Obtener datos directorio
   set_fact: foo="{{ foo }} + [ '{{ item }}' ]"   #directorio = "{{ item }}"
