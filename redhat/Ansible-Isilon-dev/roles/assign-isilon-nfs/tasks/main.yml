@@ -32,8 +32,7 @@
   set_fact: directorio
 
 - name: Obtener datos directorio
-#  set_fact: directorio = "{{ item }}"
-  register: directorio
+  set_fact: directorio = "{{ item }}"
   with_items: "{{ directorios.json.exports }}"
   when: item.description == "{{ directory_name }}"
 
