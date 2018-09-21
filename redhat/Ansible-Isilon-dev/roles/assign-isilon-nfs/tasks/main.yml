@@ -36,30 +36,30 @@
   with_items: "{{ directorios.json.exports }}"
   when: item.description == "{{ directory_name }}"
 
-#- name: debug salida directorio item
-#  debug: var=directorio
-
-- name: Declarar variable fact_read_write_clients
+- name: Declarar variables
   set_fact:
     fact_read_write_clients:
+    fact_root_clients:
+    fact_read_only_clients:
+
 
 - name: Agregar arreglo de ips read_write_clients
   set_fact:
     fact_read_write_clients: "{{ read_write_clients_ip_list }}, \"{{ item }}\", {{fact_read_write_clients}}"
   loop: "{{ directorio.read_write_clients }}"
 
-- name: Declarar variable
-  set_fact:
-    fact_root_clients:
+#- name: Declarar variable
+#  set_fact:
+#    fact_root_clients:
 
 - name: Agregar arreglo de ips root_clients
   set_fact:
     fact_root_clients: "{{ root_clients_ip_list }}, \"{{ item }}\", {{fact_root_clients}}"
   loop: "{{ directorio.root_clients }}"
 
-- name: Declarar variable fact_read_only_clients
-  set_fact:
-    fact_read_only_clients:
+#- name: Declarar variable fact_read_only_clients
+#  set_fact:
+#    fact_read_only_clients:
 
 - name: Agregar arreglo de ips fact_read_only_clients
   set_fact:
@@ -82,15 +82,12 @@
 
 - set_fact:
     urlHeader: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/{{ directorio.id }} -X PUT -k -u admin:smartvm -v --data"
-    urlBody: "{\"read_write_clients\":[ {{ fact_read_write_clients }}], \"root_clients\": [{{ fact_root_clients }}]}, \"read_only_clients\": [ {{ directorio.read_only_clients }},{{ read_only_clients_ip_list }}]"
-
-
-
+    urlBody: "{\"read_write_clients\":[ {{ fact_read_write_clients }}], \"root_clients\": [{{ fact_root_clients }}]}, \"read_only_clients\": [ {{ fact_read_only_clients }}]"
 
 - name: urlBody
   debug: var=urlBody
 
-- name: Modificar Directorio
+- name: Modificar Directorio modulo
   uri:
     url: "https://{{ api_url }}:{{ api_port }}/platform/4/protocols/nfs/exports/{{ directorio.id }}"
     method: PUT
@@ -108,7 +105,7 @@
     status_code: 200,201
   register: salida
 
-- name: Actualizar directorio
+- name: Actualizar directorio shell
   shell: " {{urlHeader}} '{{ urlBody }}'"
   register: salida_shell
 
