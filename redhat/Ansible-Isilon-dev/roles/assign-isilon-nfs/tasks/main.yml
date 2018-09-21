@@ -42,8 +42,8 @@
 
 - name: Agregar arreglo de ips read_write_clients
   debug:
-    msg: "{{ item | string }}"
-  with_items: {{ directorio.read_only_clients }}
+    msg: "{{ directorio.read_only_clients | string }}"
+#  with_items: {{ directorio.read_only_clients }}
 
 
   #  urlHeader: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/{{ directorio.id }} -X PUT -k -u admin:smartvm -v --data"
