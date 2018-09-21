@@ -29,7 +29,7 @@
 #- name: debug salida directorios to json
 #  debug: var=directorios.json.exports
 
-- name: Obtener datos directorio
+- name: Obtener datos directorio sin arreglo
   set_fact: directorioQQQ = "{{ item }}"
   register: directorio
   with_items: "{{ directorios.json.exports }}"
