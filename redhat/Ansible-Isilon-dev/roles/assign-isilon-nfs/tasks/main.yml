@@ -57,16 +57,36 @@
     fact_root_clients: "{{ root_clients_ip_list }}, \"{{ item }}\", {{fact_root_clients}}"
   loop: "{{ directorio.root_clients }}"
 
+- name: Declarar variable fact_root_clients
+  set_fact:
+    fact_read_only_clients:
+
+- name: Agregar arreglo de ips root_clients
+  set_fact:
+    fact_read_only_clients: "{{ root_clients_ip_list }}, \"{{ item }}\", {{fact_read_only_clients}}"
+  loop: "{{ directorio.read_only_clients }}"
+
+
+
+
+
 #  with_items: {{ directorio.read_only_clients }}
-
-  #  urlHeader: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/{{ directorio.id }} -X PUT -k -u admin:smartvm -v --data"
-  #  urlBody: "{\"read_write_clients\":[ {{ directorio.read_write_clients[0]}}, {{ read_write_clients_ip_list }}], \"root_clients\": [{{ directorio.root_clients }},{{ root_clients_ip_list }}]}, \"read_only_clients\": [ {{ directorio.read_only_clients }},{{ read_only_clients_ip_list }}]"
-
 - name: fact_read_write_clients
   debug: var=fact_read_write_clients
 
 - name: fact_read_write_clients
   debug: var=fact_root_clients
+
+
+
+
+
+- set_fact:
+    urlHeader: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/{{ directorio.id }} -X PUT -k -u admin:smartvm -v --data"
+    urlBody: "{\"read_write_clients\":[ {{ fact_read_write_clients }}], \"root_clients\": [{{ fact_root_clients }}]}, \"read_only_clients\": [ {{ directorio.read_only_clients }},{{ read_only_clients_ip_list }}]"
+
+
+
 
 - name: urlBody
   debug: var=urlBody
