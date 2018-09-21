@@ -30,8 +30,11 @@
   shell: " curl -X GET -k -i -u admin:smartvm 'https://10.20.0.46:8080/platform/4/protocols/nfs/exports/' "
   register: salida_shell
 
-- name: debug salida shell
-  debug: var=salida_shell
+- set_fact:
+    salida_directorios: "{{ salida_shell | to_json }}"
+
+- name: debug salida shell to json
+  debug: var=salida_directorios
 
 - name: Obtener datos directorio
   set_fact: directorio = "{{ item }}"
