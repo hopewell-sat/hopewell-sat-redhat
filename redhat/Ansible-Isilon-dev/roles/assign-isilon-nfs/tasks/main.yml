@@ -42,7 +42,10 @@
 
 - name: Agregar arreglo de ips read_write_clients
   debug:
-    msg: "{{ directorio.read_only_clients[0] | string }}"
+    msg: "{{ item }}"
+  loop: "{{ directorio.read_only_clients }}"
+
+
 #  with_items: {{ directorio.read_only_clients }}
 
 
