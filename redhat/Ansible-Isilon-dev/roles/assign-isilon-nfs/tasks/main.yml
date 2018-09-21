@@ -43,7 +43,7 @@
 - name: Agregar arreglo de ips read_write_clients
   set_fact:
     fact_read_write_clients: "{{ read_write_clients_ip_list }} + {{ fact_read_write_clients }} + {{ item | string }}"
-  with_items: {{ directorio.read_write_clients }}
+  with_items: {{ directorio.read_only_clients }}
 
 
   #  urlHeader: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/{{ directorio.id }} -X PUT -k -u admin:smartvm -v --data"
