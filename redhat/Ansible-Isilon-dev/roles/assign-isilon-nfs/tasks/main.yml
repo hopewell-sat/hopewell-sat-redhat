@@ -42,19 +42,13 @@
 
 - name: Agregar arreglo de ips read_write_clients
   set_fact:
-    variable: "{{ item }}"
-  loop: "{{ directorio.read_only_clients }}"
-
+    fact_read_write_clients: "\"{{ item }}\""
+  loop: "{{ directorio.read_write_clients }}"
 
 #  with_items: {{ directorio.read_only_clients }}
 
-
   #  urlHeader: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/{{ directorio.id }} -X PUT -k -u admin:smartvm -v --data"
   #  urlBody: "{\"read_write_clients\":[ {{ directorio.read_write_clients[0]}}, {{ read_write_clients_ip_list }}], \"root_clients\": [{{ directorio.root_clients }},{{ root_clients_ip_list }}]}, \"read_only_clients\": [ {{ directorio.read_only_clients }},{{ read_only_clients_ip_list }}]"
-
-
-
-
 
 - name: fact_read_write_clients
   debug: var=fact_read_write_clients
