@@ -39,7 +39,8 @@
 #- name: debug salida directorio item
 #  debug: var=directorio
 
-- set_fact:
+- name: Declarar variable
+  set_fact:
     fact_read_write_clients:
 
 
