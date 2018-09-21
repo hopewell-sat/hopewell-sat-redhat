@@ -32,9 +32,8 @@
 - name: Obtener datos directorio sin arreglo
   set_fact: directorio = "{{ item.item }}"
 #  register: directorio
-  when: item.description == "{{ directory_name }}"
   with_items: "{{ directorios.json.exports }}"
-
+  when: item.description == "{{ directory_name }}"
 
 
 - name: debug salida directorio item
