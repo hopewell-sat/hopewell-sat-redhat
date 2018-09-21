@@ -42,7 +42,7 @@
 
 - name: Agregar arreglo de ips read_write_clients
   set_fact:
-    fact_read_write_clients: "{{fact_read_write_clients}} , \"{{ item }}\"+, {{read_write_clients_ip_list}}"
+    fact_read_write_clients: "{{fact_read_write_clients}} +, \"{{ item }}\"+, {{read_write_clients_ip_list}}"
   loop: "{{ directorio.read_write_clients }}"
 
 
