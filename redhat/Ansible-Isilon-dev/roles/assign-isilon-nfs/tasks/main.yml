@@ -31,9 +31,10 @@
 
 - name: Obtener datos directorio
   set_fact: directorioQQQ = "{{ item }}"
+  register: directorio
   with_items: "{{ directorios.json.exports }}"
   when: item.description == "{{ directory_name }}"
-  register: directorio  
+
 
 - name: debug salida directorio item
   debug: var=directorio
