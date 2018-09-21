@@ -36,13 +36,12 @@
   with_items: "{{ directorios.json.exports }}"
   when: item.description == "{{ directory_name }}"
 
-
-- name: debug salida directorio item
-  debug: var=directorio
+#- name: debug salida directorio item
+#  debug: var=directorio
 
 - name: Agregar arreglo de ips read_write_clients
   set_fact:
-    fact_read_write_clients: "{{ read_write_clients_ip_list }} +, {{fact_read_write_clients}} +, \"{{ item }}\"+, "
+    fact_read_write_clients: "{{ read_write_clients_ip_list }}, {{fact_read_write_clients}}, \"{{ item }}\"+, "
   loop: "{{ directorio.read_write_clients }}"
 
 
