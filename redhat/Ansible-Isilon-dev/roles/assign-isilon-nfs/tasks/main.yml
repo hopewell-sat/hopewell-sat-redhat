@@ -50,7 +50,7 @@
 
 - name: Declarar variable
   set_fact:
-    fact_read_write_clients:
+    fact_root_clients:
 
 - name: Agregar arreglo de ips root_clients
   set_fact:
