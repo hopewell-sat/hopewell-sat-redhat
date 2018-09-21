@@ -32,13 +32,13 @@
   set_fact: directorio
 
 - name: Obtener datos directorio
-  set_fact: directorio = "{{ item }}"
+  set_fact: foo="{{ foo }} + [ '{{ item }}' ]"   #directorio = "{{ item }}"
   with_items: "{{ directorios.json.exports }}"
   when: item.description == "{{ directory_name }}"
 
 
 - name: debug salida directorio item
-  debug: var=directorio
+  debug: var=foo
 
 - name: Agregar arreglo de ips a ---- "{{ directory_name }}"
   set_fact:
