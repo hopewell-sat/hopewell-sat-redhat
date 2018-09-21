@@ -26,13 +26,17 @@
   register: directorios
   ignore_errors: True
 
-- name: debug salida directorios to json
-  debug: var=directorios.json.exports
+#- name: debug salida directorios to json
+#  debug: var=directorios.json.exports
 
 - name: Obtener datos directorio
   set_fact: directorio = "{{ item }}"
   with_items: "{{ directorios.json.exports }}"
   when: item.description == "{{ directory_name }}"
+
+- name: debug salida directorio item
+  debug: var=directorio
+
 
 - name: Agregar arreglo de ips a ---- "{{ directory_name }}"
   set_fact:
