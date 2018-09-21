@@ -31,8 +31,8 @@
 
 - name: Obtener datos directorio sin arreglo
   set_fact: directorioQQQ = "{{ item }}"
-  register: directorio
   with_items: "{{ directorios.json.exports }}"
+  register: directorio
   when: item.description == "{{ directory_name }}"
 
 
