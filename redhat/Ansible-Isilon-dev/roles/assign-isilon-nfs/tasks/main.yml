@@ -41,8 +41,8 @@
   debug: var=directorio
 
 - name: Agregar arreglo de ips read_write_clients
-  set_fact:
-    fact_read_write_clients: "{{ item | string }}"
+  debug:
+    msg: "{{ item | string }}"
   with_items: {{ directorio.read_only_clients }}
 
 
