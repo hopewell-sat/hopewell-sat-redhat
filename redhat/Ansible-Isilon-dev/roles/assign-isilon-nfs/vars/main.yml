@@ -3,9 +3,9 @@ api_user: admin
 api_pass: smartvm
 api_url: "10.20.0.46"
 api_port: 8080
-read_write_clients_ip_list: "\"10.20.0.51\""
-root_clients_ip_list: "\"10.20.0.51\",\"10.20.1.0/24\",\"10.20.3.0/255.255.255.0\""
-read_only_clients_ip_list: "\"10.20.2.250\",\"10.20.2.0/24\""
+read_write_clients_ip_list: "\"10.20.0.100\""
+root_clients_ip_list: "\"10.20.0.200\",\"10.20.1.0/24\",\"10.20.3.0/255.255.255.0\""
+read_only_clients_ip_list: "\"10.20.2.15\",\"10.20.2.0/24\""
 centro_datos_sat: "Laboratorio Puebla"
 #Aplicar diccionario
 directorio:
