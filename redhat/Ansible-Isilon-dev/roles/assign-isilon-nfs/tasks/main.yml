@@ -30,7 +30,8 @@
 #  debug: var=directorios.json.exports
 
 - name: Obtener datos directorio sin arreglo
-  set_fact: directorio = "{{ item.item }}"
+  set_fact:
+    directorio: "{{ item }}"
 #  register: directorio
   with_items: "{{ directorios.json.exports }}"
   when: item.description == "{{ directory_name }}"
