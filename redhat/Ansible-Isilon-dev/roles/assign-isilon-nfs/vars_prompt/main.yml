@@ -2,7 +2,7 @@
 - name: directory_name
   prompt: "senha_06092018"
 - name: read_write_clients_ip_list
-  prompt: "\"10.20.0.51\""
+  prompt: "\"10.20.0.51\",\"10.20.0.100\""
 - name: root_clients_ip_list
   prompt: "\"10.20.0.51\",\"10.20.1.0/24\",\"10.20.3.0/255.255.255.0\""
 - name: read_only_clients_ip_list
