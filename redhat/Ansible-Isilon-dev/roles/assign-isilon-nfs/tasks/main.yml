@@ -69,6 +69,9 @@
 - name: fact_read_write_clients
   debug: var=fact_read_write_clients
 
+- name: fact_read_write_clients
+  debug: var=fact_root_clients
+
 - name: urlBody
   debug: var=urlBody
 
