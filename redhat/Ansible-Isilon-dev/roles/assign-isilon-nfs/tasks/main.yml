@@ -26,6 +26,9 @@
   register: directorios
   ignore_errors: True
 
+- name: debug salida directorios to json
+  debug: var=salida_directorios
+
 - name: Obtener directorios shell
   shell: " curl -X GET -k -i -u admin:smartvm 'https://10.20.0.46:8080/platform/4/protocols/nfs/exports/' "
   register: salida_shell
