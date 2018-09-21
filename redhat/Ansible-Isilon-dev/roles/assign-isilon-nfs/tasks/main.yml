@@ -77,7 +77,7 @@
 
 - set_fact:
     urlHeader: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/{{ directorio.id }} -X PUT -k -u admin:smartvm -v --data"
-    urlBody: "{\"read_write_clients\":[ {{ fact_read_write_clients | regex_replace('[^*],', '') }}], \"root_clients\": [{{ fact_root_clients | regex_replace('[^*],', '') }}]}, \"read_only_clients\": [ {{ fact_read_only_clients | regex_replace('[^*],', '') }}]"
+    urlBody: "{\"read_write_clients\":[ {{ fact_read_write_clients }}], \"root_clients\": [{{ fact_root_clients }}]}, \"read_only_clients\": [ {{ fact_read_only_clients }}]"
 
 - name: urlBody
   debug: var=urlBody
@@ -88,8 +88,8 @@
     method: PUT
     headers:
       x-isi-ifs-target-type: container
-#    body: "{\"paths\":[\"/ifs/nfs/exports/{{ directory_name }}\"],\"all_dirs\": true,\"read_write_clients\": [{{ read_write_clients_ip_list }}],\"root_clients\": [{{ root_clients_ip_list }}] ,\"read_only_clients\": [{{ read_only_clients_ip_list }}] }"
-    body: "{{ urlBody }}"
+    body: "{\"paths\":[\"/ifs/nfs/exports/{{ directory_name }}\"],\"all_dirs\": true,\"read_write_clients\": [{{ fact_read_write_clients | regex_replace('[\\s\\S]{0,1}$' , '') }}],\"root_clients\": [{{ fact_root_clients | regex_replace('[\\s\\S]{0,1}$' , '') }}] ,\"read_only_clients\": [{{ fact_read_only_clients | regex_replace('[\\s\\S]{0,1}$' , '') }}] }"
+#    body: "{{ urlBody }}"
     body_format: json
     user: "{{ api_user }}"
     password: "{{ api_pass }}"
