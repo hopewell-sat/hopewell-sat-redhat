@@ -22,7 +22,7 @@
     validate_certs: no
     return_content: yes
     follow_redirects: yes
-    status_code: 404
+    status_code: 200
   register: directorios
   ignore_errors: True
 
