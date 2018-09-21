@@ -28,6 +28,8 @@
 
 #- name: debug salida directorios to json
 #  debug: var=directorios.json.exports
+- name: crear arreglo de catalogos
+  set_fact: directorio=[]
 
 - name: Obtener datos directorio
   set_fact: directorio = "{{ directorio }} + {{ item }}"
@@ -36,7 +38,6 @@
 
 - name: debug salida directorio item
   debug: var=directorio
-
 
 - name: Agregar arreglo de ips a ---- "{{ directory_name }}"
   set_fact:
