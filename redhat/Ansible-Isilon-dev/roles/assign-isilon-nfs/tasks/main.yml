@@ -76,10 +76,6 @@
 - name: fact_read_write_clients
   debug: var=fact_read_only_clients
 
-
-
-
-
 - set_fact:
     urlHeader: "curl https://10.20.0.46:8080/platform/4/protocols/nfs/exports/{{ directorio.id }} -X PUT -k -u admin:smartvm -v --data"
     urlBody: "{\"read_write_clients\":[ {{ fact_read_write_clients }}], \"root_clients\": [{{ fact_root_clients }}]}, \"read_only_clients\": [ {{ fact_read_only_clients }}]"
