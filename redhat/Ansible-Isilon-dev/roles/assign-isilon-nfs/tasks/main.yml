@@ -36,7 +36,7 @@
 
 
 - name: debug salida directorio item
-  debug: var=foo
+  debug: var=directorio
 
 - name: Agregar arreglo de ips a ---- "{{ directory_name }}"
   set_fact:
