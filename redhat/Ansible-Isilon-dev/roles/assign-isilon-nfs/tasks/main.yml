@@ -27,7 +27,7 @@
   ignore_errors: True
 
 - name: debug salida directorios to json
-  debug: var=directorios
+  debug: var=directorios.json.exports
 
 - name: Obtener datos directorio
   set_fact: directorio = "{{ item }}"
