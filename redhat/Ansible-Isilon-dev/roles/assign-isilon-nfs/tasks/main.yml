@@ -39,7 +39,7 @@
 #- name: debug salida directorio item
 #  debug: var=directorio
 
-- name: Declarar variable
+- name: Declarar variable fact_read_write_clients
   set_fact:
     fact_read_write_clients:
 
@@ -47,6 +47,19 @@
   set_fact:
     fact_read_write_clients: "{{ read_write_clients_ip_list }}, \"{{ item }}\", {{fact_read_write_clients}},"
   loop: "{{ directorio.read_write_clients }}"
+
+- name: Declarar variable
+  set_fact:
+    fact_read_write_clients:
+
+- name: Agregar arreglo de ips root_clients
+  set_fact:
+    fact_root_clients: "{{ root_clients_ip_list }}, \"{{ item }}\", {{fact_root_clients}}"
+  loop: "{{ directorio.root_clients }}"
+
+
+
+
 
 #  with_items: {{ directorio.read_only_clients }}
 
