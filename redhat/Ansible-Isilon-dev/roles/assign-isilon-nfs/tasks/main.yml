@@ -32,7 +32,7 @@
 
 - name: Obtener datos directorio
   set_fact: directorio = "{{ item }}"
-  with_items: "{{ directorios.json }}"
+  with_items: "{{ salida_shell.exports }}"
   when: item.description == "{{ directory_name }}"
 
 - name: Agregar arreglo de ips a ---- "{{ directory_name }}"
