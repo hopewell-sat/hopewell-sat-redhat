@@ -22,7 +22,7 @@
     validate_certs: no
     return_content: yes
     follow_redirects: yes
-    status_code: 200
+    status_code: 200,201
   register: directorios
   ignore_errors: True
 
@@ -41,7 +41,6 @@
     fact_read_write_clients:
     fact_root_clients:
     fact_read_only_clients:
-
 
 - name: Agregar arreglo de ips read_write_clients
   set_fact:
@@ -100,6 +99,7 @@
     follow_redirects: yes
     status_code: 200,201
   register: salida
+  ignore_errors: True
 
 - name: Actualizar directorio shell
   shell: " {{urlHeader}} '{{ urlBody }}'"
