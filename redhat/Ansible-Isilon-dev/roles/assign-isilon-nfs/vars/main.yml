@@ -10,4 +10,5 @@ centro_datos_sat: "Laboratorio Puebla"
 #Aplicar diccionario
 diccionario_valor_descripcion:
   lp: "Laboratorio Puebla"
+directory_name: "senha_06092018"
 ...
