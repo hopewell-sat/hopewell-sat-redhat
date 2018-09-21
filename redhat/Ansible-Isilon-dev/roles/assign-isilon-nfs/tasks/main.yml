@@ -29,6 +29,10 @@
 #- name: debug salida directorios to json
 #  debug: var=directorios.json.exports
 
+- name: Declarar variables
+  set_fact:
+    directorio:
+
 - name: Obtener datos directorio sin arreglo
   set_fact:
     directorio: "{{ item }}"
