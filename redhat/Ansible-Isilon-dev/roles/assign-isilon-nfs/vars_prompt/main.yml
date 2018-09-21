@@ -1,6 +1,6 @@
 ---
 - name: directory_name
-  prompt: Nombre del directorio a validar
+  prompt: "senha_06092018"
 - name: read_write_clients_ip_list
   prompt: "\"10.20.0.51\""
 - name: root_clients_ip_list
