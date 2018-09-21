@@ -30,21 +30,11 @@
 #  debug: var=directorios.json.exports
 
 - name: Obtener datos directorio sin arreglo
-  uri:
-    url: "https://{{ api_url }}:{{ api_port }}/platform/4/protocols/nfs/exports/ {{ item.id }}"
-    method: GET
-    headers:
-      x-isi-ifs-target-type: container
-    user: "{{ api_user }}"
-    password: "{{ api_pass }}"
-    force_basic_auth: yes
-    validate_certs: no
-    return_content: yes
-    follow_redirects: yes
-    status_code: 200
-  register: directorio
-  with_items: "{{ directorios.json.exports }}"
+  set_fact: directorio = "{{ item }}"
+#  register: directorio
   when: item.description == "{{ directory_name }}"
+  with_items: "{{ directorios.json.exports }}"
+
 
 
 - name: debug salida directorio item
