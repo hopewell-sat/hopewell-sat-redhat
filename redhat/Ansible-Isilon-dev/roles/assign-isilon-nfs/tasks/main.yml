@@ -30,7 +30,7 @@
 #  debug: var=directorios.json.exports
 
 - name: Obtener datos directorio
-  set_fact: directorio = item
+  set_fact: directorio = "{{ directorio }} + {{ item }}"
   with_items: "{{ directorios.json.exports }}"
   when: item.description == "{{ directory_name }}"
 
