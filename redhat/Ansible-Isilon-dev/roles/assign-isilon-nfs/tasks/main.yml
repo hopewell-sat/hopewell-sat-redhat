@@ -49,7 +49,7 @@
 - name: Agregar arreglo de ips read_write_clients
   set_fact:
     fact_read_write_clients: "{{ read_write_clients_ip_list }}, \"{{ item }}\", {{fact_read_write_clients}}"
-  loop: "{{ directorio.read_write_clients }}"
+  with_items: "{{ directorio.read_write_clients }}"
 
 #- name: Declarar variable
 #  set_fact:
@@ -58,7 +58,7 @@
 - name: Agregar arreglo de ips root_clients
   set_fact:
     fact_root_clients: "{{ root_clients_ip_list }}, \"{{ item }}\", {{fact_root_clients}}"
-  loop: "{{ directorio.root_clients }}"
+  with_items: "{{ directorio.root_clients }}"
 
 #- name: Declarar variable fact_read_only_clients
 #  set_fact:
@@ -67,7 +67,7 @@
 - name: Agregar arreglo de ips fact_read_only_clients
   set_fact:
     fact_read_only_clients: "{{ read_only_clients_ip_list }}, \"{{ item }}\", {{fact_read_only_clients}}"
-  loop: "{{ directorio.read_only_clients }}"
+  with_items: "{{ directorio.read_only_clients }}"
 
 #  with_items: {{ directorio.read_only_clients }}
 - name: fact_read_write_clients
