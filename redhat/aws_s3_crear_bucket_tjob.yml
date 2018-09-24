@@ -1,0 +1,37 @@
+---
+- name: "SENHA ::: AWS S3 ::: Lanzar job en Tower para obtener ARN"
+  uri:
+    url: "https://{{ tower_server }}/api/v2/job_templates/{{ job_template }}/launch/"
+    method: POST
+    body_format: json
+    user: admin
+    password: smartvm
+    body:
+      extra_vars:
+        arn_bucket : "{{ usuario_iam }}"
+    validate_certs: false
+  register: obtener_arn_reg
+  ignore_errors: true
+
+- name: "SENHA ::: AWS S3 ::: Obtener ID del job creado"
+  set_fact:
+    job_id: "{{ obtener_arn_reg.json.id }}"
+
+- name: "SENHA ::: AWS S3 ::: Esperar a que termine la ejecución del playbook"
+  uri:
+    url: "https://{{ tower_server }}/api/v2/jobs/{{ job_id }}"
+    method: GET
+    body_format: json
+    user: admin
+    password: smartvm
+    validate_certs: false
+  register: resultado_job_reg
+  ignore_errors: true
+  until:  resultado_job_reg.json.status == "successful"
+  retries: 10
+  delay: 5
+
+- name: "SENHA ::: AWS S3 ::: Extracción del ARN de usuario_iam"
+  set_fact:
+    arn_usuario_iam: "{{ resultado_job_reg.json.result_stdout | regex_search('(arn:aws:iam::[0-9]*:user)') }}/{{ usuario_iam }}"
+...
