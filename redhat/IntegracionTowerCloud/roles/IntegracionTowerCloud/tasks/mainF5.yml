@@ -1,0 +1,26 @@
+---
+- name: Obteniendo la informacion de token para posteriores llamados
+  uri:
+    url: "https://{{ f5_servidor }}/mgmt/shared/authn/login"
+    method: POST
+    headers:
+      Content-Type: "application/json"
+    body: "{\"username\": \"{{ f5_usuario }}\", \"password\": \"{{ f5_constrasenia }}\", \"loginProvidername\":\"tmos\"}"
+    body_format: json
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200
+  register: f5_resultado
+  ignore_errors: True
+
+#  name: "Asignacion de token OK de F5 {{ f5_resultado.json.token.token }}"
+- set_fact:
+    f5_token: "{{ f5_resultado.json.token.token }}"
+  when: f5_resultado is succeeded
+
+#  name: "Asignacion de token fallido F5"
+
+- set_fact:
+    f5_token: ""
+  when: f5_resultado is failed
