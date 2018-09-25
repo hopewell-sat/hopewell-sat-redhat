@@ -1,7 +1,7 @@
 ---
-- name: Obtener datos ManageIQ por curl
-  shell: 'curl --user generico:redhat -i -k -X GET -H "Accept: application/json" https://10.20.0.65/api/auth?requester_type=ui'
-  register: token
+#- name: Obtener datos ManageIQ por curl
+#  shell: 'curl --user generico:redhat -i -k -X GET -H "Accept: application/json" https://10.20.0.65/api/auth?requester_type=ui'
+#  register: token
 
 #- debug:
 #    msg: "{{ token }}"
