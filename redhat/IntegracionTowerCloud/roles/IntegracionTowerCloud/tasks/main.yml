@@ -63,8 +63,11 @@
       X-Auth-Token: "{{ api_token.json.auth_token }}"
       Content-Type: "application/json"
     return_content: yes
-  register: resultado_job_reg
+  register: resultado
 #  ignore_errors: true
 #  until:  resultado_job_reg.json.status == "successful"
 #  retries: 10
 #  delay: 5
+
+- debug:
+    msg: "{{ resultado }}"
