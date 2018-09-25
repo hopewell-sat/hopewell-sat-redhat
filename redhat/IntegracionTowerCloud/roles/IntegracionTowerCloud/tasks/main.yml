@@ -38,6 +38,10 @@
   with_items: "{{ catalogo_servicios.json.resources }}"
   when: item.name == "{{ catalogo }}"
 
+- name: "Obtener url carpeta"
+  set_fact:
+    url_carpeta: "{{ servicios_carpeta.name }}"
+
 - name: "Obtener servicio"
   set_fact:
     serv: "{{ item }}"
@@ -45,12 +49,16 @@
   with_items: "{{ servicios_carpeta.service_templates.resources }}"
   when: item.name == "{{ servicio }}"
 
+- debug:
+    msg: "{{ serv }}"
+
 - name: "Ejecutar servicio"
   uri:
-    url: "{{ serv.href }}"
-    method: GET
+    url: "{{ url_carpeta }}"
+    method: POST
     validate_certs: false
     body_format: json
+    body: "{ \"action\" : \"order\", \"href\" : \"{{ serv.href }}\"}"
     headers:
       X-Auth-Token: "{{ api_token.json.auth_token }}"
       Content-Type: "application/json"
