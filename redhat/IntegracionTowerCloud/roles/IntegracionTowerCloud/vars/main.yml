@@ -1,5 +1,7 @@
 ---
 # vars file for F5
+catalogo: "Desarrollo"
+servicio: "Encriptacion"
 f5_proceso: ""
 f5_fecha_inicio: ""
 f5_fecha_fin: ""
