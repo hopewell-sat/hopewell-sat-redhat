@@ -65,9 +65,9 @@
     return_content: yes
   register: resultado
 #  ignore_errors: true
-  until:  resultado.json.results.approval_state == "successful"
-  retries: 10
-  delay: 5
+#  until:  resultado.json.results.approval_state == "successful"
+#  retries: 10
+#  delay: 5
 
 - debug:
     msg: "{{ resultado.json.results }}"
