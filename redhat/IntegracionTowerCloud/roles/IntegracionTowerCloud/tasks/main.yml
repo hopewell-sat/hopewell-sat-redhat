@@ -35,7 +35,7 @@
   set_fact:
     servicios_carpeta: "{{ item }}"
 #  register: directorio
-  with_items: "{{ catalogo_servicios.resources }}"
+  with_items: "{{ catalogo_servicios.json.resources }}"
   when: item.name == "{{ catalogo }}"
 
 - name: "Obtener servicio"
