@@ -40,7 +40,7 @@
 
 - name: "Obtener url carpeta"
   set_fact:
-    url_carpeta: "{{ servicios_carpeta.href }}"
+    url_carpeta: "{{ servicios_carpeta.href }}/service_templates"
 
 - name: "Obtener servicio"
   set_fact:
