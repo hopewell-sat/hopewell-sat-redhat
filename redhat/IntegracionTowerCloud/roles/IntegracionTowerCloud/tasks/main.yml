@@ -47,7 +47,7 @@
 
 - name: "Ejecutar servicio"
   uri:
-    url: "{{ servicio.href }}"
+    url: "{{ serv.href }}"
     method: GET
     validate_certs: false
     body_format: json
