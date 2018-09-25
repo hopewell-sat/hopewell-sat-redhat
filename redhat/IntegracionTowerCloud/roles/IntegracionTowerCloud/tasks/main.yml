@@ -65,6 +65,6 @@
     return_content: yes
   register: resultado_job_reg
 #  ignore_errors: true
-  until:  resultado_job_reg.json.status == "successful"
-  retries: 10
-  delay: 5
+#  until:  resultado_job_reg.json.status == "successful"
+#  retries: 10
+#  delay: 5
