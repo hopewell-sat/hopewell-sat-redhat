@@ -70,4 +70,4 @@
 #  delay: 5
 
 - debug:
-    msg: "{{ resultado.results.request_state }}"
+    msg: "{{ resultado.json.results.request_state }}"
