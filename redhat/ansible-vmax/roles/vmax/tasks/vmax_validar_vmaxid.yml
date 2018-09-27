@@ -1,0 +1,26 @@
+---
+# tasks file for vmax
+# tasks file for vmax_validar_vmaxid
+# Validación de conexión a vmax - consultando ID
+- name: "SENHA ::: VMax  ::: Validar vmax id"
+  uri:
+    url: "https://{{vmax_ip}}:{{vmax_puerto}}/univmax/restapi/sloprovisioning/symmetrix"
+    method: GET
+    headers:
+      Authorization: Basic {{vmax_authorization}}
+#    user: "{{ api_user }}"
+#    password: "{{ api_pass }}"
+    force_basic_auth: yes
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200,201, 500
+    timeout: 200
+  register: salida_consultar_vmax_id
+  ignore_errors: True
+  
+- set_fact:
+    salida_consultar_vmax_id_json: "{{ salida_consultar_vmax_id.json }}"
+  when:
+    - salida_consultar_vmax_id.json is defined
+...

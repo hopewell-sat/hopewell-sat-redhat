@@ -1,0 +1,10 @@
+---
+# defaults file for generar_envio
+numero_de_ticket: "CH000000000000000003"
+nombre_solicitante: "default"
+vmware_datastorename: "default"
+hostname_admin_esxi: "default"
+vmware_datosstoretype: "default"
+vmware_device: "default"
+tamano_storage: "default"                                                                                                                                        
+...

@@ -1,0 +1,81 @@
+---
+#- set_fact:
+#      isilon_nfs:
+#        centro_datos_sat: "{{ diccionario_valor_descripcion[centro_datos_sat] }}"
+#  ignore_errors: True
+  
+- name: Validar directorio
+  uri:
+    url: "https://{{ api_url }}:{{ api_port }}/namespace/ifs/nfs/exports/{{ directory_name }}"
+    method: GET
+    headers:
+      x-isi-ifs-target-type: container
+    user: "{{ api_user }}"
+    password: "{{ api_pass }}"
+    force_basic_auth: yes
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 404
+
+- name: Crear directorio
+  uri:
+    url: "https://{{ api_url }}:{{ api_port }}/namespace/ifs/nfs/exports/{{ directory_name }}?recursive=true"
+    method: PUT
+    headers:
+      x-isi-ifs-target-type: container
+    user: "{{ api_user }}"
+    password: "{{ api_pass }}"
+    force_basic_auth: yes
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    #register: _status
+
+- name: Agregar Cuotas
+  uri:
+    url: "https://{{ api_url }}:{{ api_port }}/platform/4/quota/quotas"
+    method: POST
+    headers:
+      x-isi-ifs-target-type: container
+    body: "{\"enforced\": true, \"include_snapshots\": false, \"thresholds\": {\"hard\": {{ quota }}}, \"thresholds_include_overhead\": true, \"persona\": null, \"path\":  \"/ifs/nfs/exports/{{ directory_name }}\", \"container\": true, \"type\": \"directory\"}"
+    body_format: json
+    user: "{{ api_user }}"
+    password: "{{ api_pass }}"
+    force_basic_auth: yes
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200,201
+
+- name: Insertar alias
+  uri:
+    url: "https://{{ api_url }}:{{ api_port }}/platform/4/protocols/nfs/aliases"
+    method: POST
+    headers:
+      x-isi-ifs-target-type: container
+    body: "{\"path\": \"/ifs/nfs/exports/{{ directory_name }}\", \"name\": \"/{{ directory_name }}\"}"
+    body_format: json
+    user: "{{ api_user }}"
+    password: "{{ api_pass }}"
+    force_basic_auth: yes
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200,201
+  register: salida
+  ignore_errors: True
+
+- set_fact:
+    salida_error: "{{ salida.failed }}"
+
+- name: Imprimir resultado
+  debug:
+    var: salida
+
+- name: Ejecutando una sola tarea desde generate-isilon-nfs/tasks/generate-isilon-nfs_handlers.yml
+  import_tasks: generate-isilon-nfs_handlers.yml
+  #import_role:
+    #name: generate-isilon-nfs
+    #tasks_from: generate-isilon-nfs_handlers.yml
+...

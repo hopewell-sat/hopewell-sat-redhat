@@ -1,0 +1,128 @@
+---
+- name: Obtener timestamp del sistema
+  shell: "date +%Y-%m-%d_%H:%M:%S"
+  register: fecha_inicio_proceso
+
+- set_fact:
+    nombre_archivo_isilon: "{{ numero_de_ticket }}-{{ directory_name | regex_replace('\\.') | regex_replace(' ') }}-{{ awx_job_template_name | regex_replace('miq_','') | regex_replace('_provision','') | regex_replace('//') | regex_replace('\\.') | regex_replace(' ') }}_{{ fecha_inicio_proceso.stdout | regex_replace('-') | regex_replace(':') | regex_replace(' ') | regex_replace('_') }}"
+  ignore_errors: True
+
+- debug:
+    msg: "{{ nombre_archivo_isilon }} Se genero error?: {{salida_error}}"
+  
+- name: Inicio de archivo HTML
+  copy:
+    dest: "/tmp/{{ nombre_archivo_isilon }}.html"
+    content: |
+            <html>
+               <head>
+                  <title>Resumen de generacion de NFS</title>
+                  <meta charset="UTF-8">
+                  <meta name="viewport" content="width=device-width, initial-scale=1">
+                  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+                  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+                  <div class="jumbotron jumbotron-fluid" style="background-color:white;padding-top: 0px;padding-bottom: 0px">
+                    <div class="container">
+                       <img src="https://drive.google.com/uc?id=1QqaTGiBl0y9HeAlZ_iqyLP21y_YdBbay&export=download" class="img-responsive">
+                    </div>
+                  </div>
+               </head>
+               <body>
+                 <div class="container">
+  ignore_errors: True
+
+- name: Creación de tabla Generales
+  blockinfile:
+    path:  "/tmp/{{ nombre_archivo_isilon }}.html"
+    marker: ""
+    block: |
+            <!-- Tabla de contenido -->
+                         <table class="table table-striped">
+                              <tr>
+                                <th style="color:white; background-color:#3C79C2; text-align:center; font-weight: bold" colspan="2">DATOS GENERALES</th>
+                              </tr>
+                            <tr>
+                               <td>Número de ticket:  </td>
+                               <td> {{ numero_de_ticket }} </td>
+                            </tr>
+                            <tr>
+                               <td>Nombre del solicitante:  </td>
+                               <td> {{ nombre_solicitante }} </td>
+                            </tr>
+                            <tr>
+                               <td>Correo del solicitante:  </td>
+                               <td> {{ correo_solicitante }} </td>
+                            </tr>
+                            <tr>
+                               <td>Nombre del directorio:  </td>
+                               <td> {{ directory_name }} </td>
+                            </tr>
+                         </table>
+  when: not salida_error
+  ignore_errors: True
+
+- name: Final de archivo HTML
+  blockinfile:
+    path: "/tmp/{{ nombre_archivo_isilon }}.html"
+    marker: ""
+    block: |
+        <!-- final de archivo-->
+                </div>
+              </body>
+          </html>
+  ignore_errors: True
+
+- name: general_correo_info is succeeded
+  import_role:
+    name: general
+    tasks_from: general_enviocorreo
+  vars:
+    general_correo_de: "senha.notificacion@gmail.com"
+    general_correo_para: "{{ correo_solicitante }}"
+    general_correo_concopia: "{{ lista_correo_electronico }}"
+    general_correo_asunto: Folio {{ numero_de_ticket }} - Despliegue Completado - {{ awx_job_template_name | regex_replace('miq_','') | regex_replace('_provision','') }}
+    general_correo_cuerpo: |
+                            <br/>Datos generales del despliegue con el folio <b>{{ numero_de_ticket }}</b>.-
+                            <br/>
+                            <ul>
+                            <li>Item desplegado: <b>{{ awx_job_template_name | regex_replace('miq_','') | regex_replace('_provision','') }}</b></li>
+                            <li>Solicitante / Correo:  <b>{{ nombre_solicitante }}</b> / <b>{{ correo_solicitante }}</b></li>
+                            <li>Centro de Datos: <b>{{ isilon_nfs.centro_datos_sat }}</b></li>
+                            <li>Estado de despliegue: <b>Exitoso</b></li>
+                            </ul>
+                            <br/>
+                            <br/>Documento anexo.-
+                            <ul>
+                            <li>Documento detalle de elementos desplegados en formato HTML: <b>{{ nombre_archivo_isilon }}.html</b></li>
+                            </ul>
+    general_correo_adjuntos: "/tmp/{{ nombre_archivo_isilon }}.html"
+  when: not salida_error
+  ignore_errors: True
+
+- name: general_correo_info is failed
+  import_role:
+    name: general
+    tasks_from: general_enviocorreo
+  vars:
+    general_correo_de: "senha.notificacion@gmail.com"
+    general_correo_para: "{{ correo_solicitante }}"
+    general_correo_concopia: "{{ lista_correo_electronico }}"
+    general_correo_asunto: Folio {{ numero_de_ticket }} - Despliegue Fallido - {{ awx_job_template_name | regex_replace('miq_','') | regex_replace('_provision','') }}
+    general_correo_cuerpo: |
+                            <br/>Datos generales del despliegue con el folio <b>{{ numero_de_ticket }}</b>.-
+                            <br/>
+                            <ul>
+                            <li>Item desplegado: <b>{{ awx_job_template_name | regex_replace('miq_','') | regex_replace('_provision','') }}</b></li>
+                            <li>Solicitante / Correo:  <b>{{ nombre_solicitante }}</b> / <b>{{ correo_solicitante }}</b></li>
+                            <li>Estado de despliegue: <b>Fallido</b></li>
+                            </ul>
+                            <br/>
+                            <br/>Mensaje de error
+                            <ul>
+                            <li><b>Despliegue fallido por error de comunicación</b></li>
+                            </ul>
+  when: salida_error
+
+...
+

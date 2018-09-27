@@ -1,0 +1,13 @@
+---
+# vars file for vmware_montar_datastorage_esxi_vmfs
+  vmware_vcenterhost: 10.217.124.3 #ADMSATPrueba.ags.ibm.net
+  vmware_usuario: "administrator@vsphere.local"
+  vmware_contrasenia: "Admin123$"
+  vmware_datacenter: ADMSATPrueba.ags.ibm.net
+  vmware_datastorename: "MGM"
+  vmware_cluster: "ADMSAT"
+  vmware_datastoretype: "vmfs"
+  vmware_ssh_hostnames: ['10.217.124.139','10.217.124.154']
+  vmware_ssh_user: root
+  vmware_ssh_passsword: Temporal.2018
+...

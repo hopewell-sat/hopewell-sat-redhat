@@ -1,0 +1,41 @@
+---
+- set_fact:
+    general_correo_archivo_temporal: "/tmp/StoragePrevioA.html"
+
+- include_tasks: general_managaIQStorage.yml
+
+- name: "Inicio de generacion de archivo"
+  shell: >
+            echo "
+              <!DOCTYPE html>
+              <html>
+              <head>
+              <title>SAT SENHA Reporte de Alamacenamiento</title>
+              </head>
+              <body>
+                <header>
+                  <h1>Reporte de almacenamiento SENHA SAT</h1>
+                </header>
+                <section>
+                  <article>
+                      <p>{{ general_lista_datastores }}</p>
+                  </article>
+                </section>
+                <footer>
+                    Sitio generado por Red Hat Consulting
+                </footer>
+              </body>
+              </html>            
+                 " > "{{ general_correo_archivo_temporal }}"
+  ignore_errors: True
+  
+- include_tasks: general_enviocorreo.yml
+  vars:
+    general_correo_de: "senha.notificacion@gmail.com"
+    general_correo_para: "{{ correo_solicitante }}"
+    general_correo_concopia: "{{ lista_correo_electronico }}"
+    general_correo_asunto: "Envio de informacion detallada de storage"
+    general_correo_cuerpo: "SENHA snapshot de almacenamiento al momento de generacion de ambiente"
+    general_correo_adjuntos: "{{ general_correo_archivo_temporal }}"
+  
+... 

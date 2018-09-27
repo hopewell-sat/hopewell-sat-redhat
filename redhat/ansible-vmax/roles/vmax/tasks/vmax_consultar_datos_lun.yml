@@ -1,0 +1,32 @@
+---
+# tasks file for vmax
+# tasks file for vmax_consultar_volumeid
+- name: "SENHA ::: VMax  ::: Consultar datos del volumeId"
+  uri:
+    url: "https://{{vmax_ip}}:{{vmax_puerto}}/univmax/restapi/sloprovisioning/symmetrix/{{vmax_sn}}/volume/{{vmax_volumeid[0]}}"
+    method: GET
+    headers:
+      Authorization: Basic {{vmax_authorization}}
+#    user: "{{ api_user }}"
+#    password: "{{ api_pass }}"
+    force_basic_auth: yes
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200,201,204
+    timeout: 200
+  register: salida_infomracion_volume_id
+  ignore_errors: True
+    
+- set_fact:
+    salida_infomracion_volume_id_json: "{{ salida_infomracion_volume_id.json }}"
+  when:
+    - salida_consulta_luns_ids.json is defined
+
+- set_fact:
+    vmax_volimeId_uuid: 
+        - "{{ salida_infomracion_volume_id_json  }}"
+  when:
+    - salida_consulta_luns_ids.json is defined
+...
+

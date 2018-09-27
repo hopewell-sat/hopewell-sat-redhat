@@ -1,0 +1,53 @@
+---
+- name: Exports Get
+  uri:
+    url: "https://{{ api_url }}:{{ api_port }}/platform/4/protocols/nfs/exports"
+    method: GET
+    headers:
+      x-isi-ifs-target-type: container
+    user: "{{ api_user }}"
+    password: "{{ api_pass }}"
+    force_basic_auth: yes
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200,201
+  register: exports_json
+- set_fact:
+    exports_data: "{{ exports_json.json }}"
+- name: Display Exports
+  debug:
+    msg: "Exports variable is : {{ exports_json }}"
+- name: Display Exports Data
+  debug:
+    msg: "Exports variable is : {{ exports_data }}"
+- name: Search read_only_clients based on directory name
+  debug:
+    msg: "{{ exports_data | json_query(\"exports[?paths[0]=='/ifs/nfs/exports/\" + directory_name + \"'].read_only_clients[]\") }}"
+- name: Verification of query
+  debug:
+    msg: "{{ exports_data | json_query('exports[?encoding==\"DEFAULT\"].description') }}"
+- set_fact:
+    exports_id: "63"
+- set_fact:
+    read_write_clients_ip_list: "{{ old_read_write_clients_ip_list }},{{ new_read_write_clients_ip_list }}"
+- set_fact:
+    root_clients_ip_list: "{{ old_root_clients_ip_list }},{{ new_root_clients_ip_list }}"
+- set_fact:
+    read_only_clients_ip_list: "{{  old_read_only_clients_ip_list }},{{ new_read_only_clients_ip_list }}"
+- name: Exports Add
+  uri:
+    url: "https://{{ api_url }}:{{ api_port }}/platform/4/protocols/nfs/exports/{{ exports_id }}"
+    method: PUT
+    headers:
+      x-isi-ifs-target-type: container
+    body: "{\"read_write_clients\":[{{ read_write_clients_ip_list }}],\"root_clients\":[{{ root_clients_ip_list }}],\"read_only_clients\":[{{ read_only_clients_ip_list }}]}"
+    body_format: json
+    user: "{{ api_user }}"
+    password: "{{ api_pass }}"
+    force_basic_auth: yes
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200,201,204
+...

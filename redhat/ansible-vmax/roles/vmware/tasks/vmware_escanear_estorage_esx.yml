@@ -1,0 +1,38 @@
+---
+# tasks file for vmware_scan_datastorage
+- set_fact:
+    vmware_ssh_connect_esx: "sshpass -p {{vmware_ssh_passsword}} ssh -o StrictHostKeyChecking=no -o LogLevel=quiet {{vmware_ssh_user}}@{{vmware_ssh_hostname_esx}}"
+  ignore_errors: True
+
+- set_fact:
+    execute_command: "{{vmware_ssh_connect_esx}} esxcli storage core adapter rescan --all"
+  ignore_errors: True
+
+# Se comenta por que miuestra US/PW
+#- debug:
+#    msg: "command: esxcli storage core adapter rescan --all ::::  en el ESX: {{ vmware_ssh_hostname_esx }}"
+
+- name: escanearLUN
+  command: "{{ execute_command }}"
+  register: salida_rescan_esx
+  no_log: true
+  ignore_errors: True
+
+- debug:
+    msg: "Salida: {{ salida_rescan_esx.stdout_lines[0] }}"
+  when:
+    - salida_rescan_esx.stdout_lines[0] is defined
+  ignore_errors: True
+
+- debug:
+    msg: "ERROR: {{ salida_rescan_esx.stderr_lines[0] }} :::: En el ESX: {{ vmware_ssh_hostname_esx }}"
+  when:
+    - salida_rescan_esx.stderr_lines[0] is defined
+  ignore_errors: True
+
+- debug:
+    msg: "ERROR: De comunicacion: -- No se puede realizar la ejecución del comando: esxcli storage core adapter rescan --all --- en el ESX: {{ vmware_ssh_hostname_esx }}"
+  when:
+    - salida_rescan_esx is not defined
+  ignore_errors: True
+...

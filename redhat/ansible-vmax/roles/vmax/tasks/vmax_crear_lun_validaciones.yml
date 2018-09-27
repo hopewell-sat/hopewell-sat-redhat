@@ -1,0 +1,353 @@
+---
+# tasks file for vmax
+# tasks file for vmax_validar_vmaxid
+# Validación de conexión a vmax - consultando ID
+- name: "SENHA ::: VMax  ::: Validar vmax id -- Tenant senha-prod"
+  import_tasks: vmax_validar_vmaxid.yml
+  ignore_errors: True
+
+- name: "SENHA ::: VMax  ::: Validar vmax id ::: Mostrando la salida"
+  debug:
+    msg: "La validacion del ID fue exitosa: {{ salida_consultar_vmax_id_json.success }} ::: El ID del volumen es: {{ salida_consultar_vmax_id_json.symmetrixId }}"
+  when:
+    - salida_consultar_vmax_id.json is defined
+
+- name: "SENHA ::: VMax  ::: Validar vmax id ::: Mostrando la salida -- Data"
+  debug:
+    msg: "Salida completa: {{ salida_consultar_vmax_id }}"
+  when:
+    - salida_consultar_vmax_id.json is defined
+    - manejo_salidas == 'si'
+
+- name: "SENHA ::: VMax  ::: Validar vmax id ::: Mostrando la salida de error -- Data"
+  debug:
+    msg: "No se puede realizar la operacion se encontro el siguiente erorr: {{ salida_consultar_vmax_id_json.msg }} Deteniendo la implementación"
+  when:
+    - salida_consultar_vmax_id.json is not defined
+
+# Validación de conexión a vmax - Validar End Point
+- name: "SENHA ::: VMax  ::: Validar vmax End Point -- Tenant senha-prod"
+  import_tasks: vmax_validar_end_point.yml
+  ignore_errors: True
+
+- name: "SENHA ::: VMax  ::: Validar vmax End Point ::: Mostrando la salida"
+  debug:
+    msg: "Datos de version: {{ salida_validar_end_point_json }}"
+  when:
+    - salida_validar_end_point.json is defined
+
+- name: "SENHA ::: VMax  ::: Validar vmax End Point ::: Mostrando la salida -- Data"
+  debug:
+    msg: "Salida completa: {{ salida_validar_end_point }}"
+  when:
+    - salida_validar_end_point.json is defined
+    - manejo_salidas == 'si'
+
+- name: "SENHA ::: VMax  ::: Validar vmax End Point ::: Mostrando la salida de error -- Data"
+  debug:
+    msg: "No se puede realizar la operacion se encontro el siguiente erorr: {{ salida_validar_end_point_json.msg }} : Deteniendo la implementación"
+  when:
+    - salida_validar_end_point.json is not defined
+
+# Validaciones de VMAX
+#- name: "SENHA ::: VMax  ::: Validar vmax End Point -- Tenant senha-prod"
+#  import_tasks: vmax_listar_elementos_vmax.yml
+#  ignore_errors: True
+
+# Validación de Storage Resource Pool
+- name: "SENHA ::: VMax  ::: Validar Storage Resource pool"
+  import_tasks: vmax_validar_storage_resource_pool.yml
+  ignore_errors: True
+
+- name: "SENHA ::: VMax  ::: Validar Storage Resource pool  ::: Mostrando el nombre del storage resource pool"
+  debug:
+    msg: "El storage resource pool es: {{vmax_storage_rp_name}}"
+  when:
+    - salida_consultar_storage_rp.json is defined
+
+- name: "SENHA ::: VMax  ::: Validar Storage Resource pool  ::: Mostrando la salida"
+  debug:
+    msg: "Salida: {{ salida_consultar_storage_rp_json }}"
+  when:
+    - salida_consultar_storage_rp.json is defined
+    - manejo_salidas == 'si'
+
+- name: "SENHA ::: VMax  ::: Validar Storage Resource pool  ::: Mostrando la salida -- Data"
+  debug:
+    msg: "Salida completa: {{ salida_consultar_storage_rp }}"
+  when:
+    - salida_validar_end_point.json is defined
+    - manejo_salidas == 'si'
+
+- name: "SENHA ::: VMax  ::: Validar Storage Resource pool  ::: Mostrando la salida de error -- Data"
+  debug:
+    msg: "No se puede realizar la operacion se encontro el siguiente erorr: {{ salida_consultar_storage_rp_json.msg }} : Deteniendo la implementación"
+  when:
+    - salida_consultar_storage_rp.json is not defined
+
+# Validación de espacio en el Storage Resource Pool
+- name: "SENHA ::: VMax  ::: Validar espacio en Storage Resource pool"
+  import_tasks: vmax_validar_espacio_disponible.yml
+  ignore_errors: True
+
+- name: "SENHA ::: VMax  ::: Validar espacio en Storage Resource pool ::: Mostrando el espacio"
+  debug:
+    msg:
+      - "El espacio total en GB es: {{ salida_consultar_espacio_storage_rp_json.total_usable_cap_gb }}"
+      - "El espacio disponible en GB es: {{ salida_consultar_espacio_storage_rp_json.fba_free_capacity }}"
+  when:
+    - salida_consultar_espacio_storage_rp.json is defined
+
+- name: "SENHA ::: VMax  ::: Validar espacio en Storage Resource pool  ::: Mostrando la salida"
+  debug:
+    msg: "Salida: {{ salida_consultar_espacio_storage_rp_json }}"
+  when:
+    - salida_consultar_espacio_storage_rp.json is defined
+    - manejo_salidas == 'si'
+
+- name: "SENHA ::: VMax  ::: Validar espacio en Storage Resource pool  ::: Mostrando la salida -- Data"
+  debug:
+    msg: "Salida completa : {{ salida_consultar_espacio_storage_rp }}"
+  when:
+    - salida_consultar_espacio_storage_rp.json is defined
+    - manejo_salidas == 'si'
+
+- name: "SENHA ::: VMax  ::: Validar espacio en Storage Resource pool  ::: Mostrando la salida de error -- Data"
+  debug:
+    msg: "No se puede realizar la operacion se encontro el siguiente erorr : {{ salida_consultar_espacio_storage_rp_json.msg }} : Deteniendo la implementación"
+  when:
+    - salida_consultar_storage_rp.json is not defined
+
+# Validación de nombre del storage group
+- name: "SENHA ::: VMax  ::: Validar nombre del storage group"
+  import_tasks: vmax_validar_nombre_storage_group.yml
+  ignore_errors: True
+
+- name: "SENHA ::: VMax  ::: Validar nombre del storage group ::: Mostrando el datos del storage group"
+  debug:
+    msg:
+      - "El espacio utilizado en GB es: {{ salida_validar_storage_group_json.cap_gb }}"
+      - "La cantidad de numeros de volumenes actuales: {{ salida_validar_storage_group_json.num_of_vols }}"
+  when:
+    - salida_validar_storage_group.json is defined
+
+- name: "SENHA ::: VMax  ::: Validar nombre del storage group ::: Mostrando el maskingview"
+  debug:
+    msg: "El maskingview es: {{ salida_validar_storage_group_json.maskingview }}"
+  when:
+    - salida_validar_storage_group.json is defined
+
+- name: "SENHA ::: VMax  ::: Validar nombre del storage group  ::: Mostrando la salida"
+  debug:
+    msg: "Salida: {{ salida_validar_storage_group_json }}"
+  when:
+    - salida_consultar_espacio_storage_rp.json is defined
+    - manejo_salidas == 'si'
+
+- name: "SENHA ::: VMax  ::: Validar nombre del storage group  ::: Mostrando la salida -- Data"
+  debug:
+    msg: "Salida completa: {{ salida_validar_storage_group }}"
+  when:
+    - salida_validar_storage_group.json is defined
+    - manejo_salidas == 'si'
+
+- name: "SENHA ::: VMax  ::: Validar nombre del storage group  ::: Mostrando la salida de error -- Data"
+  debug:
+    msg: "No se puede realizar la operacion se encontro el siguiente erorr: {{ salida_validar_storage_group_json.msg }} : Deteniendo la implementación"
+  when:
+    - salida_validar_storage_group.json is not defined
+
+# consulta las LUNs e IDs existentes
+- name: "SENHA ::: VMax  ::: Consultar LUNs e IDs existentes -- Tenant senha-prod"
+  vars:
+    vmax_lista_de_volumenes: ""
+  import_tasks: vmax_obtener_listado_lun_existentes.yml
+  ignore_errors: True
+
+- set_fact:
+    vmax_lista_de_volumenes_inicial: "{{ vmax_lista_de_volumenes[0] }}"
+  when:
+    - salida_consulta_luns_ids.json is defined
+
+- name: "SENHA ::: VMax  ::: Consultar LUNs e IDs existentes ::: Mostrando el los volumenes existentes"
+  debug:
+    msg: "Los volumenes existentes son: {{ vmax_lista_de_volumenes_inicial }}"
+  when:
+    - salida_consulta_luns_ids.json is defined
+
+- name: "SENHA ::: VMax  ::: Consultar LUNs e IDs existentes  ::: Mostrando la salida"
+  debug:
+    msg: "Salida: {{ salida_consulta_luns_ids_json }}"
+  when:
+    - salida_consulta_luns_ids_json is defined
+    - manejo_salidas == 'si'
+
+- name: "SENHA ::: VMax  ::: Consultar LUNs e IDs existentes  ::: Mostrando la salida -- Data"
+  debug:
+    msg: "Salida completa: {{ salida_consulta_luns_ids }}"
+  when:
+    - salida_consulta_luns_ids_json is defined
+    - manejo_salidas == 'si'
+
+- name: "SENHA ::: VMax  ::: Consultar LUNs e IDs existentes  ::: Mostrando la salida de error"
+  debug:
+    msg: "No se puede realizar la operacion se encontro el siguiente erorr: {{ salida_consulta_luns_ids_json.msg }} : Deteniendo la implementación"
+  when:
+    - salida_consulta_luns_ids_json is not defined
+
+# Crear LUN
+- name: "SENHA ::: VMax  ::: Crear LUN -- Tenant senha-prod"
+  import_tasks: vmax_crear_lun.yml
+  ignore_errors: True
+
+- name: "SENHA ::: VMax  ::: Crear LUN  ::: Mostrando la salida"
+  debug:
+    msg: "La creación de la lun fue satisfactoria: {{ salida_crear_lun.msg }}"
+  when:
+    - salida_crear_lun is defined
+
+- name: "SENHA ::: VMax  ::: Crear LUN  ::: Mostrando la salida -- Data"
+  debug:
+    msg: "Salida completa : {{ salida_crear_lun }}"
+  when:
+    - salida_crear_lun is defined
+    - manejo_salidas == 'si'
+
+- name: "SENHA ::: VMax  ::: Crear LUN ::: Mostrando la salida de error"
+  debug:
+    msg: "No se puede realizar la operacion se encontro el siguiente erorr : {{ salida_crear_lun.msg }} : Deteniendo la implementación"
+  when:
+    - salida_crear_lun is not defined
+
+- name: "SENHA ::: VMax  ::: Espera la actualización Unisphere para actualizacion de LUNS"
+  wait_for: timeout=300
+  delegate_to: localhost
+
+# consulta las LUNs e IDs existentes despues de la creación de la LUN
+- name: "SENHA ::: VMax  ::: Consultar LUNs e IDs existentes final -- Tenant senha-prod"
+  vars:
+    vmax_lista_de_volumenes: ""
+  import_tasks: vmax_obtener_listado_lun_existentes.yml
+  ignore_errors: True
+
+- set_fact:
+    vmax_lista_de_volumenes_final: "{{ vmax_lista_de_volumenes[0] }}"
+  when:
+    - salida_consulta_luns_ids_json is defined
+
+- name: "SENHA ::: VMax  ::: Consultar LUNs e IDs existentes final ::: Mostrando el los volumenes existentes"
+  debug:
+    msg:
+      - "Los volumenes existentes son: {{ vmax_lista_de_volumenes_final }}"
+      - "La cantidad de volumenes actuales es: {{ salida_consulta_luns_ids_json.count }}"
+  when:
+    - salida_consulta_luns_ids_json is defined
+
+- set_fact:
+    vmax_lista_de_volumenes_final: "{{ vmax_lista_de_volumenes[0] }}"
+  when:
+    - salida_consulta_luns_ids_json is defined
+
+- name: "SENHA ::: VMax  ::: Consultar LUNs e IDs existentes final ::: Mostrando la salida"
+  debug:
+    msg: "Salida : {{ salida_consulta_luns_ids_json }}"
+  when:
+    - salida_consulta_luns_ids_json is defined
+    - manejo_salidas == 'si'
+
+- name: "SENHA ::: VMax  ::: Consultar LUNs e IDs existentes final ::: Mostrando la salida -- Data"
+  debug:
+    msg: "Salida completa : {{ salida_consulta_luns_ids }}"
+  when:
+    - salida_consulta_luns_ids_json is defined
+    - manejo_salidas == 'si'
+
+- name: "SENHA ::: VMax  ::: Consultar LUNs e IDs existentes final ::: Mostrando la salida de error"
+  debug:
+    msg: "No se puede realizar la operacion se encontro el siguiente erorr : {{ salida_consulta_luns_ids_json.msg }} : Deteniendo la implementación"
+  when:
+    - salida_consulta_luns_ids_json is not defined
+
+- set_fact:
+    vmax_volumeid: "{{ vmax_lista_de_volumenes_final | difference(vmax_lista_de_volumenes_inicial) }}"
+  when:
+    - vmax_lista_de_volumenes_final is defined
+    - vmax_lista_de_volumenes_inicial is defined
+
+- name: "SENHA ::: VMax  ::: Espera para realizar el rescaneo por segunda vez"
+  wait_for: timeout=300
+  delegate_to: localhost
+  when: vmax_volumeid is not defined
+
+- set_fact:
+    vmax_volumeid: "{{ vmax_lista_de_volumenes_final | difference(vmax_lista_de_volumenes_inicial) }}"
+  when:
+    - vmax_lista_de_volumenes_final is defined
+    - vmax_lista_de_volumenes_inicial is defined
+
+- name: "SENHA ::: VMax  ::: Consultar LUNs e IDs existentes final ::: Mostrando el ID del volumen creado"
+  debug:
+    msg: "El id del volumen creado es: {{ vmax_volumeid[0] }}"
+  when:
+    - vmax_volumeid[0] is defined
+
+- name: "SENHA ::: VMax  ::: Consultar LUNs e IDs existentes final ::: ERROR Unisphere"
+  debug:
+    msg: "Unisphere no puede otorgar la lista de Luns existentes :::  La lun ha sido creada! Pero Unisphere no puede entregar la Información de la misma!"
+  when:
+    - vmax_volumeid[0] is not defined
+
+- meta: end_play
+  when:
+    - vmax_volumeid[0] is not defined
+
+# Consulta metadata de l volumen
+- name: "SENHA ::: VMax  ::: Consultar metadata del volimeId -- Tenant senha-prod"
+  import_tasks: vmax_consultar_datos_lun.yml
+  ignore_errors: True
+
+- name: "SENHA ::: VMax  ::: Consultar metadata del volimeId  ::: Mostrando el identificador del volumen"
+  debug:
+    msg: "El WWN a montar es: {{ salida_infomracion_volume_id_json.volume[0].wwn }}"
+  when:
+    - salida_infomracion_volume_id_json is defined
+
+- set_fact:
+    vmax_lista_de_volumenes_final: "{{ salida_infomracion_volume_id_json }}"
+  when:
+    - salida_infomracion_volume_id.json is defined
+
+- name: "SENHA ::: VMax  ::: Consultar metadata del volimeId  ::: Mostrando la salida"
+  debug:
+    msg: "Salida : {{ salida_infomracion_volume_id_json }}"
+  when:
+    - salida_infomracion_volume_id.json is defined
+    - manejo_salidas == 'si'
+
+- name: "SENHA ::: VMax  ::: Consultar metadata del volimeId  ::: Mostrando la salida -- Data"
+  debug:
+    msg: "Salida completa : {{ salida_infomracion_volume_id }}"
+  when:
+    - salida_infomracion_volume_id.json is defined
+    - manejo_salidas == 'si'
+
+- name: "SENHA ::: VMax  ::: Consultar metadata del volimeId  ::: Mostrando la salida de error"
+  debug:
+    msg: "No se puede realizar la operacion se encontro el siguiente erorr : {{ salida_infomracion_volume_id_json.msg }} : Deteniendo la implementación"
+  when:
+    - salida_infomracion_volume_id.json is not defined
+
+### Mostrar resumen de aprovisionamiento
+
+- name: "SENHA ::: VMax  ::: Resumen de aprovisionamiento"
+  debug:
+    msg:
+      - "Los volumenes existentes son: {{ vmax_lista_de_volumenes[0] }}"
+      - "El id del volumen creado es: {{ vmax_volumeid[0] }}"
+      - "El WWN a montar es: naa.{{ salida_infomracion_volume_id_json.volume[0].wwn }}"
+      - "La cantidad de volumenes actuales es: {{ salida_consulta_luns_ids_json.count }}"
+
+- set_fact:
+   vmware_devicename: "naa.{{ salida_infomracion_volume_id_json.volume[0].wwn }}"
+
+...

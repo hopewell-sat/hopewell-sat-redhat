@@ -1,0 +1,43 @@
+---
+# SENHA ::: VMAX  ::: Crear LUN
+- name: 'SENHA ::: VMAX  ::: Crear LUN'
+  hosts: localhost
+  gather_facts: no
+  
+  vars:
+    proyecto: 'SAT - SENHA'
+    tecnologia: 'VMAX'
+    
+# vars de VMware    
+    vmware_ssh_hostnames_ip: ['10.217.124.154']
+    vmware_ssh_hostnames: ['agucsesxspacp139.ags.ibm.net','agucsesxspacp154.ags.ibm.net']
+#    vmware_ssh_hostnames_ip: ['10.217.124.139','10.217.124.154']
+#    vmware_ssh_hostnames: ['agucsesxspacp139.ags.ibm.net','agucsesxspacp154.ags.ibm.net']
+    
+  tasks:
+# Creacion de la LUN (Con validaciones)
+    - name: '{{ proyecto }} :::: {{ tecnologia }}  :::: {{ nombre_tarea }}'
+      include_role:
+        name: vmax
+        tasks_from: vmax_crear_lun_validaciones.yml
+
+# Escanear ESXs
+    - name: '{{ proyecto }} :::: {{ tecnologia }}  :::: {{ nombre_tarea }}'
+      with_items: '{{ vmware_ssh_hostnames_ip }}'
+      include_role:
+        name: vmware
+        tasks_from: vmware_escanear_estorage_esx.yml
+      vars:
+        vmware_ssh_hostname_esx: '{{ item }}'
+      ignore_errors: True
+
+# montar LUN a Cluster
+    - name: '{{ proyecto }} :::: {{ tecnologia }}  :::: {{ nombre_tarea }}'
+      with_items: '{{ vmware_ssh_hostnames }}'
+      include_role:
+        name: vmware
+        tasks_from: montar_lun_vmfs.yml
+      vars:
+        vmware_esxi_hostname: '{{ item }}'
+      ignore_errors: True
+...

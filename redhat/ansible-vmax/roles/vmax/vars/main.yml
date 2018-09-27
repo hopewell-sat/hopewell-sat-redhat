@@ -1,0 +1,20 @@
+---
+# vars file for vmax
+# vars file for vmax_validar_vmaxid
+# vars para laboratorio USA
+# vmax_ip: 10.136.104.96
+#  vmax_puerto: 8443
+#  vmax_authorization: dHN5c3RlbXM6UEF1V3ohLSFudXBW
+# vmax_sn: "000197000564"
+# vars para aguascalientes
+  vmax_ip: 10.219.196.102
+  vmax_puerto: 8443
+  vmax_authorization: 'dHN5c3RlbXM6MTIwOTE4NTNuaDQu' 
+  vmax_usuario: tsystems
+#  vmax_password: 12091853nh4. #:::: OK ::::
+  vmax_password: zi09_5eN4@#
+  vmax_sn: 000196701439
+  vmax_storagegroup: 'SG_CL_SENHATEST'
+  vmax_num_de_vols: "1"
+  manejo_salidas: no
+...

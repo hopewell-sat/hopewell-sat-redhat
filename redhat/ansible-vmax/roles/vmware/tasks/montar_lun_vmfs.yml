@@ -1,0 +1,31 @@
+---
+# tasks file for vmware_montar_datastorage_esxi_vmfs
+- name: 'SENHA ::: VMax  ::: Montar VMFS datastores to ESXi'
+  vmware_host_datastore:
+    hostname: '{{ vmware_vcenterhost }}'
+    username: '{{ vmware_usuario }}'
+    password: '{{ vmware_contrasenia }}'
+    datacenter_name: '{{ vmware_datacenter }}'
+    datastore_name: '{{ vmware_datastorename }}'
+    datastore_type: '{{ vmware_datastoretype }}'
+    vmfs_device_name: '{{ vmware_devicename }}'
+    vmfs_version: '{{ vmware_deviceversion }}'
+    esxi_hostname: '{{ vmware_esxi_hostname }}'
+    validate_certs: no
+    state: present
+  register: vmware_montar_datastorage_esxi_vmfs
+  ignore_errors: True
+
+- debug:
+    msg: 'Error al montar el storage en el ESX: {{ vmware_esxi_hostname }} :::: ERROR:{{ vmware_montar_datastorage_esxi_vmfs.failed }}'
+  ignore_errors: True
+  when:
+    - vmware_montar_datastorage_esxi_vmfs.failed == 'true'
+    
+- debug:
+    msg: 'Se monto adecuadmaente el: {{ vmware_montar_datastorage_esxi_vmfs.result }}'
+  ignore_errors: True
+  when:
+    - vmware_montar_datastorage_esxi_vmfs.result is defined
+
+...

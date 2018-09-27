@@ -1,0 +1,12 @@
+---
+# vars file for general
+general_correo_de: "senha.notificacion@gmail.com"
+general_correo_para: ""      #correo@gmail.com
+general_correo_concopia: ""      #listas@grupo.com, 
+general_correo_asunto: "" #Asunto del correo
+general_correo_cuerpo: ""    #Contenido del correo
+general_correo_adjuntos: ""  #Datos adjunto
+general_correo_archivo_fecha: ""
+general_correo_archivo_temporal: ""
+general_storage: ""
+general_lista_datastores: ""

@@ -1,0 +1,7 @@
+---
+- name: Append export NFS to VM, Isilon
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - append-export-isilon-nfs
+...

@@ -1,0 +1,39 @@
+---
+# handlers file for assign-isilon-nfs
+- debug:
+    msg: "Ejecutando archivo handlers para el rol assign-isilon-nfs"
+
+- name: Add TAGs to assign-isilon-nfs
+  uri:
+    url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}/tags"
+    method: POST
+    validate_certs: no
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type:  application/json
+    body_format: json
+    body:
+      action: assign
+      resources:
+        - category: "senha_ambiente"
+          name: "senha_ambiente_desarrollo"
+        - category: "senha_almacenamiento"
+          name: "senha_almacenamiento_isilon"
+  ignore_errors: True
+
+- name: Add Custom Attributes to assign-isilon-nfs
+  uri:
+    url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}/custom_attributes"
+    method: POST
+    validate_certs: no
+    headers:
+      X-Auth-Token: "{{ manageiq.api_token }}"
+      Content-Type:  application/json
+    body_format: json
+    body:
+      action: add
+      resources:
+        - name: "Work Order"
+          value: "{{ numero_de_ticket  }}"
+  ignore_errors: True
+...

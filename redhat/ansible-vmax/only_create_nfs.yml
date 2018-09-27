@@ -1,0 +1,6 @@
+---
+- name: Create NFS to VM, Isilon
+  hosts: localhost
+  roles:
+    - generate-isilon-nfs
+...

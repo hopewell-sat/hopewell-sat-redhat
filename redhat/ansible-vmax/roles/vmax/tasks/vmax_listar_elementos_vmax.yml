@@ -1,0 +1,152 @@
+---
+# tasks file for vmax
+# tasks file for data
+#VALIDATION VMAX 
+- name: 'SENHA ::: VMax  ::: Validar storagegroup'
+  uri:
+    url: 'https://{{u4vmax_ip}}:8443/univmax/restapi/sloprovisioning/symmetrix/{{vmax3_sn}}/storagegroup'
+    method: GET
+    headers:
+      Authorization: Basic {{vmax_authorization}}
+    force_basic_auth: yes
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200,201,500
+    timeout: 200
+  register: salida_consultar_vmax_storagegroup
+  ignore_errors: True
+  
+- name: 'SENHA ::: VMax  ::: Validar Storage Resource pool'
+  debug:
+    msg: 'Salida storagegroup : {{ salida_consultar_vmax_storagegroup }}'
+  when:
+    - salida_consultar_vmax_storagegroup is defined
+    
+- name: 'SENHA ::: VMax  ::: Validar initiator'
+  uri:
+    url: 'https://{{u4vmax_ip}}:8443/univmax/restapi/sloprovisioning/symmetrix/{{vmax3_sn}}/initiator'
+    method: GET
+    headers:
+      Authorization: Basic {{vmax_authorization}}
+    force_basic_auth: yes
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200,201,500
+    timeout: 200
+  register: salida_consultar_vmax_initiator
+  ignore_errors: True
+  
+- name: 'SENHA ::: VMax  ::: Validar initiator'
+  debug:
+    msg: 'Salida initiator : {{ salida_consultar_vmax_initiator }}'
+  when:
+    - salida_consultar_vmax_initiator is defined
+
+- name: 'SENHA ::: VMax  ::: Validar hostgroup'
+  uri:
+    url: 'https://{{u4vmax_ip}}:8443/univmax/restapi/sloprovisioning/symmetrix/{{vmax3_sn}}/hostgroup'
+    method: GET
+    headers:
+      Authorization: Basic {{vmax_authorization}}
+    force_basic_auth: yes
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200,201,500
+    timeout: 200
+  register: salida_consultar_vmax_hostgroup
+  ignore_errors: True
+  
+- name: 'SENHA ::: VMax  ::: Validar hostgroup'
+  debug:
+    msg: 'Salida hostgroup : {{ salida_consultar_vmax_hostgroup }}'
+  when:
+    - salida_consultar_vmax_hostgroup is defined
+    
+- name: 'SENHA ::: VMax  ::: Validar portgroup'
+  uri:
+    url: 'https://{{u4vmax_ip}}:8443/univmax/restapi/sloprovisioning/symmetrix/{{vmax3_sn}}/portgroup'
+    method: GET
+    headers:
+      Authorization: Basic {{vmax_authorization}}
+    force_basic_auth: yes
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200,201,500
+    timeout: 200
+  register: salida_consultar_vmax_portgroup
+  ignore_errors: True
+  
+- name: 'SENHA ::: VMax  ::: Validar portgroup'
+  debug:
+    msg: 'Salida portgroup : {{ salida_consultar_vmax_portgroup }}'
+  when:
+    - salida_consultar_vmax_portgroup is defined
+
+- name: 'SENHA ::: VMax  ::: Validar maskingview'
+  uri:
+    url: 'https://{{u4vmax_ip}}:8443/univmax/restapi/sloprovisioning/symmetrix/{{vmax3_sn}}/maskingview'
+    method: GET
+    headers:
+      Authorization: Basic {{vmax_authorization}}
+    force_basic_auth: yes
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200,201,500
+    timeout: 200
+  register: salida_consultar_vmax_maskingview
+  ignore_errors: True
+  
+- name: 'SENHA ::: VMax  ::: Validar Storage Resource pool'
+  debug:
+    msg: 'Salida maskingview : {{ salida_consultar_vmax_maskingview }}'
+  when:
+    - salida_consultar_vmax_maskingview is defined
+    
+- name: 'SENHA ::: VMax  ::: Validar host'
+  uri:
+    url: 'https://{{u4vmax_ip}}:8443/univmax/restapi/sloprovisioning/symmetrix/{{vmax3_sn}}/host'
+    method: GET
+    headers:
+      Authorization: Basic {{vmax_authorization}}
+    force_basic_auth: yes
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200,201,500
+    timeout: 200
+  register: salida_consultar_vmax_host
+  ignore_errors: True
+  
+- name: 'SENHA ::: VMax  ::: Validar Storage Resource pool'
+  debug:
+    msg: 'Salida maskingview : {{ salida_consultar_vmax_host }}'
+  when:
+    - salida_consultar_vmax_host is defined
+    
+- name: 'SENHA ::: VMax  ::: Validar slo'
+  uri:
+    url: 'https://{{u4vmax_ip}}:8443/univmax/restapi/sloprovisioning/symmetrix/{{vmax3_sn}}/slo'
+    method: GET
+    headers:
+      Authorization: Basic {{vmax_authorization}}
+    force_basic_auth: yes
+    validate_certs: no
+    return_content: yes
+    follow_redirects: yes
+    status_code: 200,201,500
+    timeout: 200
+  register: salida_consultar_vmax_slo
+  ignore_errors: True
+  
+- name: 'SENHA ::: VMax  ::: Validar Storage Resource pool'
+  debug:
+    msg: 'Salida maskingview : {{ salida_consultar_vmax_slo }}'
+  when:
+    - salida_consultar_vmax_slo is defined
+...
+

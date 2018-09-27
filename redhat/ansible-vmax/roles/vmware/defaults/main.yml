@@ -1,0 +1,16 @@
+---
+# defaults file for vmware_montar_datastorage_esxi_vmfs
+vmware_datastorename: "datastorageSenha01"
+vmware_devicename: "naa.600a09803753346c625d4c7733655656"
+provider_id: "1000000000003"
+max_retries: 9
+retry_interval: 20
+hostname_admin_esxi_1: "10.20.0.25"
+hostname_admin_esxi_2: "10.20.0.26"
+vmware_deviceversion: 5
+vmware_datastoretype: "vmfs"
+provider_id: "1000000000003"
+max_retries: 2
+retry_interval: 10
+hostname_admin_esxi: "10.20.0.25"
+...

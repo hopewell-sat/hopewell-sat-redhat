@@ -1,0 +1,24 @@
+---
+# SENHA ::: VMAX  ::: Crear LUN
+- name: 'SENHA ::: VMAX  ::: Crear RDM'
+  hosts: localhost
+  gather_facts: no
+  
+  vars:
+    proyecto: 'SAT - SENHA'
+    tecnologia: 'VMAX'
+    vmax_capacityUnit: "GB"
+
+# vars de VMware    
+    vmware_ssh_hostnames_ip: ['10.217.124.139','10.217.124.154']
+    vmware_ssh_hostnames: ['agucsesxspacp139.ags.ibm.net','agucsesxspacp154.ags.ibm.net']
+    
+  tasks:
+# Creacion de la LUN (Con validaciones)
+    - name: '{{ proyecto }} :::: {{ tecnologia }}  :::: {{ nombre_tarea }}'
+      include_role:
+        name: vmax
+        tasks_from: vmax_crear_lun_validaciones.yml
+
+
+...

@@ -1,0 +1,11 @@
+---
+api_user: "admin"
+api_pass: "smartvm"
+api_url: "10.20.0.46"
+api_port: "8080"
+directory_name: "supermannl"
+quota: 1
+diccionario_valor_descripcion:
+  lp: "Laboratorio Puebla"
+
+...

@@ -1,0 +1,145 @@
+---
+#- name: Ejecutando una sola tarea desde vmax_crear_lun/tasks/Crear_lun_handlers
+#  import_role:
+#    name: vmax_crear_lun
+#    tasks_from: Crear_lun_handlers.yml    
+
+- name: Obtener timestamp del sistema
+  shell: "date +%Y-%m-%d_%H:%M:%S"
+  register: fecha_inicio_proceso
+
+- set_fact:
+    nombre_archivo_lun: "{{ numero_de_ticket }}-CreaciondeLun{{ fecha_inicio_proceso.stdout | regex_replace('-') | regex_replace(':') | regex_replace(' ')}}"
+  ignore_errors: True
+  
+- name: Inicio de archivo HTML
+  copy: 
+    dest: "/tmp/{{ nombre_archivo_lun }}.html"
+    content: |
+            <html>
+               <head>
+                  <title>Resumen de creacion de Lun</title>
+                  <meta charset="UTF-8">
+                  <meta name="viewport" content="width=device-width, initial-scale=1">
+                  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+                  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+                  <div class="jumbotron jumbotron-fluid" style="background-color:white;padding-top: 0px;padding-bottom: 0px">
+                    <div class="container">
+                       <img src="https://drive.google.com/uc?id=1QqaTGiBl0y9HeAlZ_iqyLP21y_YdBbay&export=download" class="img-responsive"> 
+                    </div>
+                  </div>
+               </head>
+               <body>
+                 <div class="container">
+  ignore_errors: True
+
+- name: Creación de tabla Generales
+  blockinfile:
+    path:  "/tmp/{{ nombre_archivo_lun }}.html"
+    marker: ""
+    block: |
+            <!-- Tabla de contenido -->
+                         <table class="table table-striped">
+                              <tr>
+                                <th style="color:white; background-color:#3C79C2; text-align:center; font-weight: bold" colspan="2">DATOS GENERALES</th>
+                              </tr>
+                            <tr>
+                               <td>Número de ticket:  </td>
+                               <td> {{ numero_de_ticket }} </td>
+                            </tr>
+                            <tr>
+                               <td>Nombre del solicitante:  </td>
+                               <td> {{ nombre_solicitante }} </td>
+                            </tr>
+                            <tr>
+                               <td>Correo del solicitante:  </td>
+                               <td> {{ correo_solicitante }} </td>
+                            <tr>
+                               <td>Nombre del Storage:  </td>
+                               <td> {{ vmware_datastorename }} </td>
+                            </tr>
+                            <tr>
+                               <td>Hostname o Servidor:  </td>
+                               <td> {{ hostname_admin_esxi }} </td>
+                            </tr>
+                            <tr>
+                               <td>Tipo de Data Store:  </td>
+                               <td> {{ vmware_datosstoretype }} </td>
+                            </tr>
+                            <tr>
+                               <td>Versión del formateo:  </td>
+                               <td> {{ vmware_device }} </td>
+                            </tr> 
+                            <tr>
+                               <td>Tamaño del storage:  </td>
+                               <td> {{ tamano_storage }} </td>
+                            </tr>                          
+                         </table>                
+  ignore_errors: True
+       
+- name: Final de archivo HTML
+  blockinfile:
+    path: "/tmp/{{ nombre_archivo_lun }}.html"
+    marker: ""
+    block: |
+        <!-- final de archivo-->
+                </div>
+              </body>
+          </html>
+  ignore_errors: True      
+        
+- name: general_correo_info is succeeded
+  import_role:
+    name: general
+    tasks_from: general_enviocorreo
+  vars:
+    general_correo_de: "senha.notificacion@gmail.com"
+    general_correo_para: "{{ correo_solicitante }}"
+    general_correo_concopia: "{{ lista_correo_electronico }}"
+    general_correo_asunto: Folio {{ numero_de_ticket }} - Despliegue Completado - Creación de Lun
+    general_correo_cuerpo: | 
+                            <br/>Datos generales del despliegue con el folio <b>{{ numero_de_ticket }}</b>:
+                            <br/>
+                            <ul>
+                            <li>Item desplegado: <b>Creación de Lun</b></li>
+                            <li>Solicitante / Correo:  <b>{{ nombre_solicitante }}</b> / <b>{{ correo_solicitante }}</b></li>                            
+                            <li>Item desplegado: <b>Creación de Lun</b></li>
+                            <li>Nombre del Storage: <b>{{ vmware_datastorename }}</b></li>
+                            <li>Hostname o Servidor: <b>{{ hostname_admin_esxi }}</b></li>
+                            <li>Tipo de Data Store: <b>{{ vmware_datosstoretype }}</b></li>
+                            <li>Versión del formateo: <b>{{ vmware_device }}</b></li>
+                            <li>Tamaño del storage: <b>{{ tamano_storage }}</b></li>
+                            <li>Estado de desplliegue: <b>Exitoso</b></li>
+                            </ul>
+                            <br/>
+                            <br/>Documentos anexos
+                            <ul>
+                            <li>Documento detalle de elementos desplegados HTML: <b>{{ nombre_archivo_lun }}.html</b></li>
+                            </ul>                                                                                                                       
+    general_correo_adjuntos: "/tmp/{{ nombre_archivo_lun }}.html" 
+  ignore_errors: True
+  
+- name: general_correo_info is failed
+  import_role:
+    name: general
+    tasks_from: general_enviocorreo
+  vars:
+    general_correo_de: "senha.notificacion@gmail.com"
+    general_correo_para: "{{ correo_solicitante }}"
+    general_correo_concopia: "{{ lista_correo_electronico }}"
+    general_correo_asunto: Folio {{ numero_de_ticket }} - Despliegue Fallido - Creación de app profile
+    general_correo_cuerpo: |
+                            <br/>Datos generales del despliegue con el folio <b>{{ numero_de_ticket }}</b>:
+                            <br/>
+                            <ul>
+                            <li>Item desplegado: <b>Creación de app profile</b></li>
+                            <li>Solicitante / Correo:  <b>{{ nombre_solicitante }}</b> / <b>{{ correo_solicitante }}</b></li>
+                            <li>Estado de desplliegue: <b>Fallido</b></li>
+                            <li>
+                            <li>
+                            <li>
+                            <li>Mensaje de error: <b>Error de comunicacion con el servidor</b></li>
+                            </ul>
+  when: salida_error  
+...

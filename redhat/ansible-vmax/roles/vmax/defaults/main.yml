@@ -1,0 +1,7 @@
+---
+# defaults file for vmax
+# defaults file for vmax_validar_storage_resource_pool
+vmax_volume_size: "2"
+vmax_capacityUnit: "GB"
+
+...
