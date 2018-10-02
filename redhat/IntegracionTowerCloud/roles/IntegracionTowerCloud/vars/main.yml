@@ -1,4 +1,7 @@
 ---
-# vars file for F5
+# vars Api ManageIQ
+api_user: generico
+api_pass: redhat
+
 catalogo: "Desarrollo"
 servicio: "Encriptacion"

@@ -6,12 +6,12 @@
 #- debug:
 #    msg: "{{ token }}"
 
-- name: "Obtencion de los catalogos y sus items de servicio de ManageIQ por API"
+- name: "Autenticacion al servicio de ManageIQ por API"
   uri:
-    url: "https://10.20.0.65/api/auth"
+    url: "https://{{ api_url }}/api/auth"
     method: GET
-    user: "generico"
-    password: "redhat"
+    user: "{{ api_user }}"
+    password: "{{ api_pass }}"
     validate_certs: false
     body_format: json
   register: api_token
@@ -21,7 +21,7 @@
 
 - name: "Obtener catalogo de servicios"
   uri:
-    url: "https://10.20.0.65/api/service_catalogs?expand=resources,service_templates"
+    url: "https://{{ api_url }}/api/service_catalogs?expand=resources,service_templates"
     method: GET
     validate_certs: false
     body_format: json
