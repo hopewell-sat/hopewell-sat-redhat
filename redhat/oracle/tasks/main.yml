@@ -1,0 +1,8 @@
+---
+# tasks file for oracle
+- include: oracle_persistir_servicioscis.yml
+- include: oracle_persistir_mvirtualcis.yml
+- include: oracle_persistir_balanceadorcis.yml
+- include: oracle_persistir_applicationcis.yml
+- include: oracle_persistir_epgcis.yml
+...

@@ -1,0 +1,42 @@
+---
+# tasks file for oracle
+- set_fact:
+    execute_command: "{{oracle_ssh_connect}} export ORACLE_HOME={{oracle_database_sql_oracle_home}} && export ORACLE_SID={{oracle_database_sql_sid}} && {{oracle_database_sqlplus}} -S {{oracle_database_sql_admin_username}}/{{oracle_database_sql_admin_password}} @{{sql_path}}{{consulta_codigo_app}} \\\"{{id_de_aplicacion}}\\\""
+
+- debug:
+    msg: "command: '{{ execute_command }}' Sera ejecutado en sentencia Oracle en el sig esquema ({{ oracle_database_sql_sid }}) (ORACLE_HOME: {{oracle_database_sql_oracle_home }})"
+
+- name: oracle_consultar_codigo_aplicacion
+  command: "{{execute_command}}"
+
+  register: oracle_consultar_codigo_aplicacion
+  environment:
+    ORACLE_HOME: "{{oracle_database_sql_oracle_home}}"
+    ORACLE_SID: "{{oracle_database_sql_sid}}"
+    SQL_PATH: "{{sql_path}}"
+    
+- set_fact:
+    codigo_aplicacion: |
+      {{oracle_consultar_codigo_aplicacion.stdout_lines[1] | regex_replace('\n','')}}
+
+- debug:
+    msg: "{{ codigo_aplicacion }}"
+    
+- debug:
+    msg: "Se prodjo el siguiente error: {{ oracle_consultar_codigo_aplicacion.stderr }}"
+...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
